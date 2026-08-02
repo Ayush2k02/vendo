@@ -4,7 +4,7 @@
 
 One contract, three engines:
 
-- **Built-in local engine** — lexical retrieval over the host's own store (the free tier), reading and writing the `vendo_knowledge_docs` / `vendo_knowledge_chunks` collections.
+- **Built-in local engine** — lexical retrieval over the host's own store (the free tier), reading and writing the `vendo_knowledge_docs` / `vendo_knowledge_chunks` collections; upgrades to hybrid semantic (RRF) search when the optional `knowledgeEmbedder` slot is filled.
 - **Cloud client** — speaks the knowledge wire protocol (`vendo/knowledge-wire@1`) to a managed backend.
 - **BYO HTTP template** — the same wire protocol pointed at a host-supplied endpoint.
 

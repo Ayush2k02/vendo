@@ -71,9 +71,13 @@ rewrites:
 
 In the matrix: `memory` (per-PR CI) · `lexical` (joined 2026-07-26 at K7
 landing; deterministic over an in-memory store, but NOT in the per-PR
-workflow — its refusal layer is red at baseline, see the ledger). Planned:
-`cloud` (lane K3, nightly). Real engines are measured on the natural
-`question`; only the memory engine uses `memoryQuery`.
+workflow — its refusal layer is red at baseline, see the ledger) · `semantic`
+(joined 2026-08-02; `lexical` with the `knowledgeEmbedder` slot filled —
+hybrid RRF search, deterministic offline embedder by default and the shipped
+hosted embedder when a key is present, same red-refusal caveat as lexical so
+also out of the per-PR gate). Planned: `cloud` (lane K3, nightly). Real
+engines are measured on the natural `question`; only the memory engine uses
+`memoryQuery`.
 
 ## Nightly engine-matrix rows (not per-PR; wiring lands with the engines)
 
@@ -271,6 +275,7 @@ calibration runs are).
 |---|---|---|---|---|---|
 | 2026-07-25 | memory | 1.000 | 1.000 | — (offline) | Calibration run at authoring time; bars seeded at measured values |
 | 2026-07-26 | lexical | 0.100 | 0.055 | — (offline) | Calibration at K7 landing, natural questions. Retrieval baseline is weak (unnormalized term-frequency scoring; long common-token docs dominate; schema lookup honestly empty for question-shaped text) and the REFUSAL LAYER IS RED: off-corpus questions return junk hits, so the shipped zero-hits weakness policy answers them (6/60 golden items retrieved; 0/15 refusal items refused). Bars seeded at measured floors; lexical stays out of the per-PR gate until refusals go honest — this row is the suite catching a real quality gap, not noise |
+| 2026-08-02 | semantic | 0.300 | 0.174 | — (offline) | Calibration of the hybrid-RRF path (`lexical` + `knowledgeEmbedder`), natural questions, no hosted embedding key in the run so a deterministic dependency-free offline embedder (L2-normalized bag-of-words + char-trigram). Numbers are honest FLOORS from length-normalization alone — 3x lift over lexical (chat 0.139→0.416, deep 0.125→0.375) with NO synonym recall (the offline model has none); a hosted embedder (OPENAI/GOOGLE key) only exceeds them, re-run and re-ratchet. schema stays 0/0 (untouched by design). Refusal layer still RED, so like lexical it stays out of the per-PR gate. Bars in `bars/semantic.json` |
 | 2026-07-27 | agentset (replay) | — | — | — | WITHDRAWN. K14's verifier table ("false answers 47% → 3%") was a replay with reconstructed passages and a hand-computed outcome, not a live run; superseded by the row below. The harness and artifact are deleted |
 | 2026-07-28 | agentset (live, band-gated) | — | — | — | K15 first measurement of K14's gated design, 94 questions × 3 passes × two runs: false answers 19/12/9 and 16/12/10 of 34 (worst 19/34 — 56%), false refusals 2-3/60, only 59-60/94 searches read. The gate was removed on the strength of this row |
 | 2026-07-28 | agentset (live, ungated — ships) | — | — | — | The check on every hits-returning search: false answers 7/34 and 10/34 (worst 10/34 — 29%), false refusals 3/60, 94/94 searches read, 1.37-1.39 calls/search, verifier p50 1.7-1.8s per call (2.5-2.6s summed per verified turn), tool call p50 3.5-3.7s / p95 6.8s. **The zero-false-answer bar still does NOT hold**, which is why the check ships off by default |

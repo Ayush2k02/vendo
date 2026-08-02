@@ -483,7 +483,7 @@ export interface CreateVendoConfig {
   model?: LanguageModel;
   /** @deprecated the model half is superseded by `models.paint`; `disabled` stays. */
   paint?: { model?: LanguageModel; disabled?: boolean };
-  models?: ModelsConfig;      // { agent, paint, judge, knowledgeVerifier } — name or model object
+  models?: ModelsConfig;      // { agent, paint, judge, knowledgeVerifier, knowledgeEmbedder } — name or model object
   auth?: HostAuthPreset;      // one preset fills principal + actAs + oauth
   principal?: (req: Request) => Promise<Principal | null>; // escape hatch
   catalog?: ComponentCatalog | ComponentRegistry;          // registry.tsx, or the array form
