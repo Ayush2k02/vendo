@@ -71,3 +71,17 @@ export function bindVendoModelSlots(
   _model: unknown,
   _models: ConfigurableSlotModels | undefined,
 ): void {}
+
+/** Export parity for the embedder resolver (dev-creds/embedding.ts imports it
+ *  from "#dev-creds/model"). Host-provider resolution is Node-only —
+ *  createRequire off the project root does not exist in a Worker — so on this
+ *  runtime it refuses with the same honest guidance the model ladder gives:
+ *  pass an explicit `models.knowledgeEmbedder` EmbeddingModel object. Never
+ *  called at composition (the resolver only reaches it when a keyed embedding
+ *  provider must be loaded), so a keyless edge host stays lexical unbothered. */
+export function importHostModule(_root: string, specifier: string): Promise<Record<string, unknown>> {
+  return Promise.reject(new Error(
+    `the vendo embedding ladder needs Node to resolve ${specifier}; on this runtime pass an explicit `
+    + "`models.knowledgeEmbedder` EmbeddingModel object to createVendo instead.",
+  ));
+}

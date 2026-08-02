@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "generatedAt": "2026-08-02T00:00:00.000Z",
+  "toleranceRationale": "The `semantic` engine is `lexical` with the knowledgeEmbedder slot filled — hybrid RRF search (semantic cosine fused with the existing term-frequency ranking, k=60), gated on an embedder exactly as the verifier pass is gated on its model slot. Measured over the SAME 59-doc fixture corpus and natural questions as lexical, in the SAME harness. With NO hosted embedding key in the run environment the engine uses a deterministic, dependency-free offline embedding model (L2-normalized bag-of-words + char-trigram vectors — a classic vector-space model with NO synonym knowledge), so these numbers are honest FLOORS, not a hosted-model quality claim: recall@5 0.100→0.300 and mrr 0.055→0.174 (chat 0.139→0.416, deep 0.125→0.375) — a 3x lift that comes purely from length-normalization + subword overlap fixing the raw-term-frequency common-token domination that sinks lexical. A hosted embedder (OPENAI_API_KEY / GOOGLE_GENERATIVE_AI_API_KEY, resolved by the same knowledgeEmbedder slot with zero code changes) adds synonym/paraphrase recall on TOP of this and only exceeds these floors — re-run `pnpm corpus knowledge-eval --engine semantic` with a key set and re-ratchet. schema stays 0/0: schema intent (exact title/slug lookup) is untouched by the embedder by design. NOTE the refusal layer is still RED for this engine at baseline (a broad-cosine offline embedder returns hits for off-corpus questions too, same shipped zero-hits weakness policy as lexical) — a calibrated weakness threshold on the now-meaningful semantic score is the follow-up that retires it; until then this engine, like lexical, is not on the per-PR refusal-gated path. Raising or lowering any bar requires a PR editing this file with a one-line justification.",
+  "bars": {
+    "recall@5": 0.3,
+    "mrr": 0.173,
+    "recall@5.chat": 0.416,
+    "mrr.chat": 0.233,
+    "recall@5.deep": 0.375,
+    "mrr.deep": 0.25,
+    "recall@5.schema": 0,
+    "mrr.schema": 0
+  }
+}

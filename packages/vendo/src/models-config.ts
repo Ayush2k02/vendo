@@ -1,4 +1,4 @@
-import type { LanguageModel } from "ai";
+import type { EmbeddingModel, LanguageModel } from "ai";
 import { VendoError } from "@vendoai/core";
 import { vendoModel, type VendoModelOptions } from "#dev-creds/model";
 
@@ -24,6 +24,15 @@ export interface ModelsConfig {
       the host's credentials resolve to; `VENDO_KNOWLEDGE_VERIFY=off` turns the
       check off entirely. */
   knowledgeVerifier?: string | LanguageModel;
+  /** Knowledge design v2 R3 — the local engine's optional embedding slot that
+      turns keyword search into hybrid semantic (RRF) search. A model-name
+      string resolves an embedding-capable provider from the credential ladder
+      (OpenAI/Google — the Cloud gateway serves chat, not embeddings), or an
+      explicit ai-SDK `EmbeddingModel` object wins as-is. Unset ⇒ the engine
+      stays lexical (today's behavior), unless `VENDO_KNOWLEDGE_EMBED=on` opts a
+      keyed host in. Consumed by `resolveKnowledgeEmbedder` (dev-creds/
+      embedding.ts), NOT by resolveModels — embeddings are not chat models. */
+  knowledgeEmbedder?: string | EmbeddingModel;
 }
 
 export interface ResolveModelsInput {

@@ -38,6 +38,17 @@ export {
   type KnowledgeConfig,
   type KnowledgeSourceConfig,
 } from "./ingest/index.js";
+/** Knowledge design v2 R3 — the local engine's embedding client (asymmetric,
+    batched, backoff), the concrete fill of core's frozen `KnowledgeEmbedder`
+    seam that powers the optional hybrid-RRF search path. */
+export {
+  aiEmbedder,
+  DOCUMENT_TASK_TYPE,
+  EMBEDDING_DIMENSIONS,
+  QUERY_TASK_TYPE,
+  type AiEmbedderOptions,
+  type HybridEmbedder,
+} from "./local/embedder.js";
 export { bindKnowledgeStore, lexicalKnowledge } from "./local/lexical.js";
 /** Knowledge K14 — the verifier pass itself (cheap model, capped, fail-open). */
 export {

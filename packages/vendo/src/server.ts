@@ -39,6 +39,7 @@ import {
   type ComponentRegistry,
   type Json,
   type KnowledgeAdapter,
+  type KnowledgeEmbedder,
   type PermissionGrant,
   type Principal,
   type RunContext,
@@ -111,6 +112,8 @@ import { bindVendoModelSlots, vendoModel } from "#dev-creds/model";
 // argument means `vendo` semantics (per-rung defaults); a name passes through
 // VERBATIM to the resolved rung. `devModel` stays as the deprecated alias.
 export { devModel, vendoModel, type DevModelOptions, type VendoModelOptions, type VendoModelSlot } from "#dev-creds/model";
+import { resolveKnowledgeEmbedder } from "./dev-creds/embedding.js";
+export { resolveKnowledgeEmbedder, type ResolveKnowledgeEmbedderOptions } from "./dev-creds/embedding.js";
 import { resolveModels } from "./models-config.js";
 export { type ModelsConfig } from "./models-config.js";
 import type { ModelsConfig } from "./models-config.js";
@@ -627,8 +630,14 @@ function selectConnectors(configured: Connector[] | undefined, connectorApps?: s
 function selectKnowledge(
   configured: KnowledgeAdapter | undefined,
   store: StoreAdapter,
+  embedder: KnowledgeEmbedder | undefined,
 ): KnowledgeAdapter | undefined {
-  if (configured !== undefined) return bindKnowledgeStore(configured, store);
+  // The embedder is threaded only through bindKnowledgeStore, which applies it
+  // to the built-in local lexical engine and NOTHING else — a cloud/BYO/custom
+  // adapter (which owns its own retrieval) passes through untouched. So a host
+  // that composed `lexicalKnowledge()` gets hybrid search when the embedder
+  // slot resolved, and everyone else is unaffected.
+  if (configured !== undefined) return bindKnowledgeStore(configured, store, embedder);
   const cloud = cloudKeyOptions();
   if (cloud === undefined) return undefined;
   return cloudKnowledge(cloud);
@@ -1814,7 +1823,7 @@ export function createVendo(config: CreateVendoConfig): Vendo {
   actions.add(apps.agentTools());
   // Knowledge K1 — the tool exists exactly when an adapter is configured;
   // no adapter, no `vendo_knowledge_search` in any descriptor surface.
-  const knowledge = selectKnowledge(config.knowledge, store);
+  const knowledge = selectKnowledge(config.knowledge, store, resolveKnowledgeEmbedder({ models: config.models }));
   // K14 — the calibrated band + verifier ride exactly the engine they were
   // calibrated against (the Cloud default); a host-passed adapter keeps the
   // uncalibrated defaults it has today.

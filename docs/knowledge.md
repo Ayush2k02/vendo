@@ -8,7 +8,7 @@ the same contract:
 
 | Engine | What it is | Posture |
 | --- | --- | --- |
-| `lexicalKnowledge()` | Free tier: keyword retrieval in your own store — works offline, zero keys | full (`fetch`, `write`, `visibility: "enforced"`) |
+| `lexicalKnowledge()` | Free tier: keyword retrieval in your own store — works offline, zero keys; upgrades to hybrid semantic when the `knowledgeEmbedder` slot is filled | full (`fetch`, `write`, `visibility: "enforced"`) |
 | `cloudKnowledge({ apiKey })` | Vendo Cloud's managed engine over `vendo/knowledge-wire@1` — composed for you from `VENDO_API_KEY` | full |
 | `httpKnowledge({ url })` | BYO: any endpoint you run, in any language, speaking the same wire | declared — partial implementations are first-class |
 
@@ -141,7 +141,44 @@ returns zero hits (the agent says it doesn't know), `deep` intent is
 documented as no-op escalation locally, and `schema` intent is exact
 term/title lookup over glossary/api entries. Pass
 `lexicalKnowledge({ store })` to keep the knowledge tables in a different
-database.
+database. Optionally upgrades to **hybrid semantic** search — see below.
+
+**Local hybrid semantic** — the same local engine with an embedding provider
+configured. Keyword ranking alone misses synonyms and paraphrases by
+construction ("change my login credentials" shares no words with a password-
+reset doc). Fill the optional `knowledgeEmbedder` slot and the engine embeds
+each chunk at upsert (storing an L2-normalized `vector` and the embedding model
+id on the existing chunk row — no new table, no new dependency, no extra
+infra), embeds the query at search, and **fuses** the semantic ranking with the
+existing keyword ranking via Reciprocal Rank Fusion (RRF, k=60). It never
+throws the keyword signal away — exact-keyword queries keep their lexical rank
+while synonym queries get rescued by the semantic one. Five properties, in the
+shape of the [verifier slot](#the-verifier-pass-cloud-engine):
+
+- **It is OFF by default; the free tier stays lexical.** With no embedder the
+  engine is byte-for-byte the keyword engine — the hybrid path is purely
+  additive and gated on the embedder's presence, so the zero-key, zero-config
+  default is unchanged. Opt in by setting `models.knowledgeEmbedder` (a model
+  name or an ai-SDK `EmbeddingModel`) or `VENDO_KNOWLEDGE_EMBED=on`. Anything
+  that is neither `on` nor `off` fails loudly at startup.
+- **It needs a real embedding key — a provider one, not the Cloud key.**
+  Embeddings come from OpenAI or Google (`OPENAI_API_KEY` /
+  `GOOGLE_GENERATIVE_AI_API_KEY`, resolved through the standard credential
+  ladder with the AI SDK's `embedMany`, asymmetric task types and batching).
+  `VENDO_API_KEY` alone does **not** unlock it: the Cloud gateway serves chat,
+  not embeddings — which is why an Anthropic-only host stays lexical. Enabled
+  with no embedding key ⇒ it fails open to lexical and says so on the log.
+- **It has its own model slot.** `knowledgeEmbedder` sits beside
+  `knowledgeVerifier`; pin it with `VENDO_MODEL_KNOWLEDGE_EMBEDDER` or
+  `models.knowledgeEmbedder`. A changed model id re-embeds the corpus (a vector
+  written under a different model is ignored until the doc's next upsert).
+- **`schema` intent is untouched.** Exact title/slug lookup over glossary/api
+  entries never fuzzes — only `chat`/`deep` search fuses in the semantic signal.
+- **Measured, honestly.** On the repo's own 59-doc eval the hybrid path lifts
+  recall@5 from 0.10 to 0.30 and MRR from 0.055 to 0.17 *with a keyless offline
+  embedder* (length-normalization alone); a hosted model adds synonym recall on
+  top. Run `pnpm corpus knowledge-eval --engine lexical --engine semantic` to
+  reproduce; the floors live in `docs/eval/knowledge/bars/semantic.json`.
 
 **Cloud** — `cloudKnowledge({ apiKey })` speaks `vendo/knowledge-wire@1`
 against the console mount. You rarely construct it: `VENDO_API_KEY` composes
