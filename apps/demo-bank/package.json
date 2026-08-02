@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "predev": "vendo sync . --no-ai",
-    "dev": "next dev",
+    "dev": "next dev -p 3000",
     "prebuild": "vendo sync . --no-ai",
     "build": "next build",
     "start": "next start",

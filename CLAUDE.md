@@ -19,6 +19,13 @@ generated UI in a sandboxed, brand-native surface.
 
 - `pnpm install` · `pnpm build` · `pnpm test` · `pnpm typecheck` · `pnpm lint` (turbo-cached)
 - Demos: `pnpm --filter demo-bank dev` (Maple) · `pnpm --filter demo-accounting dev` (Cadence)
+- `VENDO_BASE_URL` (the operator-set, credential-trusted origin — nothing derives
+  it from the port the server actually bound to) must match the port the demo dev
+  server is really running on. The demo `dev` scripts are pinned to `next dev -p 3000`
+  for exactly this reason: a busy port now fails loudly instead of Next silently
+  relocating and producing confusing 404s across chat, automations, and rehearsal.
+  If port 3000 is genuinely unavailable, free it — or update both the `-p` flag and
+  `VENDO_BASE_URL` together so they stay in sync.
 
 ## Vendo Cloud
 
