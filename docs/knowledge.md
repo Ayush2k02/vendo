@@ -174,11 +174,13 @@ shape of the [verifier slot](#the-verifier-pass-cloud-engine):
   written under a different model is ignored until the doc's next upsert).
 - **`schema` intent is untouched.** Exact title/slug lookup over glossary/api
   entries never fuzzes — only `chat`/`deep` search fuses in the semantic signal.
-- **Measured, honestly.** On the repo's own 59-doc eval the hybrid path lifts
-  recall@5 from 0.10 to 0.30 and MRR from 0.055 to 0.17 *with a keyless offline
-  embedder* (length-normalization alone); a hosted model adds synonym recall on
-  top. Run `pnpm corpus knowledge-eval --engine lexical --engine semantic` to
-  reproduce; the floors live in `docs/eval/knowledge/bars/semantic.json`.
+- **Measured, honestly.** On the repo's own 59-doc eval a real hosted embedder
+  (Google `gemini-embedding-2`) lifts recall@5 from 0.10 to 0.55 and MRR from
+  0.055 to 0.36 over the lexical baseline — synonym/paraphrase recall a keyless
+  offline embedder cannot provide. Run `VENDO_KNOWLEDGE_EMBED=on
+  VENDO_MODEL_KNOWLEDGE_EMBEDDER=gemini-embedding-2 pnpm corpus knowledge-eval
+  --engine lexical --engine semantic` to reproduce; the measured floors and
+  their full provenance live in `docs/eval/knowledge/bars/semantic.json`.
 
 **Cloud** — `cloudKnowledge({ apiKey })` speaks `vendo/knowledge-wire@1`
 against the console mount. You rarely construct it: `VENDO_API_KEY` composes
