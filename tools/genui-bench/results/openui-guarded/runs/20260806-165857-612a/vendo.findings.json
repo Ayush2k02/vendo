@@ -1,0 +1,7 @@
+[
+  {
+    "severity": "block",
+    "where": "<Stat> labeled \"Total Balance\"",
+    "message": "The Total Balance stat card binds to `accounts` instead of `accounts.data`, causing the sum to evaluate on the query object rather than the array — bind `accounts.data | sum(balance)` instead."
+  }
+]

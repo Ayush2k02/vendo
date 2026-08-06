@@ -1,0 +1,39 @@
+{
+  "id": "20260806-165517-1328",
+  "createdAt": "2026-08-06T11:25:17.052Z",
+  "gitSha": "ac7ea3636d4640cb9be06932bc031494745d0fed",
+  "gitDirty": "de0b84545d34ab3f1303a76c5eeb421461e68666fab376de2f0ffb8266374cd5",
+  "request": {
+    "prompt": "let me transfer money between my accounts",
+    "host": "maple",
+    "lanes": [
+      "vendo",
+      "openui"
+    ],
+    "packRef": {
+      "pack": "smoke",
+      "index": 1
+    }
+  },
+  "lanes": {
+    "vendo": {
+      "status": "ok",
+      "startedAt": 1786015477281,
+      "durationMs": 39745,
+      "usage": {
+        "promptTokens": 6468,
+        "outputTokens": 7818
+      }
+    },
+    "openui": {
+      "status": "ok",
+      "startedAt": 1786015477293,
+      "durationMs": 16120,
+      "usage": {
+        "promptTokens": 6820,
+        "outputTokens": 3502
+      },
+      "repairs": 0
+    }
+  }
+}

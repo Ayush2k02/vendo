@@ -1,0 +1,7 @@
+[
+  {
+    "severity": "warn",
+    "where": "<Input> labeled \"Search\"",
+    "message": "The Search input is not bound to a filter or query parameter, so typing in it does nothing; bind it to a query filter or state variable, or remove it in favor of DataTable's built-in search."
+  }
+]

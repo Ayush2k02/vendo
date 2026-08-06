@@ -1,0 +1,35 @@
+{
+  "id": "20260806-165719-c069",
+  "createdAt": "2026-08-06T11:27:19.554Z",
+  "gitSha": "ac7ea3636d4640cb9be06932bc031494745d0fed",
+  "gitDirty": "de0b84545d34ab3f1303a76c5eeb421461e68666fab376de2f0ffb8266374cd5",
+  "request": {
+    "prompt": "show my clients",
+    "host": "cadence",
+    "lanes": [
+      "vendo",
+      "openui"
+    ]
+  },
+  "lanes": {
+    "vendo": {
+      "status": "ok",
+      "startedAt": 1786015623406,
+      "durationMs": 16082,
+      "usage": {
+        "promptTokens": 4786,
+        "outputTokens": 2728
+      }
+    },
+    "openui": {
+      "status": "ok",
+      "startedAt": 1786015623474,
+      "durationMs": 11859,
+      "usage": {
+        "promptTokens": 6608,
+        "outputTokens": 2693
+      },
+      "repairs": 0
+    }
+  }
+}

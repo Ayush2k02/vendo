@@ -1,0 +1,100 @@
+{
+  "format": "vendo/app@1",
+  "name": "Recent Transactions",
+  "tree": {
+    "formatVersion": "vendo-genui/v2",
+    "root": "app",
+    "nodes": [
+      {
+        "id": "app",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "group-0"
+        ]
+      },
+      {
+        "id": "group-0",
+        "component": "Surface",
+        "source": "prewired",
+        "children": [
+          "group-0-title",
+          "group-0-body"
+        ]
+      },
+      {
+        "id": "group-0-title",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Transactions Search",
+          "variant": "heading"
+        }
+      },
+      {
+        "id": "group-0-body",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "group-0-body-input-1",
+          "group-0-body-datatable-1"
+        ]
+      },
+      {
+        "id": "group-0-body-input-1",
+        "component": "Input",
+        "source": "prewired",
+        "props": {
+          "label": "Search",
+          "name": "search",
+          "type": "search",
+          "placeholder": "Search by merchant, description, or amount"
+        }
+      },
+      {
+        "id": "group-0-body-datatable-1",
+        "component": "DataTable",
+        "source": "prewired",
+        "props": {
+          "rows": {
+            "$path": "/transactions/data"
+          },
+          "searchable": true,
+          "sortBy": "timestamp desc",
+          "columns": [
+            {
+              "key": "timestamp",
+              "label": "Date",
+              "format": "date"
+            },
+            {
+              "key": "merchant",
+              "label": "Merchant"
+            },
+            {
+              "key": "category",
+              "label": "Category"
+            },
+            {
+              "key": "amount",
+              "label": "Amount",
+              "format": "money",
+              "align": "end"
+            }
+          ],
+          "emptyState": "No transactions found"
+        }
+      }
+    ],
+    "queries": [
+      {
+        "name": "transactions",
+        "tool": "host_listTransactions",
+        "input": {
+          "limit": 50
+        }
+      }
+    ]
+  },
+  "id": "app_bench_mshfiwse"
+}

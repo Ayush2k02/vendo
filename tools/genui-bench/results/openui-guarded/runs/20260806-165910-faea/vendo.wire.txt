@@ -1,0 +1,11 @@
+<App name="Recent Transactions">
+  <Query id="transactions" tool="host_listTransactions" input={{ limit: 20 }}/>
+  <Query id="accounts" tool="host_listAccounts"/>
+  <Surface id="group-0">
+    <Stat id="stat-1" label="Total Balance" value={accounts | sum(balance)} format="money"/>
+    <Text id="group-0-title" text="Recent Activity" variant="heading"/>
+    <Stack id="group-0-body">
+      <MapleSpendingDonut id="maplespendingdonut-1" data={transactions.data}/>
+    </Stack>
+  </Surface>
+</App>

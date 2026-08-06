@@ -1,0 +1,1021 @@
+{
+  "model": "gemini-3.6-flash",
+  "totals": {
+    "records": 29,
+    "singleShot": 16,
+    "conversationTurns": 13
+  },
+  "singleShot": {
+    "vendo": {
+      "runs": 16,
+      "answered": 6,
+      "refused": 10,
+      "failed": 0,
+      "repairs": 0,
+      "promptTokens": 55499,
+      "outputTokens": 39105,
+      "medianDurationMs": 3964,
+      "editFindings": 0
+    },
+    "openui": {
+      "runs": 16,
+      "answered": 5,
+      "refused": 11,
+      "failed": 0,
+      "repairs": 0,
+      "promptTokens": 106644,
+      "outputTokens": 20295,
+      "medianDurationMs": 3809,
+      "editFindings": 0
+    }
+  },
+  "conversations": {
+    "vendo": {
+      "runs": 13,
+      "answered": 8,
+      "refused": 2,
+      "failed": 3,
+      "repairs": 0,
+      "promptTokens": 49892,
+      "outputTokens": 30312,
+      "medianDurationMs": 10284,
+      "editFindings": 5
+    },
+    "openui": {
+      "runs": 13,
+      "answered": 11,
+      "refused": 2,
+      "failed": 0,
+      "repairs": 0,
+      "promptTokens": 97015,
+      "outputTokens": 16221,
+      "medianDurationMs": 5705,
+      "editFindings": 0
+    }
+  },
+  "overall": {
+    "vendo": {
+      "runs": 29,
+      "answered": 14,
+      "refused": 12,
+      "failed": 3,
+      "repairs": 0,
+      "promptTokens": 105391,
+      "outputTokens": 69417,
+      "medianDurationMs": 8451,
+      "editFindings": 5
+    },
+    "openui": {
+      "runs": 29,
+      "answered": 16,
+      "refused": 13,
+      "failed": 0,
+      "repairs": 0,
+      "promptTokens": 203659,
+      "outputTokens": 36516,
+      "medianDurationMs": 4543,
+      "editFindings": 0
+    }
+  },
+  "runs": [
+    {
+      "id": "20260806-165437-77f4",
+      "host": "maple",
+      "prompt": "show my account balances at a glance",
+      "pack": "smoke",
+      "conversation": null,
+      "lanes": {
+        "vendo": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 60593,
+          "promptTokens": 8374,
+          "outputTokens": 11364,
+          "repairs": 0,
+          "findings": 2
+        },
+        "openui": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 9891,
+          "promptTokens": 6820,
+          "outputTokens": 2032,
+          "repairs": 0,
+          "findings": 0
+        }
+      }
+    },
+    {
+      "id": "20260806-165517-1328",
+      "host": "maple",
+      "prompt": "let me transfer money between my accounts",
+      "pack": "smoke",
+      "conversation": null,
+      "lanes": {
+        "vendo": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 39745,
+          "promptTokens": 6468,
+          "outputTokens": 7818,
+          "repairs": 0,
+          "findings": 0
+        },
+        "openui": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 16120,
+          "promptTokens": 6820,
+          "outputTokens": 3502,
+          "repairs": 0,
+          "findings": 0
+        }
+      }
+    },
+    {
+      "id": "20260806-165541-a7e8",
+      "host": "maple",
+      "prompt": "show my recent transactions with search",
+      "pack": "smoke",
+      "conversation": null,
+      "lanes": {
+        "vendo": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 24108,
+          "promptTokens": 4480,
+          "outputTokens": 4203,
+          "repairs": 0,
+          "findings": 1
+        },
+        "openui": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 13840,
+          "promptTokens": 6819,
+          "outputTokens": 2908,
+          "repairs": 0,
+          "findings": 0
+        }
+      }
+    },
+    {
+      "id": "20260806-165546-1172",
+      "host": "cadence",
+      "prompt": "show my account balances at a glance",
+      "pack": "smoke",
+      "conversation": null,
+      "lanes": {
+        "vendo": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 2821,
+          "promptTokens": 2011,
+          "outputTokens": 321,
+          "repairs": 0,
+          "reasons": [
+            "Your host does not track account balances or link to financial institutions."
+          ]
+        },
+        "openui": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 3046,
+          "promptTokens": 6612,
+          "outputTokens": 399,
+          "repairs": 0,
+          "reasons": [
+            "There is no tool available to retrieve or display your account balances."
+          ]
+        }
+      }
+    },
+    {
+      "id": "20260806-165549-8e11",
+      "host": "cadence",
+      "prompt": "let me transfer money between my accounts",
+      "pack": "smoke",
+      "conversation": null,
+      "lanes": {
+        "vendo": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 2163,
+          "promptTokens": 2011,
+          "outputTokens": 201,
+          "repairs": 0,
+          "reasons": [
+            "Your host does not support money transfers or managing bank accounts."
+          ]
+        },
+        "openui": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 2549,
+          "promptTokens": 6612,
+          "outputTokens": 322,
+          "repairs": 0,
+          "reasons": [
+            "Your host has no bank account or money transfer tools, so money cannot be transferred between accounts."
+          ]
+        }
+      }
+    },
+    {
+      "id": "20260806-165552-1e26",
+      "host": "cadence",
+      "prompt": "show my recent transactions with search",
+      "pack": "smoke",
+      "conversation": null,
+      "lanes": {
+        "vendo": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 2863,
+          "promptTokens": 2010,
+          "outputTokens": 335,
+          "repairs": 0,
+          "reasons": [
+            "Your host has no way to track or search transactions."
+          ]
+        },
+        "openui": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 3025,
+          "promptTokens": 6611,
+          "outputTokens": 414,
+          "repairs": 0,
+          "reasons": [
+            "Your host has no transaction or financial ledger data, so recent transactions cannot be shown."
+          ]
+        }
+      }
+    },
+    {
+      "id": "20260806-165557-8ea8",
+      "host": "cadence",
+      "prompt": "which clients still owe me money, oldest first",
+      "pack": "cadence",
+      "conversation": null,
+      "lanes": {
+        "vendo": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 3964,
+          "promptTokens": 2013,
+          "outputTokens": 524,
+          "repairs": 0,
+          "reasons": [
+            "Your host has no invoice or balance tracking capabilities to determine which clients owe money."
+          ]
+        },
+        "openui": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 3539,
+          "promptTokens": 6614,
+          "outputTokens": 533,
+          "repairs": 0,
+          "reasons": [
+            "Your host has no client billing or invoice data, so clients owing money cannot be listed."
+          ]
+        }
+      }
+    },
+    {
+      "id": "20260806-165601-b967",
+      "host": "cadence",
+      "prompt": "show me where my money went last quarter",
+      "pack": "cadence",
+      "conversation": null,
+      "lanes": {
+        "vendo": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 2992,
+          "promptTokens": 2012,
+          "outputTokens": 404,
+          "repairs": 0,
+          "reasons": [
+            "Your firm management system tracks tax document requests and deadlines, but has no spending or expense tracking tools to show where your money went last quarter."
+          ]
+        },
+        "openui": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 3706,
+          "promptTokens": 6613,
+          "outputTokens": 558,
+          "repairs": 0,
+          "reasons": [
+            "Your host has no spending or transaction data, so expense tracking cannot be shown."
+          ]
+        }
+      }
+    },
+    {
+      "id": "20260806-165605-8451",
+      "host": "cadence",
+      "prompt": "let me chase every overdue invoice in one go",
+      "pack": "cadence",
+      "conversation": null,
+      "lanes": {
+        "vendo": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 3121,
+          "promptTokens": 2013,
+          "outputTokens": 408,
+          "repairs": 0,
+          "reasons": [
+            "Your host has no invoice or billing system to track or chase overdue invoices."
+          ]
+        },
+        "openui": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 3624,
+          "promptTokens": 6614,
+          "outputTokens": 580,
+          "repairs": 0,
+          "reasons": [
+            "Your host has no invoice or billing data, so overdue invoices cannot be chased."
+          ]
+        }
+      }
+    },
+    {
+      "id": "20260806-165626-799f",
+      "host": "cadence",
+      "prompt": "what's missing before I can close the books this month",
+      "pack": "cadence",
+      "conversation": null,
+      "lanes": {
+        "vendo": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 21531,
+          "promptTokens": 4886,
+          "outputTokens": 3931,
+          "repairs": 0,
+          "findings": 0
+        },
+        "openui": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 4543,
+          "promptTokens": 6617,
+          "outputTokens": 699,
+          "repairs": 0,
+          "reasons": [
+            "Your host has no bookkeeping or month-end closing data, so what is missing to close the books cannot be determined."
+          ]
+        }
+      }
+    },
+    {
+      "id": "20260806-165630-30ab",
+      "host": "cadence",
+      "prompt": "show revenue by client with a chart, and let me drill into one",
+      "pack": "cadence",
+      "conversation": null,
+      "lanes": {
+        "vendo": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 3927,
+          "promptTokens": 2018,
+          "outputTokens": 570,
+          "repairs": 0,
+          "reasons": [
+            "Your host has no billing or financial tools to track revenue by client."
+          ]
+        },
+        "openui": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 3715,
+          "promptTokens": 6619,
+          "outputTokens": 545,
+          "repairs": 0,
+          "reasons": [
+            "The host tools do not track client revenue or financial data, so client revenue charts and drill-downs cannot be generated."
+          ]
+        }
+      }
+    },
+    {
+      "id": "20260806-165651-7800",
+      "host": "cadence",
+      "prompt": "build me a deadline board for the next 30 days",
+      "pack": "cadence",
+      "conversation": null,
+      "lanes": {
+        "vendo": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 20814,
+          "promptTokens": 6320,
+          "outputTokens": 4926,
+          "repairs": 0,
+          "findings": 0
+        },
+        "openui": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 15825,
+          "promptTokens": 6617,
+          "outputTokens": 3403,
+          "repairs": 0,
+          "findings": 0
+        }
+      }
+    },
+    {
+      "id": "20260806-165655-75f0",
+      "host": "cadence",
+      "prompt": "which clients are least profitable once I account for time spent",
+      "pack": "cadence",
+      "conversation": null,
+      "lanes": {
+        "vendo": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 3184,
+          "promptTokens": 2015,
+          "outputTokens": 450,
+          "repairs": 0,
+          "reasons": [
+            "Your host does not track time spent or client profitability metrics."
+          ]
+        },
+        "openui": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 3482,
+          "promptTokens": 6616,
+          "outputTokens": 438,
+          "repairs": 0,
+          "reasons": [
+            "Your host has no time tracking or fee/revenue data, so client profitability cannot be computed."
+          ]
+        }
+      }
+    },
+    {
+      "id": "20260806-165659-7bd6",
+      "host": "cadence",
+      "prompt": "one screen that answers: can I afford to hire someone",
+      "pack": "cadence",
+      "conversation": null,
+      "lanes": {
+        "vendo": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 3293,
+          "promptTokens": 2015,
+          "outputTokens": 440,
+          "repairs": 0,
+          "reasons": [
+            "Your host has no financial or payroll data to determine if you can afford to hire someone."
+          ]
+        },
+        "openui": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 3809,
+          "promptTokens": 6616,
+          "outputTokens": 594,
+          "repairs": 0,
+          "reasons": [
+            "Your host has no financial, revenue, expense, or payroll data, so whether you can afford to hire someone cannot be determined."
+          ]
+        }
+      }
+    },
+    {
+      "id": "20260806-165719-c069",
+      "host": "cadence",
+      "prompt": "show my clients",
+      "pack": null,
+      "conversation": null,
+      "lanes": {
+        "vendo": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 16082,
+          "promptTokens": 4786,
+          "outputTokens": 2728,
+          "repairs": 0,
+          "findings": 0
+        },
+        "openui": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 11859,
+          "promptTokens": 6608,
+          "outputTokens": 2693,
+          "repairs": 0,
+          "findings": 0
+        }
+      }
+    },
+    {
+      "id": "20260806-165728-018c",
+      "host": "maple",
+      "prompt": "show my clients",
+      "pack": null,
+      "conversation": null,
+      "lanes": {
+        "vendo": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 4031,
+          "promptTokens": 2067,
+          "outputTokens": 482,
+          "repairs": 0,
+          "reasons": [
+            "Your host has no way to show clients."
+          ]
+        },
+        "openui": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 4891,
+          "promptTokens": 6816,
+          "outputTokens": 675,
+          "repairs": 0,
+          "reasons": [
+            "Your host has no client data, so client information cannot be displayed."
+          ]
+        }
+      }
+    },
+    {
+      "id": "20260806-165811-16b7",
+      "host": "maple",
+      "prompt": "show my recent transactions",
+      "pack": null,
+      "conversation": {
+        "fixture": "maple-spending-workspace",
+        "turn": 1,
+        "of": 7
+      },
+      "lanes": {
+        "openui": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 9096,
+          "promptTokens": 6817,
+          "outputTokens": 1832,
+          "repairs": 0,
+          "findings": 0,
+          "editFindings": []
+        },
+        "vendo": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 18783,
+          "promptTokens": 4404,
+          "outputTokens": 3310,
+          "repairs": 0,
+          "findings": 0,
+          "editFindings": []
+        }
+      }
+    },
+    {
+      "id": "20260806-165822-af41",
+      "host": "maple",
+      "prompt": "add a bar chart of spending by category above the table",
+      "pack": null,
+      "conversation": {
+        "fixture": "maple-spending-workspace",
+        "turn": 2,
+        "of": 7
+      },
+      "lanes": {
+        "openui": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 7884,
+          "promptTokens": 7446,
+          "outputTokens": 1425,
+          "repairs": 0,
+          "findings": 0,
+          "editFindings": []
+        },
+        "vendo": {
+          "status": "failed",
+          "outcome": "failed",
+          "durationMs": 10695,
+          "promptTokens": 2308,
+          "outputTokens": 2416,
+          "repairs": 0,
+          "error": "generation failed: wire shape-mismatch: node \"barchart-1\" prop \"data\" (/spending/categories): \"categories\" indexes into an array in the tool's response shape (expected a numeric index) | binding /spending/categories on node \"barchart-1\" prop \"data\": \"categories\" indexes into an array in the tool's response shape (expected a numeric index)",
+          "editFindings": []
+        }
+      }
+    },
+    {
+      "id": "20260806-165840-2593",
+      "host": "maple",
+      "prompt": "make that chart a donut instead",
+      "pack": null,
+      "conversation": {
+        "fixture": "maple-spending-workspace",
+        "turn": 3,
+        "of": 7
+      },
+      "lanes": {
+        "openui": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 3213,
+          "promptTokens": 7519,
+          "outputTokens": 491,
+          "repairs": 0,
+          "findings": 0,
+          "editFindings": []
+        },
+        "vendo": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 17995,
+          "promptTokens": 3486,
+          "outputTokens": 3473,
+          "repairs": 0,
+          "findings": 0,
+          "editFindings": [
+            {
+              "severity": "warn",
+              "where": "element \"app\"",
+              "message": "preservation: this Stack disappeared on a turn that only asked to modify \u2014 regression on untouched UI"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "20260806-165857-612a",
+      "host": "maple",
+      "prompt": "add a stat card with my total balance across all accounts",
+      "pack": null,
+      "conversation": {
+        "fixture": "maple-spending-workspace",
+        "turn": 4,
+        "of": 7
+      },
+      "lanes": {
+        "openui": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 5910,
+          "promptTokens": 7550,
+          "outputTokens": 1075,
+          "repairs": 0,
+          "findings": 0,
+          "editFindings": []
+        },
+        "vendo": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 16769,
+          "promptTokens": 6085,
+          "outputTokens": 2963,
+          "repairs": 0,
+          "findings": 1,
+          "editFindings": []
+        }
+      }
+    },
+    {
+      "id": "20260806-165900-03f2",
+      "host": "maple",
+      "prompt": "also show my credit score next to it",
+      "pack": null,
+      "conversation": {
+        "fixture": "maple-spending-workspace",
+        "turn": 5,
+        "of": 7
+      },
+      "lanes": {
+        "openui": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 3164,
+          "promptTokens": 7620,
+          "outputTokens": 475,
+          "repairs": 0,
+          "reasons": [
+            "Your host has no credit score data, so credit score cannot be displayed."
+          ],
+          "editFindings": []
+        },
+        "vendo": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 3178,
+          "promptTokens": 2542,
+          "outputTokens": 459,
+          "repairs": 0,
+          "reasons": [
+            "Your host has no way to access or display your credit score."
+          ],
+          "editFindings": []
+        }
+      }
+    },
+    {
+      "id": "20260806-165910-faea",
+      "host": "maple",
+      "prompt": "remove the transactions table",
+      "pack": null,
+      "conversation": {
+        "fixture": "maple-spending-workspace",
+        "turn": 6,
+        "of": 7
+      },
+      "lanes": {
+        "openui": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 3629,
+          "promptTokens": 7655,
+          "outputTokens": 515,
+          "repairs": 0,
+          "findings": 0,
+          "editFindings": []
+        },
+        "vendo": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 10183,
+          "promptTokens": 3661,
+          "outputTokens": 1723,
+          "repairs": 0,
+          "findings": 0,
+          "editFindings": []
+        }
+      }
+    },
+    {
+      "id": "20260806-165918-79fa",
+      "host": "maple",
+      "prompt": "add a line chart of my cashflow over the last months",
+      "pack": null,
+      "conversation": {
+        "fixture": "maple-spending-workspace",
+        "turn": 7,
+        "of": 7
+      },
+      "lanes": {
+        "openui": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 6127,
+          "promptTokens": 7572,
+          "outputTokens": 1091,
+          "repairs": 0,
+          "findings": 0,
+          "editFindings": []
+        },
+        "vendo": {
+          "status": "failed",
+          "outcome": "failed",
+          "durationMs": 7679,
+          "promptTokens": 2505,
+          "outputTokens": 1638,
+          "repairs": 0,
+          "error": "generation failed: wire shape-mismatch: node \"linechart-1\" prop \"data\" (/cashflow/data): \"data\" indexes into an array in the tool's response shape (expected a numeric index) | binding /cashflow/data on node \"linechart-1\" prop \"data\": \"data\" indexes into an array in the tool's response shape (expected a numeric index)",
+          "editFindings": []
+        }
+      }
+    },
+    {
+      "id": "20260806-165947-e692",
+      "host": "cadence",
+      "prompt": "build me a deadline board for the next 30 days",
+      "pack": null,
+      "conversation": {
+        "fixture": "cadence-deadline-workspace",
+        "turn": 1,
+        "of": 6
+      },
+      "lanes": {
+        "openui": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 18613,
+          "promptTokens": 6617,
+          "outputTokens": 4203,
+          "repairs": 0,
+          "findings": 0,
+          "editFindings": []
+        },
+        "vendo": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 29729,
+          "promptTokens": 7484,
+          "outputTokens": 7477,
+          "repairs": 0,
+          "findings": 0,
+          "editFindings": []
+        }
+      }
+    },
+    {
+      "id": "20260806-165958-26f6",
+      "host": "cadence",
+      "prompt": "add a stat card with how many clients are missing documents",
+      "pack": null,
+      "conversation": {
+        "fixture": "cadence-deadline-workspace",
+        "turn": 2,
+        "of": 6
+      },
+      "lanes": {
+        "openui": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 4671,
+          "promptTokens": 7559,
+          "outputTokens": 750,
+          "repairs": 0,
+          "findings": 0,
+          "editFindings": []
+        },
+        "vendo": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 11141,
+          "promptTokens": 4073,
+          "outputTokens": 1753,
+          "repairs": 0,
+          "findings": 0,
+          "editFindings": [
+            {
+              "severity": "warn",
+              "where": "element \"app\"",
+              "message": "preservation: this Stack disappeared on a turn that only asked to add \u2014 regression on untouched UI"
+            },
+            {
+              "severity": "warn",
+              "where": "element \"group-0-body-cadencemissingdocshero-1\"",
+              "message": "preservation: this CadenceMissingDocsHero disappeared on a turn that only asked to add \u2014 regression on untouched UI"
+            },
+            {
+              "severity": "warn",
+              "where": "element \"tab-1\"",
+              "message": "preservation: this Stack disappeared on a turn that only asked to add \u2014 regression on untouched UI"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "20260806-170009-8440",
+      "host": "cadence",
+      "prompt": "show the deadlines as a table with client, filing deadline, and the missing document kinds",
+      "pack": null,
+      "conversation": {
+        "fixture": "cadence-deadline-workspace",
+        "turn": 3,
+        "of": 6
+      },
+      "lanes": {
+        "openui": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 5705,
+          "promptTokens": 7595,
+          "outputTokens": 1042,
+          "repairs": 0,
+          "findings": 0,
+          "editFindings": []
+        },
+        "vendo": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 10284,
+          "promptTokens": 4063,
+          "outputTokens": 1722,
+          "repairs": 0,
+          "findings": 0,
+          "editFindings": []
+        }
+      }
+    },
+    {
+      "id": "20260806-170012-803f",
+      "host": "cadence",
+      "prompt": "add a profitability column to that table",
+      "pack": null,
+      "conversation": {
+        "fixture": "cadence-deadline-workspace",
+        "turn": 4,
+        "of": 6
+      },
+      "lanes": {
+        "openui": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 3146,
+          "promptTokens": 7635,
+          "outputTokens": 303,
+          "repairs": 0,
+          "reasons": [
+            "Your host has no client profitability or revenue data, so a profitability column cannot be added."
+          ],
+          "editFindings": []
+        },
+        "vendo": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 3269,
+          "promptTokens": 2593,
+          "outputTokens": 524,
+          "repairs": 0,
+          "reasons": [
+            "Your host does not track client profitability, so a profitability column cannot be added to the table."
+          ],
+          "editFindings": []
+        }
+      }
+    },
+    {
+      "id": "20260806-170027-15f5",
+      "host": "cadence",
+      "prompt": "add a donut chart of clients by status",
+      "pack": null,
+      "conversation": {
+        "fixture": "cadence-deadline-workspace",
+        "turn": 5,
+        "of": 6
+      },
+      "lanes": {
+        "vendo": {
+          "status": "failed",
+          "outcome": "failed",
+          "durationMs": 8451,
+          "promptTokens": 2636,
+          "outputTokens": 1662,
+          "repairs": 0,
+          "error": "generation failed: node \"donutchart-1\" sets unknown prop \"categoryField\" on prewired component \"DonutChart\"; the renderer drops it. Allowed props: data, categoryKey, valueKey, format, donut, height, emptyState | node \"donutchart-1\" sets unknown prop \"title\" on prewired component \"DonutChart\"; the renderer drops it. Allowed props: data, categoryKey, valueKey, format, donut, height, emptyState",
+          "editFindings": []
+        },
+        "openui": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 14597,
+          "promptTokens": 7677,
+          "outputTokens": 2698,
+          "repairs": 0,
+          "findings": 0,
+          "editFindings": []
+        }
+      }
+    },
+    {
+      "id": "20260806-170034-bf4e",
+      "host": "cadence",
+      "prompt": "remove the missing-documents stat you added",
+      "pack": null,
+      "conversation": {
+        "fixture": "cadence-deadline-workspace",
+        "turn": 6,
+        "of": 6
+      },
+      "lanes": {
+        "openui": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 2586,
+          "promptTokens": 7753,
+          "outputTokens": 321,
+          "repairs": 0,
+          "findings": 0,
+          "editFindings": []
+        },
+        "vendo": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 7297,
+          "promptTokens": 4052,
+          "outputTokens": 1192,
+          "repairs": 0,
+          "findings": 1,
+          "editFindings": [
+            {
+              "severity": "warn",
+              "where": "edit",
+              "message": "expected a chart-pie in the UI after this turn; none is present"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "id": "20260806-170034-bf4e",
+  "createdAt": "2026-08-06T11:30:34.398Z",
+  "gitSha": "ac7ea3636d4640cb9be06932bc031494745d0fed",
+  "gitDirty": "de0b84545d34ab3f1303a76c5eeb421461e68666fab376de2f0ffb8266374cd5",
+  "request": {
+    "prompt": "remove the missing-documents stat you added",
+    "host": "cadence",
+    "lanes": [
+      "vendo",
+      "openui"
+    ],
+    "conversationRef": {
+      "fixture": "cadence-deadline-workspace",
+      "turn": 6,
+      "of": 6
+    }
+  },
+  "lanes": {
+    "openui": {
+      "status": "ok",
+      "startedAt": 1786015827112,
+      "durationMs": 2586,
+      "usage": {
+        "promptTokens": 7753,
+        "outputTokens": 321
+      },
+      "repairs": 0,
+      "editFindings": []
+    },
+    "vendo": {
+      "status": "ok",
+      "startedAt": 1786015827101,
+      "durationMs": 7297,
+      "usage": {
+        "promptTokens": 4052,
+        "outputTokens": 1192
+      },
+      "editFindings": [
+        {
+          "severity": "warn",
+          "where": "edit",
+          "message": "expected a chart-pie in the UI after this turn; none is present"
+        }
+      ]
+    }
+  }
+}

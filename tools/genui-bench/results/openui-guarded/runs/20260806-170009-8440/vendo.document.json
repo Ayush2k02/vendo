@@ -1,0 +1,214 @@
+{
+  "format": "vendo/app@1",
+  "name": "Deadline Board (Next 30 Days)",
+  "tree": {
+    "formatVersion": "vendo-genui/v2",
+    "root": "root",
+    "nodes": [
+      {
+        "id": "root",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "tabs"
+        ]
+      },
+      {
+        "id": "tabs",
+        "component": "Tabs",
+        "source": "prewired",
+        "props": {
+          "tabs": [
+            {
+              "value": "Upcoming Deadlines",
+              "label": "Upcoming Deadlines"
+            },
+            {
+              "value": "Activity & Urgency",
+              "label": "Activity & Urgency"
+            }
+          ],
+          "value": "Upcoming Deadlines"
+        },
+        "children": [
+          "tab-0",
+          "stack-1"
+        ]
+      },
+      {
+        "id": "tab-0",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "group-0"
+        ]
+      },
+      {
+        "id": "group-0",
+        "component": "Surface",
+        "source": "prewired",
+        "children": [
+          "group-0-title",
+          "group-0-body"
+        ]
+      },
+      {
+        "id": "group-0-title",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "30-Day Deadline Tracker",
+          "variant": "heading"
+        }
+      },
+      {
+        "id": "group-0-body",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "row-1",
+          "group-0-body-datatable-1"
+        ]
+      },
+      {
+        "id": "row-1",
+        "component": "Row",
+        "source": "prewired",
+        "children": [
+          "stat-1",
+          "cadencemissingdocshero-1"
+        ]
+      },
+      {
+        "id": "stat-1",
+        "component": "Stat",
+        "source": "prewired",
+        "props": {
+          "label": "Clients Missing Documents",
+          "value": {
+            "$path": "/dashboard/clientsMissingDocs"
+          }
+        }
+      },
+      {
+        "id": "cadencemissingdocshero-1",
+        "component": "CadenceMissingDocsHero",
+        "source": "host",
+        "props": {
+          "missingCount": {
+            "$path": "/dashboard/clientsMissingDocs"
+          },
+          "clientCount": {
+            "$path": "/dashboard/clientsTotal"
+          },
+          "badgeLabel": "Action Required"
+        }
+      },
+      {
+        "id": "group-0-body-datatable-1",
+        "component": "DataTable",
+        "source": "prewired",
+        "props": {
+          "rows": {
+            "$path": "/deadlines"
+          },
+          "sortBy": "filingDeadline asc",
+          "searchable": true,
+          "columns": [
+            {
+              "key": "businessName",
+              "label": "Client"
+            },
+            {
+              "key": "filingDeadline",
+              "label": "Filing Deadline",
+              "format": "date"
+            },
+            {
+              "key": "missingDocKinds",
+              "label": "Missing Document Kinds"
+            }
+          ],
+          "emptyState": "No deadlines found for the next 30 days"
+        }
+      },
+      {
+        "id": "stack-1",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "group-1"
+        ]
+      },
+      {
+        "id": "group-1",
+        "component": "Surface",
+        "source": "prewired",
+        "children": [
+          "group-1-title",
+          "group-1-body"
+        ]
+      },
+      {
+        "id": "group-1-title",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Recent Activity & Deadline Alerts",
+          "variant": "heading"
+        }
+      },
+      {
+        "id": "group-1-body",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "group-1-body-cardlist-1"
+        ]
+      },
+      {
+        "id": "group-1-body-cardlist-1",
+        "component": "CardList",
+        "source": "prewired",
+        "props": {
+          "items": {
+            "$path": "/activity"
+          },
+          "titleField": "summary",
+          "badgeField": "type",
+          "fields": [
+            {
+              "key": "at",
+              "label": "Date & Time",
+              "format": "datetime"
+            },
+            {
+              "key": "clientId",
+              "label": "Client ID"
+            }
+          ],
+          "columns": 2,
+          "emptyState": "No recent activity or deadline alerts."
+        }
+      }
+    ],
+    "queries": [
+      {
+        "name": "deadlines",
+        "tool": "host_listDeadlines",
+        "input": {}
+      },
+      {
+        "name": "dashboard",
+        "tool": "host_getDashboard",
+        "input": {}
+      },
+      {
+        "name": "activity",
+        "tool": "host_listActivity",
+        "input": {}
+      }
+    ]
+  },
+  "id": "app_bench_mshfoyag"
+}

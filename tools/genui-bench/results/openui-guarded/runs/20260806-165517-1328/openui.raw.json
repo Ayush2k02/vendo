@@ -1,0 +1,14 @@
+{
+  "model": "gemini-3.6-flash",
+  "responseText": "root = Stack([header, accountsSurface, transferSurface], 16)\nheader = Text(\"Transfer Money\", \"heading\")\naccounts = Query(\"host_listAccounts\", {}, [])\naccountsSurface = Surface([accountsTable], \"Account Balances\")\naccCols = [{key: \"name\", label: \"Account Name\"}, {key: \"kind\", label: \"Type\"}, {key: \"mask\", label: \"Mask\"}, {key: \"balance\", label: \"Balance\", format: \"money\", align: \"end\"}]\naccountsTable = DataTable(accounts, accCols)\ntransferSurface = Surface([transferNotice, transferForm], \"Make a Transfer\")\ntransferNotice = Callout(\"Transfers move funds directly from your account. Please confirm all details before submitting.\", \"info\", \"Transfer Notice\")\nfromSelect = Select(accounts, \"From Account\", \"name\", \"id\", \"Select source account\")\nrecipientInput = Input(\"To Account / Recipient Name\", null, \"e.g., Savings Account or Recipient Name\", \"text\")\namountInput = Input(\"Amount\", null, \"0.00\", \"number\")\nmemoInput = Input(\"Memo\", null, \"e.g., Monthly savings\", \"text\")\ntransferForm = Form([fromSelect, recipientInput, amountInput, memoInput], \"host_transferMoney\", \"Confirm Transfer\")",
+  "program": "root = Stack([header, accountsSurface, transferSurface], 16)\nheader = Text(\"Transfer Money\", \"heading\")\naccounts = Query(\"host_listAccounts\", {}, [])\naccountsSurface = Surface([accountsTable], \"Account Balances\")\naccCols = [{key: \"name\", label: \"Account Name\"}, {key: \"kind\", label: \"Type\"}, {key: \"mask\", label: \"Mask\"}, {key: \"balance\", label: \"Balance\", format: \"money\", align: \"end\"}]\naccountsTable = DataTable(accounts, accCols)\ntransferSurface = Surface([transferNotice, transferForm], \"Make a Transfer\")\ntransferNotice = Callout(\"Transfers move funds directly from your account. Please confirm all details before submitting.\", \"info\", \"Transfer Notice\")\nfromSelect = Select(accounts, \"From Account\", \"name\", \"id\", \"Select source account\")\nrecipientInput = Input(\"To Account / Recipient Name\", null, \"e.g., Savings Account or Recipient Name\", \"text\")\namountInput = Input(\"Amount\", null, \"0.00\", \"number\")\nmemoInput = Input(\"Memo\", null, \"e.g., Monthly savings\", \"text\")\ntransferForm = Form([fromSelect, recipientInput, amountInput, memoInput], \"host_transferMoney\", \"Confirm Transfer\")",
+  "toolsReferenced": [
+    "host_listAccounts"
+  ],
+  "parseMeta": {
+    "statementCount": 13,
+    "unresolved": [],
+    "orphaned": []
+  },
+  "repairs": 0
+}

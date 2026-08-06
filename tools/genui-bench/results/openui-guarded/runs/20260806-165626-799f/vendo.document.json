@@ -1,0 +1,141 @@
+{
+  "format": "vendo/app@1",
+  "name": "Month-end closing checklist",
+  "tree": {
+    "formatVersion": "vendo-genui/v2",
+    "root": "app",
+    "nodes": [
+      {
+        "id": "app",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "tabs"
+        ]
+      },
+      {
+        "id": "tabs",
+        "component": "Tabs",
+        "source": "prewired",
+        "props": {
+          "tabs": [
+            {
+              "value": "Readiness",
+              "label": "Readiness"
+            }
+          ],
+          "value": "Readiness"
+        },
+        "children": [
+          "tab-0"
+        ]
+      },
+      {
+        "id": "tab-0",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "group-0"
+        ]
+      },
+      {
+        "id": "group-0",
+        "component": "Surface",
+        "source": "prewired",
+        "children": [
+          "group-0-title",
+          "group-0-body"
+        ]
+      },
+      {
+        "id": "group-0-title",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Outstanding documents & deadlines",
+          "variant": "heading"
+        }
+      },
+      {
+        "id": "group-0-body",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "group-0-body-cadencemissingdocshero-1",
+          "group-0-body-datatable-1"
+        ]
+      },
+      {
+        "id": "group-0-body-cadencemissingdocshero-1",
+        "component": "CadenceMissingDocsHero",
+        "source": "host",
+        "props": {
+          "missingCount": {
+            "$path": "/dashboard/clientsMissingDocs"
+          },
+          "clientCount": {
+            "$path": "/dashboard/clientsTotal"
+          },
+          "badgeLabel": "Action Required"
+        }
+      },
+      {
+        "id": "group-0-body-datatable-1",
+        "component": "DataTable",
+        "source": "prewired",
+        "props": {
+          "rows": {
+            "$path": "/deadlines"
+          },
+          "sortBy": "filingDeadline asc",
+          "searchable": true,
+          "filterableBy": [
+            "status",
+            "entityType"
+          ],
+          "columns": [
+            {
+              "key": "businessName",
+              "label": "Client"
+            },
+            {
+              "key": "entityType",
+              "label": "Entity Type"
+            },
+            {
+              "key": "filingDeadline",
+              "label": "Filing Deadline",
+              "format": "date"
+            },
+            {
+              "key": "status",
+              "label": "Status"
+            },
+            {
+              "key": "assignee.name",
+              "label": "Assignee"
+            },
+            {
+              "key": "missingDocKinds",
+              "label": "Missing Documents"
+            }
+          ],
+          "emptyState": "No outstanding documents found"
+        }
+      }
+    ],
+    "queries": [
+      {
+        "name": "dashboard",
+        "tool": "host_getDashboard",
+        "input": {}
+      },
+      {
+        "name": "deadlines",
+        "tool": "host_listDeadlines",
+        "input": {}
+      }
+    ]
+  },
+  "id": "app_bench_mshfjy2x"
+}

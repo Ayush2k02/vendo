@@ -1,0 +1,15 @@
+{
+  "model": "gemini-3.6-flash",
+  "responseText": "root = Stack([header, kpis, tabs], 16)\nkpis = Row([stat1, stat3, stat4], 12)",
+  "program": "root = Stack([header, kpis, tabs], 16)\ndashData = Query(\"host_getDashboard\", {}, {\"clientsMissingDocs\": 0, \"documentsOutstanding\": 0, \"documentsReceived\": 0, \"documentsTotal\": 0, \"clientsTotal\": 0, \"nearestDeadline\": \"\", \"nearestDeadlineClient\": {\"id\": \"\", \"businessName\": \"\", \"filingDeadline\": \"\"}})\ndeadlinesData = Query(\"host_listDeadlines\", {}, [])\nheader = Stack([title, subtitle], 4)\ntitle = Text(\"30-Day Filing Deadline Board\", \"heading\")\nsubtitle = Text(\"Track tax filing deadlines, document collection status, and team assignments for upcoming client filings.\", \"caption\")\nkpis = Row([stat1, stat3, stat4], 12)\nstat1 = Stat(\"Total Active Clients\", dashData.clientsTotal, \"number\")\nstat3 = Stat(\"Outstanding Documents\", dashData.documentsOutstanding, \"number\", null, \"warning\")\nstat4 = Stat(\"Nearest Deadline Date\", dashData.nearestDeadline, \"date\", null, \"accent\")\ntabs = Tabs(tabList)\ntabList = [{label: \"Deadline Schedule\", content: table}, {label: \"Status Breakdown\", content: chartSurface}, {label: \"Client Overview Cards\", content: cardList}]\ntable = DataTable(deadlinesData, cols, \"filingDeadline asc\", 50, [\"status\", \"entityType\"], true, 10, \"No client deadlines scheduled.\")\ncols = [{key: \"businessName\", label: \"Client Name\"}, {key: \"filingDeadline\", label: \"Filing Deadline\", format: \"date\"}, {key: \"missingDocKinds\", label: \"Missing Documents\"}, {key: \"entityType\", label: \"Tax Form / Entity\"}, {key: \"status\", label: \"Status\"}, {key: \"assignee.name\", label: \"Assigned Staff\"}]\ncardList = CardList(deadlinesData, \"businessName\", \"status\", cardFields, 2, \"No client cards available.\")\ncardFields = [{key: \"entityType\", label: \"Tax Entity\"}, {key: \"filingDeadline\", label: \"Filing Deadline\", format: \"date\"}, {key: \"assignee.name\", label: \"Assigned Staff\"}]\nchartSurface = Surface([statusChart], \"Clients by Status\")\nstatusChart = DonutChart(deadlinesData, \"status\", \"progress.total\", \"number\")",
+  "toolsReferenced": [
+    "host_getDashboard",
+    "host_listDeadlines"
+  ],
+  "parseMeta": {
+    "statementCount": 18,
+    "unresolved": [],
+    "orphaned": []
+  },
+  "repairs": 0
+}

@@ -1,0 +1,25 @@
+<App name="Deadline Board">
+  <Query id="deadlines" tool="host_listDeadlines" input={{}}/>
+  <Query id="dashboard" tool="host_getDashboard" input={{}}/>
+  <Query id="activity" tool="host_listActivity" input={{}}/>
+  <Query id="hostListActivity" tool="host_listActivity" input={{}}/>
+  <Tabs id="tabs" tabs={[{ value: "30-Day View", label: "30-Day View" }, { value: "Activity Feed", label: "Activity Feed" }]} value="30-Day View">
+    <Stack id="tab-0">
+      <Surface id="group-0">
+        <Text id="group-0-title" text="Deadlines & Progress" variant="heading"/>
+        <Grid id="group-0-body" columns={2}>
+          <CadenceMissingDocsHero id="group-0-body-cadencemissingdocshero-1" missingCount={dashboard.clientsMissingDocs} clientCount={dashboard.clientsTotal} badgeLabel="Pending Documents"/>
+          <DataTable id="group-0-body-datatable-1" rows={deadlines} sortBy="filingDeadline asc" columns={[{ key: "businessName", label: "Business Name" }, { key: "entityType", label: "Entity Type" }, { key: "filingDeadline", label: "Filing Deadline", format: "date" }, { key: "status", label: "Status" }, { key: "missingDocKinds", label: "Missing Document Categories" }, { key: "assignee.name", label: "Assignee" }]} emptyState="No filing deadlines found between August 6, 2026 and September 5, 2026"/>
+        </Grid>
+      </Surface>
+    </Stack>
+    <Stack id="tab-1">
+      <Surface id="group-1">
+        <Text id="group-1-title" text="Deadline Activity Log" variant="heading"/>
+        <Stack id="group-1-body">
+          <DataTable id="group-1-body-datatable-1" rows={hostListActivity} columns={[{ key: "at", label: "Timestamp", format: "datetime" }, { key: "type", label: "Event Type" }, { key: "summary", label: "Summary" }, { key: "clientId", label: "Client ID" }]} sortBy="at desc" filterableBy={["type"]} searchable paginate={10} emptyState="No recent activity logged" caption="Recent uploads, document verifications, and deadline warnings"/>
+        </Stack>
+      </Surface>
+    </Stack>
+  </Tabs>
+</App>

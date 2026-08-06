@@ -1,0 +1,48 @@
+{
+  "id": "20260806-170012-803f",
+  "createdAt": "2026-08-06T11:30:12.490Z",
+  "gitSha": "ac7ea3636d4640cb9be06932bc031494745d0fed",
+  "gitDirty": "de0b84545d34ab3f1303a76c5eeb421461e68666fab376de2f0ffb8266374cd5",
+  "request": {
+    "prompt": "add a profitability column to that table",
+    "host": "cadence",
+    "lanes": [
+      "vendo",
+      "openui"
+    ],
+    "conversationRef": {
+      "fixture": "cadence-deadline-workspace",
+      "turn": 4,
+      "of": 6
+    }
+  },
+  "lanes": {
+    "openui": {
+      "status": "refused",
+      "startedAt": 1786015809236,
+      "durationMs": 3146,
+      "reasons": [
+        "Your host has no client profitability or revenue data, so a profitability column cannot be added."
+      ],
+      "usage": {
+        "promptTokens": 7635,
+        "outputTokens": 303
+      },
+      "repairs": 0,
+      "editFindings": []
+    },
+    "vendo": {
+      "status": "refused",
+      "startedAt": 1786015809221,
+      "durationMs": 3269,
+      "usage": {
+        "promptTokens": 2593,
+        "outputTokens": 524
+      },
+      "reasons": [
+        "Your host does not track client profitability, so a profitability column cannot be added to the table."
+      ],
+      "editFindings": []
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "id": "20260806-165601-b967",
+  "createdAt": "2026-08-06T11:26:01.729Z",
+  "gitSha": "ac7ea3636d4640cb9be06932bc031494745d0fed",
+  "gitDirty": "de0b84545d34ab3f1303a76c5eeb421461e68666fab376de2f0ffb8266374cd5",
+  "request": {
+    "prompt": "show me where my money went last quarter",
+    "host": "cadence",
+    "lanes": [
+      "vendo",
+      "openui"
+    ],
+    "packRef": {
+      "pack": "cadence",
+      "index": 1
+    }
+  },
+  "lanes": {
+    "vendo": {
+      "status": "refused",
+      "startedAt": 1786015558000,
+      "durationMs": 2992,
+      "usage": {
+        "promptTokens": 2012,
+        "outputTokens": 404
+      },
+      "reasons": [
+        "Your firm management system tracks tax document requests and deadlines, but has no spending or expense tracking tools to show where your money went last quarter."
+      ]
+    },
+    "openui": {
+      "status": "refused",
+      "startedAt": 1786015558008,
+      "durationMs": 3706,
+      "reasons": [
+        "Your host has no spending or transaction data, so expense tracking cannot be shown."
+      ],
+      "usage": {
+        "promptTokens": 6613,
+        "outputTokens": 558
+      },
+      "repairs": 0
+    }
+  }
+}

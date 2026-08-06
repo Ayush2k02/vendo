@@ -1,0 +1,39 @@
+{
+  "id": "20260806-165437-77f4",
+  "createdAt": "2026-08-06T11:24:37.280Z",
+  "gitSha": "ac7ea3636d4640cb9be06932bc031494745d0fed",
+  "gitDirty": "de0b84545d34ab3f1303a76c5eeb421461e68666fab376de2f0ffb8266374cd5",
+  "request": {
+    "prompt": "show my account balances at a glance",
+    "host": "maple",
+    "lanes": [
+      "vendo",
+      "openui"
+    ],
+    "packRef": {
+      "pack": "smoke",
+      "index": 0
+    }
+  },
+  "lanes": {
+    "vendo": {
+      "status": "ok",
+      "startedAt": 1786015416656,
+      "durationMs": 60593,
+      "usage": {
+        "promptTokens": 8374,
+        "outputTokens": 11364
+      }
+    },
+    "openui": {
+      "status": "ok",
+      "startedAt": 1786015416699,
+      "durationMs": 9891,
+      "usage": {
+        "promptTokens": 6820,
+        "outputTokens": 2032
+      },
+      "repairs": 0
+    }
+  }
+}

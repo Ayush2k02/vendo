@@ -1,0 +1,161 @@
+{
+  "format": "vendo/app@1",
+  "name": "Transfer Money",
+  "tree": {
+    "formatVersion": "vendo-genui/v2",
+    "root": "app",
+    "nodes": [
+      {
+        "id": "app",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "tabs"
+        ]
+      },
+      {
+        "id": "tabs",
+        "component": "Tabs",
+        "source": "prewired",
+        "props": {
+          "tabs": [
+            {
+              "value": "Transfer",
+              "label": "Transfer"
+            }
+          ],
+          "value": "Transfer"
+        },
+        "children": [
+          "tab-0"
+        ]
+      },
+      {
+        "id": "tab-0",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "group-0"
+        ]
+      },
+      {
+        "id": "group-0",
+        "component": "Surface",
+        "source": "prewired",
+        "children": [
+          "group-0-title",
+          "group-0-body"
+        ]
+      },
+      {
+        "id": "group-0-title",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Balances & Transfer",
+          "variant": "heading"
+        }
+      },
+      {
+        "id": "group-0-body",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "group-0-body-cardlist-1",
+          "group-0-body-form-1"
+        ]
+      },
+      {
+        "id": "group-0-body-cardlist-1",
+        "component": "CardList",
+        "source": "prewired",
+        "props": {
+          "items": {
+            "$path": "/hostListAccounts"
+          },
+          "titleField": "name",
+          "badgeField": "kind",
+          "fields": [
+            {
+              "key": "balance",
+              "label": "Available Balance",
+              "format": "money"
+            },
+            {
+              "key": "accountNumber",
+              "label": "Account Number"
+            }
+          ],
+          "emptyState": "No accounts available"
+        }
+      },
+      {
+        "id": "group-0-body-form-1",
+        "component": "Form",
+        "source": "prewired",
+        "props": {
+          "onSubmit": {
+            "action": "host_createTransfer"
+          },
+          "submitLabel": "Transfer Money"
+        },
+        "children": [
+          "group-0-body-select-1",
+          "group-0-body-select-2",
+          "group-0-body-input-1"
+        ]
+      },
+      {
+        "id": "group-0-body-select-1",
+        "component": "Select",
+        "source": "prewired",
+        "props": {
+          "label": "Source Account",
+          "name": "sourceAccountId",
+          "options": {
+            "$path": "/hostListAccounts"
+          },
+          "labelField": "name",
+          "valueField": "id"
+        }
+      },
+      {
+        "id": "group-0-body-select-2",
+        "component": "Select",
+        "source": "prewired",
+        "props": {
+          "label": "Destination Account",
+          "name": "destinationAccountId",
+          "options": {
+            "$path": "/hostListAccounts"
+          },
+          "labelField": "name",
+          "valueField": "id"
+        }
+      },
+      {
+        "id": "group-0-body-input-1",
+        "component": "Input",
+        "source": "prewired",
+        "props": {
+          "label": "Amount",
+          "name": "amount",
+          "type": "number"
+        }
+      }
+    ],
+    "queries": [
+      {
+        "name": "accounts",
+        "tool": "host_listAccounts",
+        "input": {}
+      },
+      {
+        "name": "hostListAccounts",
+        "tool": "host_listAccounts",
+        "input": {}
+      }
+    ]
+  },
+  "id": "app_bench_mshfi23l"
+}

@@ -1,0 +1,39 @@
+{
+  "id": "20260806-165541-a7e8",
+  "createdAt": "2026-08-06T11:25:41.194Z",
+  "gitSha": "ac7ea3636d4640cb9be06932bc031494745d0fed",
+  "gitDirty": "de0b84545d34ab3f1303a76c5eeb421461e68666fab376de2f0ffb8266374cd5",
+  "request": {
+    "prompt": "show my recent transactions with search",
+    "host": "maple",
+    "lanes": [
+      "vendo",
+      "openui"
+    ],
+    "packRef": {
+      "pack": "smoke",
+      "index": 2
+    }
+  },
+  "lanes": {
+    "vendo": {
+      "status": "ok",
+      "startedAt": 1786015517054,
+      "durationMs": 24108,
+      "usage": {
+        "promptTokens": 4480,
+        "outputTokens": 4203
+      }
+    },
+    "openui": {
+      "status": "ok",
+      "startedAt": 1786015517064,
+      "durationMs": 13840,
+      "usage": {
+        "promptTokens": 6819,
+        "outputTokens": 2908
+      },
+      "repairs": 0
+    }
+  }
+}

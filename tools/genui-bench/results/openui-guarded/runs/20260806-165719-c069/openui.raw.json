@@ -1,0 +1,15 @@
+{
+  "model": "gemini-3.6-flash",
+  "responseText": "```openui\nroot = Stack([header, summaryRow, clientTable], 16)\n\ndashboard = Query(\"host_getDashboard\", {}, {\"clientsMissingDocs\": 0, \"documentsOutstanding\": 0, \"documentsReceived\": 0, \"documentsTotal\": 0, \"clientsTotal\": 0, \"nearestDeadline\": \"\", \"nearestDeadlineClient\": {\"id\": \"\", \"businessName\": \"\", \"filingDeadline\": \"\"}})\nclients = Query(\"host_listClients\", {}, [])\n\nheader = Stack([title, subtitle], 4)\ntitle = Text(\"Client Directory\", \"heading\")\nsubtitle = Text(\"Overview of active clients, assigned staff, and tax document completion status.\", \"caption\")\n\nsummaryRow = Grid([totalClientsStat, missingDocsStat, totalDocsStat], 3, 12)\ntotalClientsStat = Stat(\"Total Clients\", dashboard.clientsTotal, \"number\")\nmissingDocsStat = Stat(\"Clients Missing Docs\", dashboard.clientsMissingDocs, \"number\", null, \"danger\")\ntotalDocsStat = Stat(\"Documents Received\", dashboard.documentsReceived, \"number\")\n\nclientTable = DataTable(clients, cols, \"businessName asc\", 50, [\"entityType\", \"status\"], true, 10, \"No clients found.\")\ncols = [{key: \"businessName\", label: \"Business Name\"}, {key: \"entityType\", label: \"Entity Type\"}, {key: \"contactName\", label: \"Contact\"}, {key: \"contactEmail\", label: \"Email\"}, {key: \"assignee.name\", label: \"Assigned To\"}, {key: \"filingDeadline\", label: \"Filing Deadline\", format: \"date\"}, {key: \"status\", label: \"Status\"}]\n```",
+  "program": "root = Stack([header, summaryRow, clientTable], 16)\n\ndashboard = Query(\"host_getDashboard\", {}, {\"clientsMissingDocs\": 0, \"documentsOutstanding\": 0, \"documentsReceived\": 0, \"documentsTotal\": 0, \"clientsTotal\": 0, \"nearestDeadline\": \"\", \"nearestDeadlineClient\": {\"id\": \"\", \"businessName\": \"\", \"filingDeadline\": \"\"}})\nclients = Query(\"host_listClients\", {}, [])\n\nheader = Stack([title, subtitle], 4)\ntitle = Text(\"Client Directory\", \"heading\")\nsubtitle = Text(\"Overview of active clients, assigned staff, and tax document completion status.\", \"caption\")\n\nsummaryRow = Grid([totalClientsStat, missingDocsStat, totalDocsStat], 3, 12)\ntotalClientsStat = Stat(\"Total Clients\", dashboard.clientsTotal, \"number\")\nmissingDocsStat = Stat(\"Clients Missing Docs\", dashboard.clientsMissingDocs, \"number\", null, \"danger\")\ntotalDocsStat = Stat(\"Documents Received\", dashboard.documentsReceived, \"number\")\n\nclientTable = DataTable(clients, cols, \"businessName asc\", 50, [\"entityType\", \"status\"], true, 10, \"No clients found.\")\ncols = [{key: \"businessName\", label: \"Business Name\"}, {key: \"entityType\", label: \"Entity Type\"}, {key: \"contactName\", label: \"Contact\"}, {key: \"contactEmail\", label: \"Email\"}, {key: \"assignee.name\", label: \"Assigned To\"}, {key: \"filingDeadline\", label: \"Filing Deadline\", format: \"date\"}, {key: \"status\", label: \"Status\"}]",
+  "toolsReferenced": [
+    "host_getDashboard",
+    "host_listClients"
+  ],
+  "parseMeta": {
+    "statementCount": 12,
+    "unresolved": [],
+    "orphaned": []
+  },
+  "repairs": 0
+}

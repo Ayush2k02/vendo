@@ -1,0 +1,15 @@
+<App name="Month-end closing checklist">
+  <Query id="dashboard" tool="host_getDashboard" input={{}}/>
+  <Query id="deadlines" tool="host_listDeadlines" input={{}}/>
+  <Tabs id="tabs" tabs={[{ value: "Readiness", label: "Readiness" }]} value="Readiness">
+    <Stack id="tab-0">
+      <Surface id="group-0">
+        <Text id="group-0-title" text="Outstanding documents & deadlines" variant="heading"/>
+        <Stack id="group-0-body">
+          <CadenceMissingDocsHero id="group-0-body-cadencemissingdocshero-1" missingCount={dashboard.clientsMissingDocs} clientCount={dashboard.clientsTotal} badgeLabel="Action Required"/>
+          <DataTable id="group-0-body-datatable-1" rows={deadlines} sortBy="filingDeadline asc" searchable filterableBy={["status", "entityType"]} columns={[{ key: "businessName", label: "Client" }, { key: "entityType", label: "Entity Type" }, { key: "filingDeadline", label: "Filing Deadline", format: "date" }, { key: "status", label: "Status" }, { key: "assignee.name", label: "Assignee" }, { key: "missingDocKinds", label: "Missing Documents" }]} emptyState="No outstanding documents found"/>
+        </Stack>
+      </Surface>
+    </Stack>
+  </Tabs>
+</App>

@@ -26,4 +26,4 @@ next-env.d.ts
 # must not swallow results/ screenshots (same rationale as the root
 # .gitignore's docs/verification negation — a result claim is worthless
 # without the evidence next to it).
-!/results/openui-experiment/screenshots/*.png
+!/results/openui-guarded/screenshots/*.png

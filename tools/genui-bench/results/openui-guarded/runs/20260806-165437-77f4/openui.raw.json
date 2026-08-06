@@ -1,0 +1,14 @@
+{
+  "model": "gemini-3.6-flash",
+  "responseText": "root = Stack([header, kpiRow, chartAndTable], 16)\naccounts = Query(\"host_listAccounts\", {}, [])\nheader = Text(\"Account Balances\", \"heading\")\nkpiRow = Row([netWorthStat, totalAccountsStat], 12)\nnetWorthStat = Stat(\"Total Balance\", totalBalance, \"money\", null, \"accent\")\ntotalAccountsStat = Stat(\"Total Accounts\", accountCount, \"number\")\ntotalBalance = @Sum(accounts.balance)\naccountCount = @Count(accounts)\nchartAndTable = Grid([chartSurface, tableSurface], 2, 16)\nchartSurface = Surface([accountChart], \"Balance Distribution\")\naccountChart = DonutChart(accounts, \"name\", \"balance\", \"money\")\ntableSurface = Surface([accountsTable], \"Accounts Breakdown\")\naccountsTable = DataTable(accounts, columns, \"balance desc\")\ncolumns = [{key: \"name\", label: \"Account Name\"}, {key: \"kind\", label: \"Type\"}, {key: \"mask\", label: \"Account #\"}, {key: \"balance\", label: \"Balance\", format: \"money\", align: \"end\"}]",
+  "program": "root = Stack([header, kpiRow, chartAndTable], 16)\naccounts = Query(\"host_listAccounts\", {}, [])\nheader = Text(\"Account Balances\", \"heading\")\nkpiRow = Row([netWorthStat, totalAccountsStat], 12)\nnetWorthStat = Stat(\"Total Balance\", totalBalance, \"money\", null, \"accent\")\ntotalAccountsStat = Stat(\"Total Accounts\", accountCount, \"number\")\ntotalBalance = @Sum(accounts.balance)\naccountCount = @Count(accounts)\nchartAndTable = Grid([chartSurface, tableSurface], 2, 16)\nchartSurface = Surface([accountChart], \"Balance Distribution\")\naccountChart = DonutChart(accounts, \"name\", \"balance\", \"money\")\ntableSurface = Surface([accountsTable], \"Accounts Breakdown\")\naccountsTable = DataTable(accounts, columns, \"balance desc\")\ncolumns = [{key: \"name\", label: \"Account Name\"}, {key: \"kind\", label: \"Type\"}, {key: \"mask\", label: \"Account #\"}, {key: \"balance\", label: \"Balance\", format: \"money\", align: \"end\"}]",
+  "toolsReferenced": [
+    "host_listAccounts"
+  ],
+  "parseMeta": {
+    "statementCount": 14,
+    "unresolved": [],
+    "orphaned": []
+  },
+  "repairs": 0
+}

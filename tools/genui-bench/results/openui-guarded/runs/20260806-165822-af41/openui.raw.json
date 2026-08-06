@@ -1,0 +1,15 @@
+{
+  "model": "gemini-3.6-flash",
+  "responseText": "root = Stack([header, statsRow, chartCard, table], 16)\nchartQuery = Query(\"host_getSpendingInsights\", {}, [])\nchartCard = Surface([chart], \"Spending by Category\")\nchart = BarChart(chartQuery, \"category\", [\"amount\"], \"money\")",
+  "program": "root = Stack([header, statsRow, chartCard, table], 16)\nheader = Text(\"Recent Transactions\", \"heading\")\nstatsRow = Row([statTotal], 12)\nstatTotal = Stat(\"Total Transactions\", txnsQuery.total, \"number\")\ntxnsQuery = Query(\"host_listTransactions\", {limit: 20}, {data: [], total: 0})\ncols = [{key: \"merchant\", label: \"Merchant\"}, {key: \"category\", label: \"Category\"}, {key: \"timestamp\", label: \"Date\", format: \"datetime\"}, {key: \"status\", label: \"Status\"}, {key: \"amount\", label: \"Amount\", format: \"money\", align: \"end\"}]\ntable = DataTable(txnsQuery.data, cols, \"timestamp desc\", 10, [\"category\", \"status\"], true, 10, \"No transactions found\")\nchartQuery = Query(\"host_getSpendingInsights\", {}, [])\nchartCard = Surface([chart], \"Spending by Category\")\nchart = BarChart(chartQuery, \"category\", [\"amount\"], \"money\")",
+  "toolsReferenced": [
+    "host_getSpendingInsights",
+    "host_listTransactions"
+  ],
+  "parseMeta": {
+    "statementCount": 10,
+    "unresolved": [],
+    "orphaned": []
+  },
+  "repairs": 0
+}

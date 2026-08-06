@@ -1,0 +1,19 @@
+<App name="Transfer Money">
+  <Query id="accounts" tool="host_listAccounts" input={{}}/>
+  <Query id="hostListAccounts" tool="host_listAccounts" input={{}}/>
+  <Tabs id="tabs" tabs={[{ value: "Transfer", label: "Transfer" }]} value="Transfer">
+    <Stack id="tab-0">
+      <Surface id="group-0">
+        <Text id="group-0-title" text="Balances & Transfer" variant="heading"/>
+        <Stack id="group-0-body">
+          <CardList id="group-0-body-cardlist-1" items={hostListAccounts} titleField="name" badgeField="kind" fields={[{ key: "balance", label: "Available Balance", format: "money" }, { key: "accountNumber", label: "Account Number" }]} emptyState="No accounts available"/>
+          <Form id="group-0-body-form-1" onSubmit="host_createTransfer" submitLabel="Transfer Money">
+            <Select id="group-0-body-select-1" label="Source Account" name="sourceAccountId" options={hostListAccounts} labelField="name" valueField="id"/>
+            <Select id="group-0-body-select-2" label="Destination Account" name="destinationAccountId" options={hostListAccounts} labelField="name" valueField="id"/>
+            <Input id="group-0-body-input-1" label="Amount" name="amount" type="number"/>
+          </Form>
+        </Stack>
+      </Surface>
+    </Stack>
+  </Tabs>
+</App>

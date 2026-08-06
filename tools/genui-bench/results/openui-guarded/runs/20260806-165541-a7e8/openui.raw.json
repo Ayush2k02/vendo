@@ -1,0 +1,14 @@
+{
+  "model": "gemini-3.6-flash",
+  "responseText": "```openui\nroot = Stack([header, searchBox, kpis, tableCard], 16)\n$search = \"\"\ntxns = Query(\"host_listTransactions\", { search: $search }, { data: [], total: 0 })\nheader = Text(\"Recent Transactions\", \"heading\")\nsearchBox = Input(\"Search\", $search, \"Search by merchant, category, descriptor...\", \"search\")\nkpis = Row([countStat, sumStat], 16)\ncountStat = Stat(\"Total Results\", txns.total, \"number\")\nsumStat = Stat(\"Total Amount\", @Sum(txns.data.amount), \"money\")\ntableCard = Surface([table], \"Transaction Details\")\ntable = DataTable(txns.data, cols, \"timestamp desc\", 20, [\"category\", \"status\"], true, 10, \"No transactions found.\")\ncols = [{ key: \"merchant\", label: \"Merchant\" }, { key: \"category\", label: \"Category\" }, { key: \"amount\", label: \"Amount\", format: \"money\", align: \"end\" }, { key: \"timestamp\", label: \"Date\", format: \"datetime\" }, { key: \"status\", label: \"Status\" }]\n```",
+  "program": "root = Stack([header, searchBox, kpis, tableCard], 16)\n$search = \"\"\ntxns = Query(\"host_listTransactions\", { search: $search }, { data: [], total: 0 })\nheader = Text(\"Recent Transactions\", \"heading\")\nsearchBox = Input(\"Search\", $search, \"Search by merchant, category, descriptor...\", \"search\")\nkpis = Row([countStat, sumStat], 16)\ncountStat = Stat(\"Total Results\", txns.total, \"number\")\nsumStat = Stat(\"Total Amount\", @Sum(txns.data.amount), \"money\")\ntableCard = Surface([table], \"Transaction Details\")\ntable = DataTable(txns.data, cols, \"timestamp desc\", 20, [\"category\", \"status\"], true, 10, \"No transactions found.\")\ncols = [{ key: \"merchant\", label: \"Merchant\" }, { key: \"category\", label: \"Category\" }, { key: \"amount\", label: \"Amount\", format: \"money\", align: \"end\" }, { key: \"timestamp\", label: \"Date\", format: \"datetime\" }, { key: \"status\", label: \"Status\" }]",
+  "toolsReferenced": [
+    "host_listTransactions"
+  ],
+  "parseMeta": {
+    "statementCount": 11,
+    "unresolved": [],
+    "orphaned": []
+  },
+  "repairs": 0
+}

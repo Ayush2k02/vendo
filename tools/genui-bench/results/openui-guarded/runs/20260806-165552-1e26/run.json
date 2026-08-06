@@ -1,0 +1,45 @@
+{
+  "id": "20260806-165552-1e26",
+  "createdAt": "2026-08-06T11:25:52.172Z",
+  "gitSha": "ac7ea3636d4640cb9be06932bc031494745d0fed",
+  "gitDirty": "de0b84545d34ab3f1303a76c5eeb421461e68666fab376de2f0ffb8266374cd5",
+  "request": {
+    "prompt": "show my recent transactions with search",
+    "host": "cadence",
+    "lanes": [
+      "vendo",
+      "openui"
+    ],
+    "packRef": {
+      "pack": "smoke",
+      "index": 2
+    }
+  },
+  "lanes": {
+    "vendo": {
+      "status": "refused",
+      "startedAt": 1786015549124,
+      "durationMs": 2863,
+      "usage": {
+        "promptTokens": 2010,
+        "outputTokens": 335
+      },
+      "reasons": [
+        "Your host has no way to track or search transactions."
+      ]
+    },
+    "openui": {
+      "status": "refused",
+      "startedAt": 1786015549132,
+      "durationMs": 3025,
+      "reasons": [
+        "Your host has no transaction or financial ledger data, so recent transactions cannot be shown."
+      ],
+      "usage": {
+        "promptTokens": 6611,
+        "outputTokens": 414
+      },
+      "repairs": 0
+    }
+  }
+}

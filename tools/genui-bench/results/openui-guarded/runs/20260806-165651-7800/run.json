@@ -1,0 +1,39 @@
+{
+  "id": "20260806-165651-7800",
+  "createdAt": "2026-08-06T11:26:51.850Z",
+  "gitSha": "ac7ea3636d4640cb9be06932bc031494745d0fed",
+  "gitDirty": "de0b84545d34ab3f1303a76c5eeb421461e68666fab376de2f0ffb8266374cd5",
+  "request": {
+    "prompt": "build me a deadline board for the next 30 days",
+    "host": "cadence",
+    "lanes": [
+      "vendo",
+      "openui"
+    ],
+    "packRef": {
+      "pack": "cadence",
+      "index": 5
+    }
+  },
+  "lanes": {
+    "vendo": {
+      "status": "ok",
+      "startedAt": 1786015590894,
+      "durationMs": 20814,
+      "usage": {
+        "promptTokens": 6320,
+        "outputTokens": 4926
+      }
+    },
+    "openui": {
+      "status": "ok",
+      "startedAt": 1786015590904,
+      "durationMs": 15825,
+      "usage": {
+        "promptTokens": 6617,
+        "outputTokens": 3403
+      },
+      "repairs": 0
+    }
+  }
+}

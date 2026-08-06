@@ -1,0 +1,42 @@
+{
+  "id": "20260806-165910-faea",
+  "createdAt": "2026-08-06T11:29:10.366Z",
+  "gitSha": "ac7ea3636d4640cb9be06932bc031494745d0fed",
+  "gitDirty": "de0b84545d34ab3f1303a76c5eeb421461e68666fab376de2f0ffb8266374cd5",
+  "request": {
+    "prompt": "remove the transactions table",
+    "host": "maple",
+    "lanes": [
+      "vendo",
+      "openui"
+    ],
+    "conversationRef": {
+      "fixture": "maple-spending-workspace",
+      "turn": 6,
+      "of": 7
+    }
+  },
+  "lanes": {
+    "openui": {
+      "status": "ok",
+      "startedAt": 1786015740194,
+      "durationMs": 3629,
+      "usage": {
+        "promptTokens": 7655,
+        "outputTokens": 515
+      },
+      "repairs": 0,
+      "editFindings": []
+    },
+    "vendo": {
+      "status": "ok",
+      "startedAt": 1786015740183,
+      "durationMs": 10183,
+      "usage": {
+        "promptTokens": 3661,
+        "outputTokens": 1723
+      },
+      "editFindings": []
+    }
+  }
+}

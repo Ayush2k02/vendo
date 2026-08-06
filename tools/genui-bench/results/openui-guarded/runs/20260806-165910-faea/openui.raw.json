@@ -1,0 +1,16 @@
+{
+  "model": "gemini-3.6-flash",
+  "responseText": "```openui-lang\nroot = Stack([header, statsRow, chartCard], 16)\n```",
+  "program": "root = Stack([header, statsRow, chartCard], 16)\nheader = Text(\"Recent Transactions\", \"heading\")\nstatsRow = Row([statBalance, statTotal], 12)\nstatTotal = Stat(\"Total Transactions\", txnsQuery.total, \"number\")\ntxnsQuery = Query(\"host_listTransactions\", {limit: 20}, {data: [], total: 0})\nchartQuery = Query(\"host_getSpendingInsights\", {}, [])\nchartCard = Surface([chart], \"Spending by Category\")\nchart = DonutChart(chartQuery, \"category\", \"amount\", \"money\")\naccountsQuery = Query(\"host_listAccounts\", {}, [])\ntotalBalance = @Sum(accountsQuery.balance)\nstatBalance = Stat(\"Total Balance\", totalBalance, \"money\")",
+  "toolsReferenced": [
+    "host_getSpendingInsights",
+    "host_listAccounts",
+    "host_listTransactions"
+  ],
+  "parseMeta": {
+    "statementCount": 11,
+    "unresolved": [],
+    "orphaned": []
+  },
+  "repairs": 0
+}

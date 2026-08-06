@@ -1,0 +1,45 @@
+{
+  "id": "20260806-165630-30ab",
+  "createdAt": "2026-08-06T11:26:30.893Z",
+  "gitSha": "ac7ea3636d4640cb9be06932bc031494745d0fed",
+  "gitDirty": "de0b84545d34ab3f1303a76c5eeb421461e68666fab376de2f0ffb8266374cd5",
+  "request": {
+    "prompt": "show revenue by client with a chart, and let me drill into one",
+    "host": "cadence",
+    "lanes": [
+      "vendo",
+      "openui"
+    ],
+    "packRef": {
+      "pack": "cadence",
+      "index": 4
+    }
+  },
+  "lanes": {
+    "vendo": {
+      "status": "refused",
+      "startedAt": 1786015586952,
+      "durationMs": 3927,
+      "usage": {
+        "promptTokens": 2018,
+        "outputTokens": 570
+      },
+      "reasons": [
+        "Your host has no billing or financial tools to track revenue by client."
+      ]
+    },
+    "openui": {
+      "status": "refused",
+      "startedAt": 1786015586963,
+      "durationMs": 3715,
+      "reasons": [
+        "The host tools do not track client revenue or financial data, so client revenue charts and drill-downs cannot be generated."
+      ],
+      "usage": {
+        "promptTokens": 6619,
+        "outputTokens": 545
+      },
+      "repairs": 0
+    }
+  }
+}

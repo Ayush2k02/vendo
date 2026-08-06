@@ -1,0 +1,43 @@
+{
+  "id": "20260806-170027-15f5",
+  "createdAt": "2026-08-06T11:30:27.101Z",
+  "gitSha": "ac7ea3636d4640cb9be06932bc031494745d0fed",
+  "gitDirty": "de0b84545d34ab3f1303a76c5eeb421461e68666fab376de2f0ffb8266374cd5",
+  "request": {
+    "prompt": "add a donut chart of clients by status",
+    "host": "cadence",
+    "lanes": [
+      "vendo",
+      "openui"
+    ],
+    "conversationRef": {
+      "fixture": "cadence-deadline-workspace",
+      "turn": 5,
+      "of": 6
+    }
+  },
+  "lanes": {
+    "vendo": {
+      "status": "failed",
+      "startedAt": 1786015812491,
+      "durationMs": 8451,
+      "usage": {
+        "promptTokens": 2636,
+        "outputTokens": 1662
+      },
+      "error": "generation failed: node \"donutchart-1\" sets unknown prop \"categoryField\" on prewired component \"DonutChart\"; the renderer drops it. Allowed props: data, categoryKey, valueKey, format, donut, height, emptyState | node \"donutchart-1\" sets unknown prop \"title\" on prewired component \"DonutChart\"; the renderer drops it. Allowed props: data, categoryKey, valueKey, format, donut, height, emptyState",
+      "editFindings": []
+    },
+    "openui": {
+      "status": "ok",
+      "startedAt": 1786015812504,
+      "durationMs": 14597,
+      "usage": {
+        "promptTokens": 7677,
+        "outputTokens": 2698
+      },
+      "repairs": 0,
+      "editFindings": []
+    }
+  }
+}

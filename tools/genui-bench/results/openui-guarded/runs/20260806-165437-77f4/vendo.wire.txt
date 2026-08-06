@@ -1,0 +1,9 @@
+<App name="Account Balances">
+  <Query id="accounts" tool="host_listAccounts" input={{}}/>
+  <Surface id="group-0">
+    <Text id="group-0-title" text="Balances Overview" variant="heading"/>
+    <Stack id="group-0-body">
+      This section could not be built — retry the edit.
+    </Stack>
+  </Surface>
+</App>

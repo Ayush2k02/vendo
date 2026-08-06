@@ -1,0 +1,41 @@
+{
+  "id": "20260806-165728-018c",
+  "createdAt": "2026-08-06T11:27:28.165Z",
+  "gitSha": "ac7ea3636d4640cb9be06932bc031494745d0fed",
+  "gitDirty": "de0b84545d34ab3f1303a76c5eeb421461e68666fab376de2f0ffb8266374cd5",
+  "request": {
+    "prompt": "show my clients",
+    "host": "maple",
+    "lanes": [
+      "vendo",
+      "openui"
+    ]
+  },
+  "lanes": {
+    "vendo": {
+      "status": "refused",
+      "startedAt": 1786015643158,
+      "durationMs": 4031,
+      "usage": {
+        "promptTokens": 2067,
+        "outputTokens": 482
+      },
+      "reasons": [
+        "Your host has no way to show clients."
+      ]
+    },
+    "openui": {
+      "status": "refused",
+      "startedAt": 1786015643246,
+      "durationMs": 4891,
+      "reasons": [
+        "Your host has no client data, so client information cannot be displayed."
+      ],
+      "usage": {
+        "promptTokens": 6816,
+        "outputTokens": 675
+      },
+      "repairs": 0
+    }
+  }
+}
