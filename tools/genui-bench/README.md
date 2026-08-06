@@ -1,11 +1,11 @@
 # genui-bench
 
 The interactive inner loop for the micro-app format and generation pipeline:
-type a prompt (or run a pack), watch four lanes answer it side by side — the
+type a prompt (or run a pack), watch five lanes answer it side by side — the
 Vendo lane as a fully interactive app on the production `@vendoai/ui` renderer
 with tool calls executing against canned host fixtures, and Thesys C1 /
-CopilotKit / Tambo rendered with their own SDKs — with every run persisted as
-a RunRecord you can reload, pin, and split-compare. Private workspace app,
+CopilotKit / Tambo / OpenUI rendered with their own SDKs — with every run
+persisted as a RunRecord you can reload, pin, and split-compare. Private workspace app,
 never published or deployed. There is deliberately no judging: eyes are the
 judge. Spec: `docs/superpowers/specs/2026-07-26-genui-bench-playground-design.md`.
 
@@ -70,6 +70,16 @@ model accepts; every history-rail entry shows the model its run used.
 `GENUI_BENCH_MODEL` still works as the headless override for the default
 path — it sets the id used when a run carries no model choice.
 
+**Keyless-Anthropic fallback.** When no `ANTHROPIC_API_KEY` is available but
+the root `.env` carries `GEMINI_API_KEY` + `GEMINI_MODEL`, every generating
+lane (vendo, copilotkit excepted — it needs the Anthropic runtime — and
+openui) resolves that Gemini model instead, through `@ai-sdk/google`
+(provider inferred from the id prefix). One resolver
+(`runner/models.ts defaultModelId`) feeds the lanes AND the JSON summary
+line, so what ran is always what is reported; the same model drives every
+lane, keeping the comparison fair. `--model` (the Anthropic A/B table) still
+requires an Anthropic key.
+
 ## Lane keys
 
 Keys load from the repo-root `.env` (source-only; a missing key marks that
@@ -81,9 +91,10 @@ lane `{"status":"no-key"}` and the run proceeds):
 | copilotkit | `ANTHROPIC_API_KEY` | self-hosted runtime (keyless — no CopilotKit account needed) |
 | thesys-c1  | `THESYS_API_KEY`    | their API + their React renderer (model below)               |
 | tambo      | `TAMBO_API_KEY`     | their orchestration + harness component registry             |
+| openui     | `ANTHROPIC_API_KEY` | guarded openui-lang over their OSS runtime + VENDO's kit (keyless — no OpenUI account needed) |
 
-`GENUI_BENCH_MODEL` overrides the Vendo/CopilotKit default model id (a per-run
-`--model` wins over it — see Model controls).
+`GENUI_BENCH_MODEL` overrides the Vendo/CopilotKit/OpenUI default model id (a
+per-run `--model` wins over it — see Model controls).
 `GENUI_BENCH_FAKE_LANES=1` swaps every lane for a stub (tests, no keys).
 
 **Thesys C1 is model-agnostic.** Their catalog (`GET /v1/embed/models`, 34
@@ -97,6 +108,46 @@ final assistant content string wrapped in a `<content thesys="true"
 version="2">` envelope around an ```openui-lang``` program; the lane passes
 that string through untouched because `C1Component` parses the envelope
 itself.
+
+**OpenUI is the same language without their cloud — guarded, over VENDO's
+kit.** The openui lane drives openui-lang (their parser, prompt generator,
+merge semantics, `Renderer`) with VENDO's component kit registered as the
+library (`lanes/vendo-openui-library.ts`: every `KIT_SPECS` component as a
+`defineComponent` entry, prompt signatures derived from the Kit's own schemas,
+a drift test pinning the two; the few stock openui components with no Kit
+equivalent stay available but their use is RECORDED as a warn finding). On top
+ride vendo's guardrails (`lanes/openui-guardrails.ts`):
+
+- **Grounding + typed refusal** — the system prompt appends the vendo brain's
+  honesty contract, overriding the stock prompt's "use realistic mock data"
+  instruction; an ungroundable ask answers with `<Cannot>` lines and lands as
+  `status:"refused"`, rendered as the Kit's own `Disclaimer` cards.
+- **Pre-render fact validation** — every `Query()`/`Mutation()` binding is
+  checked against the host catalog (the finding lists the real tools, the
+  `unknownToolIssues` teaching pattern) and every element against the library
+  schema (their parser's ValidationErrors, enriched with their hints), before
+  anything renders.
+- **Bounded repair** — blocking findings go back to the model as a teaching
+  instruction (at most 2 rounds, the conductor's own `FIX_ROUNDS`); what
+  survives is an honest `failed`, never a silently broken render. A repair
+  round may also honestly CONVERT to a refusal.
+
+Rendering: OpenUIPane feeds the program to their `Renderer` over the vendo
+kit wrappers (`cockpit/panes/vendo-kit-openui.tsx`), themed by the host's real
+`.vendo/theme.json` (GET `/api/theme`); `Query()` bindings and Button/Form
+host-tool actions resolve through `/api/tools` at render time.
+
+**Conversations (multi-turn).** `bench run --conversations conversations`
+drives every `ConversationFixture` in `packs/conversations.json` through the
+session-capable lanes (vendo: `conductCreate`/`conductEdit` with the brain
+session carried; openui: their edit mode — patch statements merged by name,
+untouched statements surviving verbatim). Each turn persists as its own
+RunRecord (`request.conversationRef` links the thread) with the three-valued
+outcome (answered / refused / failed), token usage, repair count, and per-turn
+scoring findings (`runner/conversation.ts`): fabrication-risk (answered where
+the fixture demands a refusal), preservation (a refusal must leave the UI
+byte-identical; an add/modify edit must not lose untouched elements), and
+lane-neutral widget expectations (`wants`/`drops`).
 
 Working in a git worktree (or keeping keys outside the repo)? There is no
 `.env` at the worktree root, so source your key file into the shell first —

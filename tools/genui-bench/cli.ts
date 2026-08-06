@@ -12,9 +12,11 @@ import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 import { executeRun } from "./runner/run";
+import { executeConversation } from "./runner/conversation";
 import {
   EFFORT_LEVELS,
   PRODUCTION_MODEL,
+  defaultModelId,
   findModel,
   modelChoices,
   validateModelChoice,
@@ -25,7 +27,7 @@ import type { HostFixture, HostName, LaneAdapter, LaneName, RunRequest } from ".
 
 const APP_DIR = dirname(fileURLToPath(import.meta.url));
 const HOSTS: HostName[] = ["maple", "cadence"];
-const LANES: LaneName[] = ["vendo", "thesys-c1", "copilotkit", "tambo"];
+const LANES: LaneName[] = ["vendo", "thesys-c1", "copilotkit", "tambo", "openui"];
 
 async function main(): Promise<void> {
   const { values, positionals } = parseArgs({
@@ -35,6 +37,7 @@ async function main(): Promise<void> {
       host: { type: "string" },
       prompt: { type: "string", multiple: true },
       pack: { type: "string" },
+      conversations: { type: "string" },
       lanes: { type: "string", default: "vendo" },
       "runs-dir": { type: "string" },
       model: { type: "string" },
@@ -46,14 +49,22 @@ async function main(): Promise<void> {
     usage(`unknown command "${positionals[0]}" — only "run" exists`);
   }
 
-  const host = values.host as HostName | undefined;
-  if (!host) usage("--host <maple|cadence> is required");
-  if (!HOSTS.includes(host)) usage(`unknown --host "${host}" (maple|cadence)`);
-
   const lanes = (values.lanes as string).split(",").map((lane) => lane.trim()) as LaneName[];
   for (const lane of lanes) {
     if (!LANES.includes(lane)) usage(`unknown lane "${lane}" (${LANES.join("|")})`);
   }
+
+  if (values.conversations !== undefined) {
+    if (values.host || values.prompt?.length || values.pack || values.model) {
+      usage("--conversations is self-contained (fixtures define hosts and asks) — drop --host/--prompt/--pack/--model");
+    }
+    await runConversations(values.conversations, lanes, values["runs-dir"]);
+    return;
+  }
+
+  const host = values.host as HostName | undefined;
+  if (!host) usage("--host <maple|cadence> is required");
+  if (!HOSTS.includes(host)) usage(`unknown --host "${host}" (maple|cadence)`);
 
   const model = resolveModel(values.model, values.temperature, values.thinking);
   const prompts = resolvePrompts(values.prompt, values.pack);
@@ -75,8 +86,9 @@ async function main(): Promise<void> {
     console.log(join(runsDir, record.id, "run.json"));
 
     // The summary always names the model that actually ran, so an agent
-    // reading the line never has to know what the engine default is.
-    const entry: Record<string, unknown> = { prompt, model: model ?? { id: PRODUCTION_MODEL.id } };
+    // reading the line never has to know what the engine default is — the
+    // resolver covers GENUI_BENCH_MODEL and the Gemini fallback too.
+    const entry: Record<string, unknown> = { prompt, model: model ?? { id: defaultModelId() } };
     for (const lane of lanes) {
       const result = record.lanes[lane];
       if (!result) continue;
@@ -94,6 +106,64 @@ async function main(): Promise<void> {
     summary.push(entry);
   }
   console.log(JSON.stringify({ runs: summary }));
+}
+
+/**
+ * `--conversations <pack>` — run every ConversationFixture in
+ * packs/<pack>.json through the session-capable lanes, printing one summary
+ * entry per fixture with per-turn outcomes (answered/refused/failed), wall
+ * time, repairs, and scoring-finding counts.
+ */
+async function runConversations(
+  packName: string,
+  lanes: LaneName[],
+  runsDirFlag: string | undefined,
+): Promise<void> {
+  const packPath = join(APP_DIR, "packs", `${packName}.json`);
+  if (!existsSync(packPath)) usage(`conversations pack not found: ${packPath}`);
+  const { conversations } = JSON.parse(readFileSync(packPath, "utf8")) as {
+    conversations: import("./runner/types").ConversationFixture[];
+  };
+  if (!Array.isArray(conversations) || conversations.length === 0) {
+    usage(`${packPath} carries no "conversations" array`);
+  }
+  const runsDir = runsDirFlag ?? join(APP_DIR, "runs");
+
+  loadRootEnv();
+  const { fixtures, adapters } = await resolveLanes(lanes);
+
+  const summary: Array<Record<string, unknown>> = [];
+  for (const fixture of conversations) {
+    const records = await executeConversation(fixture, fixtures, adapters, runsDir);
+    for (const record of records) console.log(join(runsDir, record.id, "run.json"));
+    summary.push({
+      fixture: fixture.id,
+      host: fixture.host,
+      model: { id: defaultModelId() },
+      turns: records.map((record, index) => {
+        const turn: Record<string, unknown> = {
+          ask: fixture.turns[index]?.ask,
+          expect: fixture.turns[index]?.expect.outcome,
+        };
+        for (const [lane, result] of Object.entries(record.lanes)) {
+          if (result.status === "no-key") {
+            turn[lane] = { status: "no-key" };
+            continue;
+          }
+          turn[lane] = {
+            status: result.status,
+            durationMs: result.durationMs,
+            ...(result.repairs ? { repairs: result.repairs } : {}),
+            ...(result.editFindings?.length ? { editFindings: result.editFindings.length } : {}),
+            ...(result.status === "refused" ? { reasons: result.reasons } : {}),
+            ...(result.status === "failed" ? { error: result.error } : {}),
+          };
+        }
+        return turn;
+      }),
+    });
+  }
+  console.log(JSON.stringify({ conversations: summary }));
 }
 
 /**
@@ -165,6 +235,16 @@ async function resolveLanes(lanes: LaneName[]): Promise<{
         async generate() {
           return { status: "ok", startedAt: Date.now(), durationMs: 0, findings: [] };
         },
+        createSession() {
+          return {
+            async turn() {
+              return { status: "ok", startedAt: Date.now(), durationMs: 0, findings: [] };
+            },
+            snapshot() {
+              return { elements: [], components: {} };
+            },
+          };
+        },
       }),
     );
     return { fixtures: { maple: stub("maple"), cadence: stub("cadence") }, adapters };
@@ -206,7 +286,8 @@ function loadRootEnv(): void {
 function usage(message: string): never {
   console.error(`genui-bench: ${message}`);
   console.error(
-    'usage: bench run --host <maple|cadence> (--prompt "..." [--prompt "..."] | --pack <name>) [--lanes vendo,thesys-c1,copilotkit,tambo] [--runs-dir <dir>]' +
+    'usage: bench run --host <maple|cadence> (--prompt "..." [--prompt "..."] | --pack <name>) [--lanes vendo,thesys-c1,copilotkit,tambo,openui] [--runs-dir <dir>]' +
+      "\n       bench run --conversations <pack> [--lanes vendo,openui] [--runs-dir <dir>]   (multi-turn fixtures; hosts come from the pack)" +
       `\n       [--model <id|label>] [--temperature <0-1>] [--thinking <tokens|${EFFORT_LEVELS.join("|")}>]` +
       `\n       models: ${modelChoices()}` +
       `\n       (no --model = the engine default, ${PRODUCTION_MODEL.id})`,

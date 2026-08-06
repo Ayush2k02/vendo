@@ -33,6 +33,11 @@ export function HistoryRail({
         >
           <div className="rprompt">
             {run.pin && <span className="pinbadge">★ {run.pin} </span>}
+            {run.request.conversationRef && (
+              <span className="pinbadge" title={run.request.conversationRef.fixture}>
+                ⟲ {run.request.conversationRef.turn}/{run.request.conversationRef.of}{" "}
+              </span>
+            )}
             {run.request.prompt}
           </div>
           {/* The model rides the rail, not the pane header: split-compare is

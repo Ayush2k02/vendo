@@ -97,7 +97,7 @@ async function runLane(
 }
 
 /** `${yyyymmdd-hhmmss}-${4 hex}` — sortable, collision-safe enough for one dir. */
-function newRunId(): string {
+export function newRunId(): string {
   const now = new Date();
   const pad = (value: number) => String(value).padStart(2, "0");
   const stamp =

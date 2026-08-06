@@ -80,9 +80,11 @@ function HostFrame({
   );
 }
 
-/** A lane result is frameable only when it carries a document to render. */
+/** A lane result is frameable when it carries a document to render — an ok
+ *  run's app, or the PRESERVED previous app riding a mid-conversation
+ *  refusal (the partial-refusal contract). */
 function hasDocument(result: LaneResult | undefined): boolean {
-  return result?.status === "ok" && result.document !== undefined;
+  return (result?.status === "ok" || result?.status === "refused") && result.document !== undefined;
 }
 
 export function VendoPane({ result, host, runId, compare }: PaneProps) {
@@ -92,9 +94,27 @@ export function VendoPane({ result, host, runId, compare }: PaneProps) {
   if (result.status === "failed") {
     return <PaneNote>Generation failed: {result.error}</PaneNote>;
   }
+  if (result.status === "refused" && !hasDocument(result)) {
+    return (
+      <PaneNote>
+        <span data-vendo-refusal="">The host refused this ask:</span>
+        <ul style={{ margin: "6px 0 0", paddingLeft: 18 }}>
+          {result.reasons.map((reason, index) => <li key={index}>{reason}</li>)}
+        </ul>
+      </PaneNote>
+    );
+  }
   if (!hasDocument(result)) {
     return <PaneNote>The run carries no document.</PaneNote>;
   }
+  const refusalBanner = result.status === "refused" ? (
+    <div
+      data-vendo-refusal-banner=""
+      style={{ padding: "8px 12px", fontSize: 12.5, color: "#8a6d1d", background: "#fdf6e3", borderBottom: "1px solid #eadfb8" }}
+    >
+      refused — the app below is the PREVIOUS turn&apos;s, preserved intact: {result.reasons.join(" · ")}
+    </div>
+  ) : null;
 
   if (compare !== undefined) {
     return (
@@ -111,7 +131,12 @@ export function VendoPane({ result, host, runId, compare }: PaneProps) {
       </div>
     );
   }
-  return <HostFrame host={host} runId={runId} readOnly={false} title="Vendo — generated app" />;
+  return (
+    <div style={{ display: "flex", flexDirection: "column", height: "100%", minHeight: 0 }}>
+      {refusalBanner}
+      <HostFrame host={host} runId={runId} readOnly={result.status === "refused"} title="Vendo — generated app" />
+    </div>
+  );
 }
 
 export default VendoPane;

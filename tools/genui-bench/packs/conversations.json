@@ -1,0 +1,44 @@
+{
+  "conversations": [
+    {
+      "id": "maple-spending-workspace",
+      "title": "Maple: build a spending workspace through 7 turns of edits (credit-score refusal mid-way)",
+      "host": "maple",
+      "turns": [
+        { "ask": "show my recent transactions",
+          "expect": { "outcome": "answered", "wants": ["table"] } },
+        { "ask": "add a bar chart of spending by category above the table",
+          "expect": { "outcome": "answered", "kind": "add", "wants": ["table", "chart-bar"] } },
+        { "ask": "make that chart a donut instead",
+          "expect": { "outcome": "answered", "kind": "modify", "wants": ["table", "chart-pie"], "drops": ["chart-bar"] } },
+        { "ask": "add a stat card with my total balance across all accounts",
+          "expect": { "outcome": "answered", "kind": "add", "wants": ["table", "chart-pie"] } },
+        { "ask": "also show my credit score next to it",
+          "expect": { "outcome": "refused" } },
+        { "ask": "remove the transactions table",
+          "expect": { "outcome": "answered", "kind": "remove", "drops": ["table"] } },
+        { "ask": "add a line chart of my cashflow over the last months",
+          "expect": { "outcome": "answered", "kind": "add", "wants": ["chart-line", "chart-pie"] } }
+      ]
+    },
+    {
+      "id": "cadence-deadline-workspace",
+      "title": "Cadence: iterate a deadline board through 6 turns (profitability refusal mid-way)",
+      "host": "cadence",
+      "turns": [
+        { "ask": "build me a deadline board for the next 30 days",
+          "expect": { "outcome": "answered" } },
+        { "ask": "add a stat card with how many clients are missing documents",
+          "expect": { "outcome": "answered", "kind": "add" } },
+        { "ask": "show the deadlines as a table with client, filing deadline, and the missing document kinds",
+          "expect": { "outcome": "answered", "kind": "modify", "wants": ["table"] } },
+        { "ask": "add a profitability column to that table",
+          "expect": { "outcome": "refused" } },
+        { "ask": "add a donut chart of clients by status",
+          "expect": { "outcome": "answered", "kind": "add", "wants": ["table", "chart-pie"] } },
+        { "ask": "remove the missing-documents stat you added",
+          "expect": { "outcome": "answered", "kind": "remove", "wants": ["table", "chart-pie"] } }
+      ]
+    }
+  ]
+}
