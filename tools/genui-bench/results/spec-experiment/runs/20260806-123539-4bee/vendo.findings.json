@@ -1,7 +1,0 @@
-[
-  {
-    "severity": "block",
-    "where": "<MapleNetWorthCard>",
-    "message": "The net worth card sums accounts.balance instead of accounts.balance_cents, rendering an incorrect or zero total because the data field is balance_cents."
-  }
-]

@@ -1,0 +1,22 @@
+<App name="30-Day Deadline Board">
+  <Query id="deadlines" tool="host_listDeadlines" input={{}}/>
+  <Query id="dashboard" tool="host_getDashboard" input={{}}/>
+  <Tabs id="tabs" tabs={[{ value: "Deadlines", label: "Deadlines" }]} value="Deadlines">
+    <Stack id="tab-0">
+      <Surface id="group-0">
+        <Text id="group-0-title" text="Summary" variant="heading"/>
+        <Grid id="group-0-body" columns={3}>
+          <Stat id="group-0-body-stat-1" label="Nearest Filing Deadline" value={dashboard.nearestDeadline} format="date" suffix={dashboard.nearestDeadlineClient.businessName}/>
+          <Stat id="group-0-body-stat-2" label="Clients Outstanding" value={dashboard.clientsMissingDocs} format="number"/>
+          <CadenceMissingDocsHero id="group-0-body-cadencemissingdocshero-1" missingCount={dashboard.clientsMissingDocs} clientCount={dashboard.clientsTotal} badgeLabel="Action Required"/>
+        </Grid>
+      </Surface>
+      <Surface id="group-1">
+        <Text id="group-1-title" text="Filing Schedule (Next 30 Days)" variant="heading"/>
+        <Stack id="group-1-body">
+          <DataTable id="group-1-body-datatable-1" rows={deadlines} sortBy="filingDeadline asc" columns={[{ key: "businessName", label: "Client" }, { key: "filingDeadline", label: "Deadline Date", format: "date" }, { key: "progress.received", label: "Docs Received" }, { key: "missingDocKinds", label: "Missing Document Types" }]} searchable paginate={10} emptyState="No filing deadlines scheduled for the next 30 days"/>
+        </Stack>
+      </Surface>
+    </Stack>
+  </Tabs>
+</App>

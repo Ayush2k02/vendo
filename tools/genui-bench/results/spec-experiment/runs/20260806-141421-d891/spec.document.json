@@ -1,0 +1,221 @@
+{
+  "format": "vendo/app@1",
+  "id": "app_bench_spec_86c1b34a",
+  "name": "Spending & Budget Analysis",
+  "ui": "tree",
+  "tree": {
+    "formatVersion": "vendo-genui/v2",
+    "root": "app",
+    "nodes": [
+      {
+        "id": "app",
+        "component": "Stack",
+        "source": "prewired",
+        "props": {
+          "gap": 16
+        },
+        "children": [
+          "title",
+          "section-0",
+          "section-1",
+          "section-2"
+        ]
+      },
+      {
+        "id": "title",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Spending & Budget Analysis",
+          "variant": "heading"
+        }
+      },
+      {
+        "id": "piece-0",
+        "component": "DonutChart",
+        "source": "prewired",
+        "props": {
+          "categoryKey": "category",
+          "valueKey": "amount",
+          "format": "money",
+          "height": 220,
+          "data": {
+            "$path": "/q0"
+          }
+        }
+      },
+      {
+        "id": "piece-1",
+        "component": "DataTable",
+        "source": "prewired",
+        "props": {
+          "caption": "Spending against target budget limits by category",
+          "columns": [
+            {
+              "key": "category",
+              "label": "Category"
+            },
+            {
+              "key": "spent",
+              "label": "Spent",
+              "format": "money"
+            },
+            {
+              "key": "limit",
+              "label": "Budget Limit",
+              "format": "money"
+            }
+          ],
+          "rows": {
+            "$path": "/q1"
+          }
+        }
+      },
+      {
+        "id": "piece-2",
+        "component": "Callout",
+        "source": "prewired",
+        "props": {
+          "title": "Review recurring subscriptions and recurring charges to identify optional recurring expenses to cancel or downscale",
+          "tone": "info"
+        }
+      },
+      {
+        "id": "piece-3",
+        "component": "DataTable",
+        "source": "prewired",
+        "props": {
+          "caption": "Active recurring charges and subscriptions",
+          "columns": [
+            {
+              "key": "merchant",
+              "label": "Merchant"
+            },
+            {
+              "key": "category",
+              "label": "Category"
+            },
+            {
+              "key": "cadence",
+              "label": "Frequency"
+            },
+            {
+              "key": "amount",
+              "label": "Amount",
+              "format": "money"
+            },
+            {
+              "key": "nextDate",
+              "label": "Next Renewal"
+            }
+          ],
+          "rows": {
+            "$path": "/q2"
+          }
+        }
+      },
+      {
+        "id": "section-0",
+        "component": "Surface",
+        "source": "prewired",
+        "children": [
+          "section-0-title",
+          "section-0-body"
+        ]
+      },
+      {
+        "id": "section-0-title",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Spending Overview",
+          "variant": "heading"
+        }
+      },
+      {
+        "id": "section-0-body",
+        "component": "Stack",
+        "source": "prewired",
+        "props": {
+          "gap": 12
+        },
+        "children": [
+          "piece-0"
+        ]
+      },
+      {
+        "id": "section-1",
+        "component": "Surface",
+        "source": "prewired",
+        "children": [
+          "section-1-title",
+          "section-1-body"
+        ]
+      },
+      {
+        "id": "section-1-title",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Category Budgets",
+          "variant": "heading"
+        }
+      },
+      {
+        "id": "section-1-body",
+        "component": "Stack",
+        "source": "prewired",
+        "props": {
+          "gap": 12
+        },
+        "children": [
+          "piece-1"
+        ]
+      },
+      {
+        "id": "section-2",
+        "component": "Surface",
+        "source": "prewired",
+        "children": [
+          "section-2-title",
+          "section-2-body"
+        ]
+      },
+      {
+        "id": "section-2-title",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Cutback Opportunities",
+          "variant": "heading"
+        }
+      },
+      {
+        "id": "section-2-body",
+        "component": "Stack",
+        "source": "prewired",
+        "props": {
+          "gap": 12
+        },
+        "children": [
+          "piece-2",
+          "piece-3"
+        ]
+      }
+    ],
+    "queries": [
+      {
+        "name": "q0",
+        "tool": "host_getSpendingInsights"
+      },
+      {
+        "name": "q1",
+        "tool": "host_getBudgets"
+      },
+      {
+        "name": "q2",
+        "tool": "host_getRecurringInsights"
+      }
+    ]
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "format": "vendo/app@1",
+  "id": "app_bench_spec_85773329",
+  "name": "Refused: the host can't ground this ask",
+  "ui": "tree",
+  "tree": {
+    "formatVersion": "vendo-genui/v2",
+    "root": "app",
+    "nodes": [
+      {
+        "id": "app",
+        "component": "Stack",
+        "source": "prewired",
+        "props": {
+          "gap": 12
+        },
+        "children": [
+          "refusal",
+          "missing"
+        ]
+      },
+      {
+        "id": "refusal",
+        "component": "Disclaimer",
+        "source": "prewired",
+        "props": {
+          "reason": "I cannot determine client profitability or analyze time spent because time tracking and billing data are not available in the system.",
+          "title": "This host can't ground that ask"
+        }
+      },
+      {
+        "id": "missing",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Missing capability: Time tracking and hours logged per client · Client billing, revenue, or fee data",
+          "variant": "caption"
+        }
+      }
+    ]
+  }
+}

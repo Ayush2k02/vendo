@@ -1,0 +1,31 @@
+{
+  "id": "20260806-141140-2e18",
+  "createdAt": "2026-08-06T08:41:40.294Z",
+  "gitSha": "5fb84d8911ee3f9d812c6fe61736ea90b6bb2ba0",
+  "gitDirty": null,
+  "request": {
+    "prompt": "let me transfer money between my accounts",
+    "host": "cadence",
+    "lanes": [
+      "vendo",
+      "spec"
+    ],
+    "packRef": {
+      "pack": "smoke",
+      "index": 1
+    }
+  },
+  "lanes": {
+    "vendo": {
+      "status": "failed",
+      "startedAt": 1786005696413,
+      "durationMs": 2709,
+      "error": "the host refused this ask: Your host cannot transfer money between your accounts."
+    },
+    "spec": {
+      "status": "ok",
+      "startedAt": 1786005696421,
+      "durationMs": 3858
+    }
+  }
+}

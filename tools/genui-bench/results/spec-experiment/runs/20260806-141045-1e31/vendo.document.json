@@ -1,0 +1,60 @@
+{
+  "format": "vendo/app@1",
+  "name": "Account Balances",
+  "tree": {
+    "formatVersion": "vendo-genui/v2",
+    "root": "app",
+    "nodes": [
+      {
+        "id": "app",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "group-0"
+        ]
+      },
+      {
+        "id": "group-0",
+        "component": "Surface",
+        "source": "prewired",
+        "children": [
+          "group-0-title",
+          "group-0-body"
+        ]
+      },
+      {
+        "id": "group-0-title",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Overview",
+          "variant": "heading"
+        }
+      },
+      {
+        "id": "group-0-body",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "group-0-body-failed"
+        ]
+      },
+      {
+        "id": "group-0-body-failed",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "This section could not be built — retry the edit."
+        }
+      }
+    ],
+    "queries": [
+      {
+        "name": "accounts",
+        "tool": "host_listAccounts",
+        "input": {}
+      }
+    ]
+  },
+  "id": "app_bench_msh9m3j9"
+}

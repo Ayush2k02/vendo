@@ -1,0 +1,16 @@
+{
+  "model": "gemini-3.6-flash",
+  "responseText": "{\n  \"refusal\": {\n    \"reason\": \"The system does not track client financial or revenue data, so revenue charts and client revenue details cannot be displayed.\",\n    \"missing\": [\n      \"Client revenue and billing data\"\n    ]\n  }\n}",
+  "repaired": false,
+  "refusal": {
+    "reason": "The system does not track client financial or revenue data, so revenue charts and client revenue details cannot be displayed.",
+    "missing": [
+      "Client revenue and billing data"
+    ]
+  },
+  "pieces": [],
+  "specErrors": [],
+  "toolsBound": [],
+  "queryCount": 0,
+  "nodeCount": 3
+}

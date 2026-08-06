@@ -1,0 +1,196 @@
+{
+  "format": "vendo/app@1",
+  "name": "Transfer Money",
+  "tree": {
+    "formatVersion": "vendo-genui/v2",
+    "root": "app",
+    "nodes": [
+      {
+        "id": "app",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "tabs"
+        ]
+      },
+      {
+        "id": "tabs",
+        "component": "Tabs",
+        "source": "prewired",
+        "props": {
+          "tabs": [
+            {
+              "value": "Transfer",
+              "label": "Transfer"
+            }
+          ],
+          "value": "Transfer"
+        },
+        "children": [
+          "tab-0"
+        ]
+      },
+      {
+        "id": "tab-0",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "group-0",
+          "group-1"
+        ]
+      },
+      {
+        "id": "group-0",
+        "component": "Surface",
+        "source": "prewired",
+        "children": [
+          "group-0-title",
+          "group-0-body"
+        ]
+      },
+      {
+        "id": "group-0-title",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Your Accounts",
+          "variant": "heading"
+        }
+      },
+      {
+        "id": "group-0-body",
+        "component": "Grid",
+        "source": "prewired",
+        "props": {
+          "columns": 1
+        },
+        "children": [
+          "group-0-body-datatable-1"
+        ]
+      },
+      {
+        "id": "group-0-body-datatable-1",
+        "component": "DataTable",
+        "source": "prewired",
+        "props": {
+          "rows": {
+            "$path": "/accounts"
+          },
+          "columns": [
+            {
+              "key": "name",
+              "label": "Account Name"
+            },
+            {
+              "key": "kind",
+              "label": "Type"
+            },
+            {
+              "key": "mask",
+              "label": "Account Number"
+            },
+            {
+              "key": "balance",
+              "label": "Available Balance",
+              "format": "money",
+              "align": "end"
+            }
+          ],
+          "sortBy": "name asc",
+          "emptyState": "No accounts found"
+        }
+      },
+      {
+        "id": "group-1",
+        "component": "Surface",
+        "source": "prewired",
+        "children": [
+          "group-1-title",
+          "group-1-body"
+        ]
+      },
+      {
+        "id": "group-1-title",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "New Transfer",
+          "variant": "heading"
+        }
+      },
+      {
+        "id": "group-1-body",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "group-1-body-form-1"
+        ]
+      },
+      {
+        "id": "group-1-body-form-1",
+        "component": "Form",
+        "source": "prewired",
+        "props": {
+          "onSubmit": {
+            "action": "executeTransfer"
+          },
+          "submitLabel": "Transfer Money"
+        },
+        "children": [
+          "group-1-body-select-1",
+          "group-1-body-select-2",
+          "group-1-body-input-1"
+        ]
+      },
+      {
+        "id": "group-1-body-select-1",
+        "component": "Select",
+        "source": "prewired",
+        "props": {
+          "label": "Source Account",
+          "name": "source_account_id",
+          "options": {
+            "$path": "/accounts"
+          },
+          "labelField": "name",
+          "valueField": "id",
+          "placeholder": "Select source account"
+        }
+      },
+      {
+        "id": "group-1-body-select-2",
+        "component": "Select",
+        "source": "prewired",
+        "props": {
+          "label": "Destination Account",
+          "name": "destination_account_id",
+          "options": {
+            "$path": "/accounts"
+          },
+          "labelField": "name",
+          "valueField": "id",
+          "placeholder": "Select destination account"
+        }
+      },
+      {
+        "id": "group-1-body-input-1",
+        "component": "Input",
+        "source": "prewired",
+        "props": {
+          "label": "Transfer Amount",
+          "name": "amount",
+          "type": "number",
+          "placeholder": "0.00"
+        }
+      }
+    ],
+    "queries": [
+      {
+        "name": "accounts",
+        "tool": "host_listAccounts",
+        "input": {}
+      }
+    ]
+  },
+  "id": "app_bench_msh9nbs4"
+}

@@ -1,0 +1,65 @@
+{
+  "model": "gemini-3.6-flash",
+  "responseText": "{\n  \"title\": \"Account Balances at a Glance\",\n  \"components\": [\n    {\n      \"use\": \"Stat\",\n      \"section\": \"Overview\",\n      \"tool\": \"host_getProfile\",\n      \"params\": {},\n      \"select\": \"netWorth\",\n      \"props\": {\n        \"label\": \"Total Net Worth\",\n        \"format\": \"money\"\n      }\n    },\n    {\n      \"use\": \"CardList\",\n      \"section\": \"Your Accounts\",\n      \"tool\": \"host_listAccounts\",\n      \"params\": {},\n      \"props\": {\n        \"titleField\": \"name\",\n        \"badgeField\": \"kind\",\n        \"fields\": [\n          {\n            \"key\": \"mask\",\n            \"label\": \"Account Number\"\n          },\n          {\n            \"key\": \"balance\",\n            \"label\": \"Current Balance\",\n            \"format\": \"money\"\n          }\n        ],\n        \"columns\": 3,\n        \"emptyState\": \"No accounts found.\"\n      }\n    }\n  ]\n}",
+  "repaired": false,
+  "spec": {
+    "title": "Account Balances at a Glance",
+    "components": [
+      {
+        "use": "Stat",
+        "section": "Overview",
+        "tool": "host_getProfile",
+        "params": {},
+        "select": "netWorth",
+        "props": {
+          "label": "Total Net Worth",
+          "format": "money"
+        }
+      },
+      {
+        "use": "CardList",
+        "section": "Your Accounts",
+        "tool": "host_listAccounts",
+        "params": {},
+        "props": {
+          "titleField": "name",
+          "badgeField": "kind",
+          "fields": [
+            {
+              "key": "mask",
+              "label": "Account Number"
+            },
+            {
+              "key": "balance",
+              "label": "Current Balance",
+              "format": "money"
+            }
+          ],
+          "columns": 3,
+          "emptyState": "No accounts found."
+        }
+      }
+    ]
+  },
+  "pieces": [
+    {
+      "index": 0,
+      "use": "Stat",
+      "tool": "host_getProfile",
+      "errors": []
+    },
+    {
+      "index": 1,
+      "use": "CardList",
+      "tool": "host_listAccounts",
+      "errors": []
+    }
+  ],
+  "specErrors": [],
+  "toolsBound": [
+    "host_getProfile",
+    "host_listAccounts"
+  ],
+  "queryCount": 2,
+  "nodeCount": 11
+}

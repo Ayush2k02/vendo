@@ -1,0 +1,31 @@
+{
+  "id": "20260806-141136-c5d1",
+  "createdAt": "2026-08-06T08:41:36.412Z",
+  "gitSha": "5fb84d8911ee3f9d812c6fe61736ea90b6bb2ba0",
+  "gitDirty": null,
+  "request": {
+    "prompt": "show my account balances at a glance",
+    "host": "cadence",
+    "lanes": [
+      "vendo",
+      "spec"
+    ],
+    "packRef": {
+      "pack": "smoke",
+      "index": 0
+    }
+  },
+  "lanes": {
+    "vendo": {
+      "status": "failed",
+      "startedAt": 1786005692083,
+      "durationMs": 2973,
+      "error": "the host refused this ask: Your host has no way to show account balances."
+    },
+    "spec": {
+      "status": "ok",
+      "startedAt": 1786005692093,
+      "durationMs": 4299
+    }
+  }
+}

@@ -1,0 +1,9 @@
+<App name="Recent Transactions">
+  <Query id="transactions" tool="host_listTransactions" input={{ limit: 50 }}/>
+  <Surface id="group-0">
+    <Text id="group-0-title" text="Recent Transactions" variant="heading"/>
+    <Stack id="group-0-body">
+      <DataTable id="group-0-body-datatable-1" rows={transactions.data} searchable sortBy="timestamp desc" paginate={10} columns={[{ key: "timestamp", label: "Date", format: "date" }, { key: "merchant", label: "Payee" }, { key: "category", label: "Category" }, { key: "amount", label: "Amount", format: "money", align: "end" }]} emptyState="No recent transactions found"/>
+    </Stack>
+  </Surface>
+</App>

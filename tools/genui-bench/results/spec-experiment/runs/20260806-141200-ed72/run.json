@@ -1,0 +1,31 @@
+{
+  "id": "20260806-141200-ed72",
+  "createdAt": "2026-08-06T08:42:00.562Z",
+  "gitSha": "5fb84d8911ee3f9d812c6fe61736ea90b6bb2ba0",
+  "gitDirty": null,
+  "request": {
+    "prompt": "show me where my money went last quarter",
+    "host": "cadence",
+    "lanes": [
+      "vendo",
+      "spec"
+    ],
+    "packRef": {
+      "pack": "cadence",
+      "index": 1
+    }
+  },
+  "lanes": {
+    "vendo": {
+      "status": "failed",
+      "startedAt": 1786005716070,
+      "durationMs": 3258,
+      "error": "the host refused this ask: Your host has no financial or expense tracking data to show where your money went last quarter."
+    },
+    "spec": {
+      "status": "ok",
+      "startedAt": 1786005716079,
+      "durationMs": 4471
+    }
+  }
+}

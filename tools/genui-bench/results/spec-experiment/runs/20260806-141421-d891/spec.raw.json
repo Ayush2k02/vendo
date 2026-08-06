@@ -1,0 +1,120 @@
+{
+  "model": "gemini-3.6-flash",
+  "responseText": "{\n  \"title\": \"Spending & Budget Analysis\",\n  \"components\": [\n    {\n      \"use\": \"DonutChart\",\n      \"section\": \"Spending Overview\",\n      \"tool\": \"host_getSpendingInsights\",\n      \"params\": {},\n      \"props\": {\n        \"categoryKey\": \"category\",\n        \"valueKey\": \"amount\",\n        \"format\": \"money\",\n        \"height\": 220\n      }\n    },\n    {\n      \"use\": \"DataTable\",\n      \"section\": \"Category Budgets\",\n      \"tool\": \"host_getBudgets\",\n      \"params\": {},\n      \"props\": {\n        \"caption\": \"Spending against target budget limits by category\",\n        \"columns\": [\n          {\n            \"key\": \"category\",\n            \"label\": \"Category\"\n          },\n          {\n            \"key\": \"spent\",\n            \"label\": \"Spent\",\n            \"format\": \"money\"\n          },\n          {\n            \"key\": \"limit\",\n            \"label\": \"Budget Limit\",\n            \"format\": \"money\"\n          }\n        ]\n      }\n    },\n    {\n      \"use\": \"Callout\",\n      \"section\": \"Cutback Opportunities\",\n      \"props\": {\n        \"title\": \"Review recurring subscriptions and recurring charges to identify optional recurring expenses to cancel or downscale\",\n        \"tone\": \"info\"\n      }\n    },\n    {\n      \"use\": \"DataTable\",\n      \"section\": \"Cutback Opportunities\",\n      \"tool\": \"host_getRecurringInsights\",\n      \"params\": {},\n      \"props\": {\n        \"caption\": \"Active recurring charges and subscriptions\",\n        \"columns\": [\n          {\n            \"key\": \"merchant\",\n            \"label\": \"Merchant\"\n          },\n          {\n            \"key\": \"category\",\n            \"label\": \"Category\"\n          },\n          {\n            \"key\": \"cadence\",\n            \"label\": \"Frequency\"\n          },\n          {\n            \"key\": \"amount\",\n            \"label\": \"Amount\",\n            \"format\": \"money\"\n          },\n          {\n            \"key\": \"nextDate\",\n            \"label\": \"Next Renewal\"\n          }\n        ]\n      }\n    }\n  ]\n}",
+  "repaired": false,
+  "spec": {
+    "title": "Spending & Budget Analysis",
+    "components": [
+      {
+        "use": "DonutChart",
+        "section": "Spending Overview",
+        "tool": "host_getSpendingInsights",
+        "params": {},
+        "props": {
+          "categoryKey": "category",
+          "valueKey": "amount",
+          "format": "money",
+          "height": 220
+        }
+      },
+      {
+        "use": "DataTable",
+        "section": "Category Budgets",
+        "tool": "host_getBudgets",
+        "params": {},
+        "props": {
+          "caption": "Spending against target budget limits by category",
+          "columns": [
+            {
+              "key": "category",
+              "label": "Category"
+            },
+            {
+              "key": "spent",
+              "label": "Spent",
+              "format": "money"
+            },
+            {
+              "key": "limit",
+              "label": "Budget Limit",
+              "format": "money"
+            }
+          ]
+        }
+      },
+      {
+        "use": "Callout",
+        "section": "Cutback Opportunities",
+        "props": {
+          "title": "Review recurring subscriptions and recurring charges to identify optional recurring expenses to cancel or downscale",
+          "tone": "info"
+        }
+      },
+      {
+        "use": "DataTable",
+        "section": "Cutback Opportunities",
+        "tool": "host_getRecurringInsights",
+        "params": {},
+        "props": {
+          "caption": "Active recurring charges and subscriptions",
+          "columns": [
+            {
+              "key": "merchant",
+              "label": "Merchant"
+            },
+            {
+              "key": "category",
+              "label": "Category"
+            },
+            {
+              "key": "cadence",
+              "label": "Frequency"
+            },
+            {
+              "key": "amount",
+              "label": "Amount",
+              "format": "money"
+            },
+            {
+              "key": "nextDate",
+              "label": "Next Renewal"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "pieces": [
+    {
+      "index": 0,
+      "use": "DonutChart",
+      "tool": "host_getSpendingInsights",
+      "errors": []
+    },
+    {
+      "index": 1,
+      "use": "DataTable",
+      "tool": "host_getBudgets",
+      "errors": []
+    },
+    {
+      "index": 2,
+      "use": "Callout",
+      "errors": []
+    },
+    {
+      "index": 3,
+      "use": "DataTable",
+      "tool": "host_getRecurringInsights",
+      "errors": []
+    }
+  ],
+  "specErrors": [],
+  "toolsBound": [
+    "host_getBudgets",
+    "host_getRecurringInsights",
+    "host_getSpendingInsights"
+  ],
+  "queryCount": 3,
+  "nodeCount": 15
+}

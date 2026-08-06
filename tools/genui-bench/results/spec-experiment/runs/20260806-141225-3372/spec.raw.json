@@ -1,0 +1,116 @@
+{
+  "model": "gemini-3.6-flash",
+  "responseText": "{\n  \"title\": \"Outstanding Items & Client Document Status\",\n  \"components\": [\n    {\n      \"use\": \"Stat\",\n      \"section\": \"Firm Overview\",\n      \"tool\": \"host_getDashboard\",\n      \"params\": {},\n      \"select\": \"clientsMissingDocs\",\n      \"props\": {\n        \"label\": \"Clients Missing Documents\",\n        \"tone\": \"warning\"\n      }\n    },\n    {\n      \"use\": \"Stat\",\n      \"section\": \"Firm Overview\",\n      \"tool\": \"host_getDashboard\",\n      \"params\": {},\n      \"select\": \"documentsOutstanding\",\n      \"props\": {\n        \"label\": \"Documents Outstanding\",\n        \"tone\": \"danger\"\n      }\n    },\n    {\n      \"use\": \"Stat\",\n      \"section\": \"Firm Overview\",\n      \"tool\": \"host_getDashboard\",\n      \"params\": {},\n      \"select\": \"documentsReceived\",\n      \"props\": {\n        \"label\": \"Documents Received\",\n        \"tone\": \"accent\"\n      }\n    },\n    {\n      \"use\": \"DataTable\",\n      \"section\": \"Clients with Pending Documents\",\n      \"tool\": \"host_listDeadlines\",\n      \"params\": {},\n      \"props\": {\n        \"caption\": \"Clients ordered by upcoming deadline and their missing required documents\",\n        \"columns\": [\n          {\n            \"key\": \"businessName\",\n            \"label\": \"Client Name\"\n          },\n          {\n            \"key\": \"contactName\",\n            \"label\": \"Contact\"\n          },\n          {\n            \"key\": \"filingDeadline\",\n            \"label\": \"Filing Deadline\",\n            \"format\": \"date\"\n          },\n          {\n            \"key\": \"status\",\n            \"label\": \"Status\"\n          },\n          {\n            \"key\": \"missingDocKinds\",\n            \"label\": \"Missing Documents\"\n          },\n          {\n            \"key\": \"assignee.name\",\n            \"label\": \"Assigned Staff\"\n          }\n        ],\n        \"searchable\": true,\n        \"paginate\": 10,\n        \"emptyState\": \"No clients have outstanding documents.\"\n      }\n    }\n  ]\n}",
+  "repairResponseText": "```json\n{\n  \"title\": \"Outstanding Items & Client Document Status\",\n  \"components\": [\n    {\n      \"use\": \"Stat\",\n      \"section\": \"Firm Overview\",\n      \"tool\": \"host_getDashboard\",\n      \"params\": {},\n      \"select\": \"clientsMissingDocs\",\n      \"props\": {\n        \"label\": \"Clients Missing Documents\",\n        \"tone\": \"danger\"\n      }\n    },\n    {\n      \"use\": \"Stat\",\n      \"section\": \"Firm Overview\",\n      \"tool\": \"host_getDashboard\",\n      \"params\": {},\n      \"select\": \"documentsOutstanding\",\n      \"props\": {\n        \"label\": \"Documents Outstanding\",\n        \"tone\": \"danger\"\n      }\n    },\n    {\n      \"use\": \"Stat\",\n      \"section\": \"Firm Overview\",\n      \"tool\": \"host_getDashboard\",\n      \"params\": {},\n      \"select\": \"documentsReceived\",\n      \"props\": {\n        \"label\": \"Documents Received\",\n        \"tone\": \"accent\"\n      }\n    },\n    {\n      \"use\": \"DataTable\",\n      \"section\": \"Clients with Pending Documents\",\n      \"tool\": \"host_listDeadlines\",\n      \"params\": {},\n      \"props\": {\n        \"caption\": \"Clients ordered by upcoming deadline and their missing required documents\",\n        \"columns\": [\n          {\n            \"key\": \"businessName\",\n            \"label\": \"Client Name\"\n          },\n          {\n            \"key\": \"contactName\",\n            \"label\": \"Contact\"\n          },\n          {\n            \"key\": \"filingDeadline\",\n            \"label\": \"Filing Deadline\",\n            \"format\": \"date\"\n          },\n          {\n            \"key\": \"status\",\n            \"label\": \"Status\"\n          },\n          {\n            \"key\": \"missingDocKinds\",\n            \"label\": \"Missing Documents\"\n          },\n          {\n            \"key\": \"assignee.name\",\n            \"label\": \"Assigned Staff\"\n          }\n        ],\n        \"searchable\": true,\n        \"paginate\": 10,\n        \"emptyState\": \"No clients have outstanding documents.\"\n      }\n    }\n  ]\n}\n```",
+  "repaired": true,
+  "spec": {
+    "title": "Outstanding Items & Client Document Status",
+    "components": [
+      {
+        "use": "Stat",
+        "section": "Firm Overview",
+        "tool": "host_getDashboard",
+        "params": {},
+        "select": "clientsMissingDocs",
+        "props": {
+          "label": "Clients Missing Documents",
+          "tone": "danger"
+        }
+      },
+      {
+        "use": "Stat",
+        "section": "Firm Overview",
+        "tool": "host_getDashboard",
+        "params": {},
+        "select": "documentsOutstanding",
+        "props": {
+          "label": "Documents Outstanding",
+          "tone": "danger"
+        }
+      },
+      {
+        "use": "Stat",
+        "section": "Firm Overview",
+        "tool": "host_getDashboard",
+        "params": {},
+        "select": "documentsReceived",
+        "props": {
+          "label": "Documents Received",
+          "tone": "accent"
+        }
+      },
+      {
+        "use": "DataTable",
+        "section": "Clients with Pending Documents",
+        "tool": "host_listDeadlines",
+        "params": {},
+        "props": {
+          "caption": "Clients ordered by upcoming deadline and their missing required documents",
+          "columns": [
+            {
+              "key": "businessName",
+              "label": "Client Name"
+            },
+            {
+              "key": "contactName",
+              "label": "Contact"
+            },
+            {
+              "key": "filingDeadline",
+              "label": "Filing Deadline",
+              "format": "date"
+            },
+            {
+              "key": "status",
+              "label": "Status"
+            },
+            {
+              "key": "missingDocKinds",
+              "label": "Missing Documents"
+            },
+            {
+              "key": "assignee.name",
+              "label": "Assigned Staff"
+            }
+          ],
+          "searchable": true,
+          "paginate": 10,
+          "emptyState": "No clients have outstanding documents."
+        }
+      }
+    ]
+  },
+  "pieces": [
+    {
+      "index": 0,
+      "use": "Stat",
+      "tool": "host_getDashboard",
+      "errors": []
+    },
+    {
+      "index": 1,
+      "use": "Stat",
+      "tool": "host_getDashboard",
+      "errors": []
+    },
+    {
+      "index": 2,
+      "use": "Stat",
+      "tool": "host_getDashboard",
+      "errors": []
+    },
+    {
+      "index": 3,
+      "use": "DataTable",
+      "tool": "host_listDeadlines",
+      "errors": []
+    }
+  ],
+  "specErrors": [],
+  "toolsBound": [
+    "host_getDashboard",
+    "host_listDeadlines"
+  ],
+  "queryCount": 2,
+  "nodeCount": 13
+}

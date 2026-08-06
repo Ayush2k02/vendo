@@ -1,0 +1,30 @@
+{
+  "id": "20260806-141131-d3ec",
+  "createdAt": "2026-08-06T08:41:31.489Z",
+  "gitSha": "5fb84d8911ee3f9d812c6fe61736ea90b6bb2ba0",
+  "gitDirty": null,
+  "request": {
+    "prompt": "show my recent transactions with search",
+    "host": "maple",
+    "lanes": [
+      "vendo",
+      "spec"
+    ],
+    "packRef": {
+      "pack": "smoke",
+      "index": 2
+    }
+  },
+  "lanes": {
+    "vendo": {
+      "status": "ok",
+      "startedAt": 1786005671884,
+      "durationMs": 19589
+    },
+    "spec": {
+      "status": "ok",
+      "startedAt": 1786005671893,
+      "durationMs": 7517
+    }
+  }
+}

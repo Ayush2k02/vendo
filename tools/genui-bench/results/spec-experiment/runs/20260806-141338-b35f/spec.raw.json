@@ -1,0 +1,104 @@
+{
+  "model": "gemini-3.6-flash",
+  "responseText": "{\n  \"title\": \"Client Directory\",\n  \"components\": [\n    {\n      \"use\": \"Stat\",\n      \"section\": \"Overview\",\n      \"tool\": \"host_getDashboard\",\n      \"params\": {},\n      \"select\": \"clientsTotal\",\n      \"props\": {\n        \"label\": \"Total Clients\"\n      }\n    },\n    {\n      \"use\": \"Stat\",\n      \"section\": \"Overview\",\n      \"tool\": \"host_getDashboard\",\n      \"params\": {},\n      \"select\": \"clientsMissingDocs\",\n      \"props\": {\n        \"label\": \"Clients Missing Documents\"\n      }\n    },\n    {\n      \"use\": \"DataTable\",\n      \"section\": \"Clients\",\n      \"tool\": \"host_listClients\",\n      \"params\": {},\n      \"props\": {\n        \"caption\": \"Firm Clients List\",\n        \"columns\": [\n          {\n            \"key\": \"businessName\",\n            \"label\": \"Business Name\"\n          },\n          {\n            \"key\": \"contactName\",\n            \"label\": \"Contact Person\"\n          },\n          {\n            \"key\": \"contactEmail\",\n            \"label\": \"Email\"\n          },\n          {\n            \"key\": \"entityType\",\n            \"label\": \"Entity Type\"\n          },\n          {\n            \"key\": \"status\",\n            \"label\": \"Status\"\n          },\n          {\n            \"key\": \"filingDeadline\",\n            \"label\": \"Filing Deadline\"\n          },\n          {\n            \"key\": \"assignee.name\",\n            \"label\": \"Assigned Staff\"\n          }\n        ],\n        \"searchable\": true,\n        \"filterableBy\": [\n          \"status\",\n          \"entityType\"\n        ],\n        \"paginate\": 10,\n        \"sortBy\": \"businessName asc\",\n        \"emptyState\": \"No clients found.\"\n      }\n    }\n  ]\n}",
+  "repaired": false,
+  "spec": {
+    "title": "Client Directory",
+    "components": [
+      {
+        "use": "Stat",
+        "section": "Overview",
+        "tool": "host_getDashboard",
+        "params": {},
+        "select": "clientsTotal",
+        "props": {
+          "label": "Total Clients"
+        }
+      },
+      {
+        "use": "Stat",
+        "section": "Overview",
+        "tool": "host_getDashboard",
+        "params": {},
+        "select": "clientsMissingDocs",
+        "props": {
+          "label": "Clients Missing Documents"
+        }
+      },
+      {
+        "use": "DataTable",
+        "section": "Clients",
+        "tool": "host_listClients",
+        "params": {},
+        "props": {
+          "caption": "Firm Clients List",
+          "columns": [
+            {
+              "key": "businessName",
+              "label": "Business Name"
+            },
+            {
+              "key": "contactName",
+              "label": "Contact Person"
+            },
+            {
+              "key": "contactEmail",
+              "label": "Email"
+            },
+            {
+              "key": "entityType",
+              "label": "Entity Type"
+            },
+            {
+              "key": "status",
+              "label": "Status"
+            },
+            {
+              "key": "filingDeadline",
+              "label": "Filing Deadline"
+            },
+            {
+              "key": "assignee.name",
+              "label": "Assigned Staff"
+            }
+          ],
+          "searchable": true,
+          "filterableBy": [
+            "status",
+            "entityType"
+          ],
+          "paginate": 10,
+          "sortBy": "businessName asc",
+          "emptyState": "No clients found."
+        }
+      }
+    ]
+  },
+  "pieces": [
+    {
+      "index": 0,
+      "use": "Stat",
+      "tool": "host_getDashboard",
+      "errors": []
+    },
+    {
+      "index": 1,
+      "use": "Stat",
+      "tool": "host_getDashboard",
+      "errors": []
+    },
+    {
+      "index": 2,
+      "use": "DataTable",
+      "tool": "host_listClients",
+      "errors": []
+    }
+  ],
+  "specErrors": [],
+  "toolsBound": [
+    "host_getDashboard",
+    "host_listClients"
+  ],
+  "queryCount": 2,
+  "nodeCount": 12
+}

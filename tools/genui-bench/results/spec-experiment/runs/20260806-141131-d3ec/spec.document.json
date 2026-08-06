@@ -1,0 +1,84 @@
+{
+  "format": "vendo/app@1",
+  "id": "app_bench_spec_4c129a1c",
+  "name": "Recent Transactions",
+  "ui": "tree",
+  "tree": {
+    "formatVersion": "vendo-genui/v2",
+    "root": "app",
+    "nodes": [
+      {
+        "id": "app",
+        "component": "Stack",
+        "source": "prewired",
+        "props": {
+          "gap": 16
+        },
+        "children": [
+          "title",
+          "piece-0"
+        ]
+      },
+      {
+        "id": "title",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Recent Transactions",
+          "variant": "heading"
+        }
+      },
+      {
+        "id": "piece-0",
+        "component": "DataTable",
+        "source": "prewired",
+        "props": {
+          "caption": "Transaction History",
+          "searchable": true,
+          "filterableBy": [
+            "category",
+            "status"
+          ],
+          "paginate": 10,
+          "columns": [
+            {
+              "key": "timestamp",
+              "label": "Date",
+              "format": "date"
+            },
+            {
+              "key": "merchant",
+              "label": "Merchant"
+            },
+            {
+              "key": "category",
+              "label": "Category"
+            },
+            {
+              "key": "status",
+              "label": "Status"
+            },
+            {
+              "key": "amount",
+              "label": "Amount",
+              "format": "money"
+            }
+          ],
+          "emptyState": "No transactions match your search criteria.",
+          "rows": {
+            "$path": "/q0/data"
+          }
+        }
+      }
+    ],
+    "queries": [
+      {
+        "name": "q0",
+        "tool": "host_listTransactions",
+        "input": {
+          "sort": "date_desc"
+        }
+      }
+    ]
+  }
+}

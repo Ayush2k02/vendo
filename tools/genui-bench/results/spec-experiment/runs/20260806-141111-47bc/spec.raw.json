@@ -1,0 +1,16 @@
+{
+  "model": "gemini-3.6-flash",
+  "responseText": "{\n  \"refusal\": {\n    \"reason\": \"The system does not support transferring funds internally between your own accounts.\",\n    \"missing\": [\n      \"Internal account-to-account transfer tool (selecting source and target accounts)\"\n    ]\n  }\n}",
+  "repaired": false,
+  "refusal": {
+    "reason": "The system does not support transferring funds internally between your own accounts.",
+    "missing": [
+      "Internal account-to-account transfer tool (selecting source and target accounts)"
+    ]
+  },
+  "pieces": [],
+  "specErrors": [],
+  "toolsBound": [],
+  "queryCount": 0,
+  "nodeCount": 3
+}

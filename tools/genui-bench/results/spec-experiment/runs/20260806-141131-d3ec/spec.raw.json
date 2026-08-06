@@ -1,0 +1,66 @@
+{
+  "model": "gemini-3.6-flash",
+  "responseText": "```json\n{\n  \"title\": \"Recent Transactions\",\n  \"components\": [\n    {\n      \"use\": \"DataTable\",\n      \"tool\": \"host_listTransactions\",\n      \"params\": {\n        \"sort\": \"date_desc\"\n      },\n      \"select\": \"data\",\n      \"props\": {\n        \"caption\": \"Transaction History\",\n        \"searchable\": true,\n        \"filterableBy\": [\n          \"category\",\n          \"status\"\n        ],\n        \"paginate\": 10,\n        \"columns\": [\n          {\n            \"key\": \"timestamp\",\n            \"label\": \"Date\",\n            \"format\": \"date\"\n          },\n          {\n            \"key\": \"merchant\",\n            \"label\": \"Merchant\"\n          },\n          {\n            \"key\": \"category\",\n            \"label\": \"Category\"\n          },\n          {\n            \"key\": \"status\",\n            \"label\": \"Status\"\n          },\n          {\n            \"key\": \"amount\",\n            \"label\": \"Amount\",\n            \"format\": \"money\"\n          }\n        ],\n        \"emptyState\": \"No transactions match your search criteria.\"\n      }\n    }\n  ]\n}\n```",
+  "repaired": false,
+  "spec": {
+    "title": "Recent Transactions",
+    "components": [
+      {
+        "use": "DataTable",
+        "tool": "host_listTransactions",
+        "params": {
+          "sort": "date_desc"
+        },
+        "select": "data",
+        "props": {
+          "caption": "Transaction History",
+          "searchable": true,
+          "filterableBy": [
+            "category",
+            "status"
+          ],
+          "paginate": 10,
+          "columns": [
+            {
+              "key": "timestamp",
+              "label": "Date",
+              "format": "date"
+            },
+            {
+              "key": "merchant",
+              "label": "Merchant"
+            },
+            {
+              "key": "category",
+              "label": "Category"
+            },
+            {
+              "key": "status",
+              "label": "Status"
+            },
+            {
+              "key": "amount",
+              "label": "Amount",
+              "format": "money"
+            }
+          ],
+          "emptyState": "No transactions match your search criteria."
+        }
+      }
+    ]
+  },
+  "pieces": [
+    {
+      "index": 0,
+      "use": "DataTable",
+      "tool": "host_listTransactions",
+      "errors": []
+    }
+  ],
+  "specErrors": [],
+  "toolsBound": [
+    "host_listTransactions"
+  ],
+  "queryCount": 1,
+  "nodeCount": 3
+}

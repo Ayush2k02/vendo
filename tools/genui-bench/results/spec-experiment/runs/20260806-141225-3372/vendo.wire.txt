@@ -1,0 +1,15 @@
+<App name="Month-end blockers">
+  <Query id="dashboard" tool="host_getDashboard" input={{}}/>
+  <Query id="deadlines" tool="host_listDeadlines" input={{}}/>
+  <Tabs id="tabs" tabs={[{ value: "Missing documents", label: "Missing documents" }]} value="Missing documents">
+    <Stack id="tab-0">
+      <Surface id="group-0">
+        <Text id="group-0-title" text="Month-end readiness" variant="heading"/>
+        <Grid id="group-0-body" columns={2}>
+          <CadenceMissingDocsHero id="group-0-body-cadencemissingdocshero-1" missingCount={dashboard.clientsMissingDocs} clientCount={dashboard.clientsTotal} badgeLabel="Month-End Readiness"/>
+          <DataTable id="group-0-body-datatable-1" rows={deadlines} sortBy="filingDeadline asc" searchable columns={[{ key: "businessName", label: "Client" }, { key: "entityType", label: "Entity Type" }, { key: "filingDeadline", label: "Filing Deadline", format: "date" }, { key: "assignee.name", label: "Assignee" }, { key: "status", label: "Status" }, { key: "missingDocKinds", label: "Missing Document Types" }]} emptyState="No upcoming deadlines with missing documents"/>
+        </Grid>
+      </Surface>
+    </Stack>
+  </Tabs>
+</App>

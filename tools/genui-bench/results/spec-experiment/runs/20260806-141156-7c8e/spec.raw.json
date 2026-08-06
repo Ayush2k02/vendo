@@ -1,0 +1,16 @@
+{
+  "model": "gemini-3.6-flash",
+  "responseText": "{\n  \"refusal\": {\n    \"reason\": \"The system does not track client invoices, billing records, or outstanding balances.\",\n    \"missing\": [\n      \"client billing and invoice tracking\"\n    ]\n  }\n}",
+  "repaired": false,
+  "refusal": {
+    "reason": "The system does not track client invoices, billing records, or outstanding balances.",
+    "missing": [
+      "client billing and invoice tracking"
+    ]
+  },
+  "pieces": [],
+  "specErrors": [],
+  "toolsBound": [],
+  "queryCount": 0,
+  "nodeCount": 3
+}

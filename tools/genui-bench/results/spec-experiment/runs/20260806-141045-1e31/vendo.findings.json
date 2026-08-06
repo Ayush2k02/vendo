@@ -1,0 +1,12 @@
+[
+  {
+    "severity": "warn",
+    "where": "group \"Overview\"",
+    "message": "could not be built after 2 fix-it attempts, so it shows a note asking for a retry instead of made-up content. What was still wrong: expected a single <App ...>...</App> element"
+  },
+  {
+    "severity": "warn",
+    "where": "<Stack>",
+    "message": "The app does not display account balances, showing the error text 'This section could not be built — retry the edit.' instead of rendering components bound to the accounts query."
+  }
+]

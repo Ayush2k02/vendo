@@ -1,0 +1,17 @@
+{
+  "model": "gemini-3.6-flash",
+  "responseText": "{\n  \"refusal\": {\n    \"reason\": \"This platform manages tax client document checklists and filing deadlines, but does not have access to financial transaction history or expense tracking.\",\n    \"missing\": [\n      \"Financial transaction and expense data\",\n      \"Quarterly spending and cash outflow records\"\n    ]\n  }\n}",
+  "repaired": false,
+  "refusal": {
+    "reason": "This platform manages tax client document checklists and filing deadlines, but does not have access to financial transaction history or expense tracking.",
+    "missing": [
+      "Financial transaction and expense data",
+      "Quarterly spending and cash outflow records"
+    ]
+  },
+  "pieces": [],
+  "specErrors": [],
+  "toolsBound": [],
+  "queryCount": 0,
+  "nodeCount": 3
+}

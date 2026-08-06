@@ -1,0 +1,140 @@
+{
+  "format": "vendo/app@1",
+  "name": "Month-end blockers",
+  "tree": {
+    "formatVersion": "vendo-genui/v2",
+    "root": "app",
+    "nodes": [
+      {
+        "id": "app",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "tabs"
+        ]
+      },
+      {
+        "id": "tabs",
+        "component": "Tabs",
+        "source": "prewired",
+        "props": {
+          "tabs": [
+            {
+              "value": "Missing documents",
+              "label": "Missing documents"
+            }
+          ],
+          "value": "Missing documents"
+        },
+        "children": [
+          "tab-0"
+        ]
+      },
+      {
+        "id": "tab-0",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "group-0"
+        ]
+      },
+      {
+        "id": "group-0",
+        "component": "Surface",
+        "source": "prewired",
+        "children": [
+          "group-0-title",
+          "group-0-body"
+        ]
+      },
+      {
+        "id": "group-0-title",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Month-end readiness",
+          "variant": "heading"
+        }
+      },
+      {
+        "id": "group-0-body",
+        "component": "Grid",
+        "source": "prewired",
+        "props": {
+          "columns": 2
+        },
+        "children": [
+          "group-0-body-cadencemissingdocshero-1",
+          "group-0-body-datatable-1"
+        ]
+      },
+      {
+        "id": "group-0-body-cadencemissingdocshero-1",
+        "component": "CadenceMissingDocsHero",
+        "source": "host",
+        "props": {
+          "missingCount": {
+            "$path": "/dashboard/clientsMissingDocs"
+          },
+          "clientCount": {
+            "$path": "/dashboard/clientsTotal"
+          },
+          "badgeLabel": "Month-End Readiness"
+        }
+      },
+      {
+        "id": "group-0-body-datatable-1",
+        "component": "DataTable",
+        "source": "prewired",
+        "props": {
+          "rows": {
+            "$path": "/deadlines"
+          },
+          "sortBy": "filingDeadline asc",
+          "searchable": true,
+          "columns": [
+            {
+              "key": "businessName",
+              "label": "Client"
+            },
+            {
+              "key": "entityType",
+              "label": "Entity Type"
+            },
+            {
+              "key": "filingDeadline",
+              "label": "Filing Deadline",
+              "format": "date"
+            },
+            {
+              "key": "assignee.name",
+              "label": "Assignee"
+            },
+            {
+              "key": "status",
+              "label": "Status"
+            },
+            {
+              "key": "missingDocKinds",
+              "label": "Missing Document Types"
+            }
+          ],
+          "emptyState": "No upcoming deadlines with missing documents"
+        }
+      }
+    ],
+    "queries": [
+      {
+        "name": "dashboard",
+        "tool": "host_getDashboard",
+        "input": {}
+      },
+      {
+        "name": "deadlines",
+        "tool": "host_listDeadlines",
+        "input": {}
+      }
+    ]
+  },
+  "id": "app_bench_msh9p16z"
+}

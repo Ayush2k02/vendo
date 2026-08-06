@@ -1,0 +1,28 @@
+<App name="Spending & Budget Insights">
+  <Query id="budgets" tool="host_getBudgets" input={{}}/>
+  <Query id="spending" tool="host_getSpendingInsights" input={{}}/>
+  <Query id="recurring" tool="host_getRecurringInsights" input={{}}/>
+  <Query id="hostGetRecurringInsights" tool="host_getRecurringInsights" input={{}}/>
+  <Query id="hostGetSpendingInsights" tool="host_getSpendingInsights" input={{}}/>
+  <Query id="hostGetBudgets" tool="host_getBudgets" input={{}}/>
+  <Tabs id="tabs" tabs={[{ value: "Budgets", label: "Budgets" }, { value: "Cut Back", label: "Cut Back" }]} value="Budgets">
+    <Stack id="tab-0">
+      <Surface id="group-0">
+        <Text id="group-0-title" text="Spending vs Budget" variant="heading"/>
+        <Grid id="group-0-body" columns={2}>
+          <MapleSpendingDonut id="group-0-body-maplespendingdonut-1" slices={hostGetSpendingInsights}/>
+          <DataTable id="group-0-body-datatable-1" rows={hostGetBudgets} columns={[{ key: "category", label: "Category" }, { key: "spent", label: "Spend-to-Date", format: "money", align: "end" }, { key: "limit", label: "Budget Limit", format: "money", align: "end" }]} emptyState="No budget data available"/>
+        </Grid>
+      </Surface>
+    </Stack>
+    <Stack id="tab-1">
+      <Surface id="group-1">
+        <Text id="group-1-title" text="Recurring Charges & Subscriptions" variant="heading"/>
+        <Stack id="group-1-body">
+          <Stat id="group-1-body-stat-1" label="Total monthly recurring charges committed" value={sum(hostGetRecurringInsights.amount)} format="money"/>
+          <DataTable id="group-1-body-datatable-1" rows={hostGetRecurringInsights} columns={[{ key: "merchant", label: "Merchant" }, { key: "category", label: "Category" }, { key: "cadence", label: "Cadence" }, { key: "amount", label: "Amount", format: "money" }, { key: "nextDate", label: "Next Billing Date", format: "date" }]} filterableBy={["category", "cadence"]} searchable emptyState="No recurring charges or active subscriptions found"/>
+        </Stack>
+      </Surface>
+    </Stack>
+  </Tabs>
+</App>

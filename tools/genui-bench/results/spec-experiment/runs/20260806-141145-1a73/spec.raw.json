@@ -1,0 +1,16 @@
+{
+  "model": "gemini-3.6-flash",
+  "responseText": "{\n  \"refusal\": {\n    \"reason\": \"The system does not have access to financial transaction data or transaction history.\",\n    \"missing\": [\n      \"financial transaction management and querying tool\"\n    ]\n  }\n}",
+  "repaired": false,
+  "refusal": {
+    "reason": "The system does not have access to financial transaction data or transaction history.",
+    "missing": [
+      "financial transaction management and querying tool"
+    ]
+  },
+  "pieces": [],
+  "specErrors": [],
+  "toolsBound": [],
+  "queryCount": 0,
+  "nodeCount": 3
+}

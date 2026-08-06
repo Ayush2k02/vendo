@@ -1,0 +1,17 @@
+{
+  "model": "gemini-3.6-flash",
+  "responseText": "{\n  \"refusal\": {\n    \"reason\": \"This platform handles tax document tracking and client workflows, so it does not support viewing bank accounts or transferring funds.\",\n    \"missing\": [\n      \"bank account management\",\n      \"money transfer functionality\"\n    ]\n  }\n}",
+  "repaired": false,
+  "refusal": {
+    "reason": "This platform handles tax document tracking and client workflows, so it does not support viewing bank accounts or transferring funds.",
+    "missing": [
+      "bank account management",
+      "money transfer functionality"
+    ]
+  },
+  "pieces": [],
+  "specErrors": [],
+  "toolsBound": [],
+  "queryCount": 0,
+  "nodeCount": 3
+}

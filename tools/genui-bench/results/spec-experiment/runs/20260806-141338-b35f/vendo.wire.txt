@@ -1,0 +1,10 @@
+<App name="Clients">
+  <Query id="clients" tool="host_listClients" input={{}}/>
+  <Query id="hostListClients" tool="host_listClients" input={{}}/>
+  <Surface id="group-0">
+    <Text id="group-0-title" text="All Clients" variant="heading"/>
+    <Stack id="group-0-body">
+      <DataTable id="group-0-body-datatable-1" rows={hostListClients} columns={[{ key: "businessName", label: "Client" }, { key: "entityType", label: "Entity Type" }, { key: "status", label: "Status" }, { key: "filingDeadline", label: "Deadline", format: "date" }, { key: "assignee.name", label: "Assigned Staff" }]} sortBy="filingDeadline asc" filterableBy={["status", "entityType"]} searchable paginate={10} emptyState="No clients found"/>
+    </Stack>
+  </Surface>
+</App>

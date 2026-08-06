@@ -1,0 +1,30 @@
+{
+  "id": "20260806-141225-3372",
+  "createdAt": "2026-08-06T08:42:25.373Z",
+  "gitSha": "5fb84d8911ee3f9d812c6fe61736ea90b6bb2ba0",
+  "gitDirty": null,
+  "request": {
+    "prompt": "what's missing before I can close the books this month",
+    "host": "cadence",
+    "lanes": [
+      "vendo",
+      "spec"
+    ],
+    "packRef": {
+      "pack": "cadence",
+      "index": 3
+    }
+  },
+  "lanes": {
+    "vendo": {
+      "status": "ok",
+      "startedAt": 1786005725003,
+      "durationMs": 15840
+    },
+    "spec": {
+      "status": "ok",
+      "startedAt": 1786005725011,
+      "durationMs": 20336
+    }
+  }
+}

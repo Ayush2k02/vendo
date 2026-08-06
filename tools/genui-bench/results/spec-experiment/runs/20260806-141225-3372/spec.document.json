@@ -1,0 +1,193 @@
+{
+  "format": "vendo/app@1",
+  "id": "app_bench_spec_341f71b9",
+  "name": "Outstanding Items & Client Document Status",
+  "ui": "tree",
+  "tree": {
+    "formatVersion": "vendo-genui/v2",
+    "root": "app",
+    "nodes": [
+      {
+        "id": "app",
+        "component": "Stack",
+        "source": "prewired",
+        "props": {
+          "gap": 16
+        },
+        "children": [
+          "title",
+          "section-0",
+          "section-1"
+        ]
+      },
+      {
+        "id": "title",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Outstanding Items & Client Document Status",
+          "variant": "heading"
+        }
+      },
+      {
+        "id": "piece-0",
+        "component": "Stat",
+        "source": "prewired",
+        "props": {
+          "label": "Clients Missing Documents",
+          "tone": "danger",
+          "value": {
+            "$path": "/q0/clientsMissingDocs"
+          }
+        }
+      },
+      {
+        "id": "piece-1",
+        "component": "Stat",
+        "source": "prewired",
+        "props": {
+          "label": "Documents Outstanding",
+          "tone": "danger",
+          "value": {
+            "$path": "/q0/documentsOutstanding"
+          }
+        }
+      },
+      {
+        "id": "piece-2",
+        "component": "Stat",
+        "source": "prewired",
+        "props": {
+          "label": "Documents Received",
+          "tone": "accent",
+          "value": {
+            "$path": "/q0/documentsReceived"
+          }
+        }
+      },
+      {
+        "id": "piece-3",
+        "component": "DataTable",
+        "source": "prewired",
+        "props": {
+          "caption": "Clients ordered by upcoming deadline and their missing required documents",
+          "columns": [
+            {
+              "key": "businessName",
+              "label": "Client Name"
+            },
+            {
+              "key": "contactName",
+              "label": "Contact"
+            },
+            {
+              "key": "filingDeadline",
+              "label": "Filing Deadline",
+              "format": "date"
+            },
+            {
+              "key": "status",
+              "label": "Status"
+            },
+            {
+              "key": "missingDocKinds",
+              "label": "Missing Documents"
+            },
+            {
+              "key": "assignee.name",
+              "label": "Assigned Staff"
+            }
+          ],
+          "searchable": true,
+          "paginate": 10,
+          "emptyState": "No clients have outstanding documents.",
+          "rows": {
+            "$path": "/q1"
+          }
+        }
+      },
+      {
+        "id": "g0-grid-0",
+        "component": "Grid",
+        "source": "prewired",
+        "props": {
+          "columns": 3,
+          "gap": 12
+        },
+        "children": [
+          "piece-0",
+          "piece-1",
+          "piece-2"
+        ]
+      },
+      {
+        "id": "section-0",
+        "component": "Surface",
+        "source": "prewired",
+        "children": [
+          "section-0-title",
+          "section-0-body"
+        ]
+      },
+      {
+        "id": "section-0-title",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Firm Overview",
+          "variant": "heading"
+        }
+      },
+      {
+        "id": "section-0-body",
+        "component": "Stack",
+        "source": "prewired",
+        "props": {
+          "gap": 12
+        },
+        "children": [
+          "g0-grid-0"
+        ]
+      },
+      {
+        "id": "section-1",
+        "component": "Surface",
+        "source": "prewired",
+        "children": [
+          "section-1-title",
+          "section-1-body"
+        ]
+      },
+      {
+        "id": "section-1-title",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Clients with Pending Documents",
+          "variant": "heading"
+        }
+      },
+      {
+        "id": "section-1-body",
+        "component": "Stack",
+        "source": "prewired",
+        "props": {
+          "gap": 12
+        },
+        "children": [
+          "piece-3"
+        ]
+      }
+    ],
+    "queries": [
+      {
+        "name": "q0",
+        "tool": "host_getDashboard"
+      },
+      {
+        "name": "q1",
+        "tool": "host_listDeadlines"
+      }
+    ]
+  }
+}

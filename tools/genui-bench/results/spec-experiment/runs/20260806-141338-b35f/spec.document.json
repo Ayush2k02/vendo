@@ -1,0 +1,186 @@
+{
+  "format": "vendo/app@1",
+  "id": "app_bench_spec_7f35ea6d",
+  "name": "Client Directory",
+  "ui": "tree",
+  "tree": {
+    "formatVersion": "vendo-genui/v2",
+    "root": "app",
+    "nodes": [
+      {
+        "id": "app",
+        "component": "Stack",
+        "source": "prewired",
+        "props": {
+          "gap": 16
+        },
+        "children": [
+          "title",
+          "section-0",
+          "section-1"
+        ]
+      },
+      {
+        "id": "title",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Client Directory",
+          "variant": "heading"
+        }
+      },
+      {
+        "id": "piece-0",
+        "component": "Stat",
+        "source": "prewired",
+        "props": {
+          "label": "Total Clients",
+          "value": {
+            "$path": "/q0/clientsTotal"
+          }
+        }
+      },
+      {
+        "id": "piece-1",
+        "component": "Stat",
+        "source": "prewired",
+        "props": {
+          "label": "Clients Missing Documents",
+          "value": {
+            "$path": "/q0/clientsMissingDocs"
+          }
+        }
+      },
+      {
+        "id": "piece-2",
+        "component": "DataTable",
+        "source": "prewired",
+        "props": {
+          "caption": "Firm Clients List",
+          "columns": [
+            {
+              "key": "businessName",
+              "label": "Business Name"
+            },
+            {
+              "key": "contactName",
+              "label": "Contact Person"
+            },
+            {
+              "key": "contactEmail",
+              "label": "Email"
+            },
+            {
+              "key": "entityType",
+              "label": "Entity Type"
+            },
+            {
+              "key": "status",
+              "label": "Status"
+            },
+            {
+              "key": "filingDeadline",
+              "label": "Filing Deadline"
+            },
+            {
+              "key": "assignee.name",
+              "label": "Assigned Staff"
+            }
+          ],
+          "searchable": true,
+          "filterableBy": [
+            "status",
+            "entityType"
+          ],
+          "paginate": 10,
+          "sortBy": "businessName asc",
+          "emptyState": "No clients found.",
+          "rows": {
+            "$path": "/q1"
+          }
+        }
+      },
+      {
+        "id": "g0-grid-0",
+        "component": "Grid",
+        "source": "prewired",
+        "props": {
+          "columns": 2,
+          "gap": 12
+        },
+        "children": [
+          "piece-0",
+          "piece-1"
+        ]
+      },
+      {
+        "id": "section-0",
+        "component": "Surface",
+        "source": "prewired",
+        "children": [
+          "section-0-title",
+          "section-0-body"
+        ]
+      },
+      {
+        "id": "section-0-title",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Overview",
+          "variant": "heading"
+        }
+      },
+      {
+        "id": "section-0-body",
+        "component": "Stack",
+        "source": "prewired",
+        "props": {
+          "gap": 12
+        },
+        "children": [
+          "g0-grid-0"
+        ]
+      },
+      {
+        "id": "section-1",
+        "component": "Surface",
+        "source": "prewired",
+        "children": [
+          "section-1-title",
+          "section-1-body"
+        ]
+      },
+      {
+        "id": "section-1-title",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Clients",
+          "variant": "heading"
+        }
+      },
+      {
+        "id": "section-1-body",
+        "component": "Stack",
+        "source": "prewired",
+        "props": {
+          "gap": 12
+        },
+        "children": [
+          "piece-2"
+        ]
+      }
+    ],
+    "queries": [
+      {
+        "name": "q0",
+        "tool": "host_getDashboard"
+      },
+      {
+        "name": "q1",
+        "tool": "host_listClients"
+      }
+    ]
+  }
+}

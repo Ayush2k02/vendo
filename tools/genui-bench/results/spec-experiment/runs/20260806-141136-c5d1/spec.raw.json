@@ -1,0 +1,17 @@
+{
+  "model": "gemini-3.6-flash",
+  "responseText": "{\n  \"refusal\": {\n    \"reason\": \"I cannot display account balances because the system does not have integration with bank accounts or financial ledgers.\",\n    \"missing\": [\n      \"bank account balance tracking\",\n      \"financial accounts integration\"\n    ]\n  }\n}",
+  "repaired": false,
+  "refusal": {
+    "reason": "I cannot display account balances because the system does not have integration with bank accounts or financial ledgers.",
+    "missing": [
+      "bank account balance tracking",
+      "financial accounts integration"
+    ]
+  },
+  "pieces": [],
+  "specErrors": [],
+  "toolsBound": [],
+  "queryCount": 0,
+  "nodeCount": 3
+}

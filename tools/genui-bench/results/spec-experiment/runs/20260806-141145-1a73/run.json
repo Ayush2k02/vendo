@@ -1,0 +1,31 @@
+{
+  "id": "20260806-141145-1a73",
+  "createdAt": "2026-08-06T08:41:45.289Z",
+  "gitSha": "5fb84d8911ee3f9d812c6fe61736ea90b6bb2ba0",
+  "gitDirty": null,
+  "request": {
+    "prompt": "show my recent transactions with search",
+    "host": "cadence",
+    "lanes": [
+      "vendo",
+      "spec"
+    ],
+    "packRef": {
+      "pack": "smoke",
+      "index": 2
+    }
+  },
+  "lanes": {
+    "vendo": {
+      "status": "failed",
+      "startedAt": 1786005700295,
+      "durationMs": 4980,
+      "error": "the host refused this ask: Your host has no access to financial transactions or payment data."
+    },
+    "spec": {
+      "status": "ok",
+      "startedAt": 1786005700303,
+      "durationMs": 4659
+    }
+  }
+}

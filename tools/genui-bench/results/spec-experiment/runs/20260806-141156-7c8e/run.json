@@ -1,0 +1,31 @@
+{
+  "id": "20260806-141156-7c8e",
+  "createdAt": "2026-08-06T08:41:56.070Z",
+  "gitSha": "5fb84d8911ee3f9d812c6fe61736ea90b6bb2ba0",
+  "gitDirty": null,
+  "request": {
+    "prompt": "which clients still owe me money, oldest first",
+    "host": "cadence",
+    "lanes": [
+      "vendo",
+      "spec"
+    ],
+    "packRef": {
+      "pack": "cadence",
+      "index": 0
+    }
+  },
+  "lanes": {
+    "vendo": {
+      "status": "failed",
+      "startedAt": 1786005711024,
+      "durationMs": 3426,
+      "error": "the host refused this ask: Your host has no way to track which clients still owe you money."
+    },
+    "spec": {
+      "status": "ok",
+      "startedAt": 1786005711033,
+      "durationMs": 5020
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "model": "gemini-3.6-flash",
+  "responseText": "```json\n{\n  \"refusal\": {\n    \"reason\": \"I cannot determine client profitability or analyze time spent because time tracking and billing data are not available in the system.\",\n    \"missing\": [\n      \"Time tracking and hours logged per client\",\n      \"Client billing, revenue, or fee data\"\n    ]\n  }\n}\n```",
+  "repaired": false,
+  "refusal": {
+    "reason": "I cannot determine client profitability or analyze time spent because time tracking and billing data are not available in the system.",
+    "missing": [
+      "Time tracking and hours logged per client",
+      "Client billing, revenue, or fee data"
+    ]
+  },
+  "pieces": [],
+  "specErrors": [],
+  "toolsBound": [],
+  "queryCount": 0,
+  "nodeCount": 3
+}

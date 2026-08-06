@@ -1,110 +1,88 @@
-# spec-lane (native view-spec) experiment — raw two-lane results
+# spec-lane v2 (refusal + vendo-grade composition) — raw two-lane results
 
-Real bench output from 2026-08-06, produced by the `spec` lane PR. Every
-number and screenshot here comes from these RunRecords (`runs/<id>/`, copied
-verbatim from the bench's gitignored `runs/` dir); `summary.json` is computed
-from them, nothing hand-entered. Both lanes ran in the SAME 16 runs, so every
-row compares one prompt on one generation each.
+Real bench output from 2026-08-06, produced by the spec lane v2 commit.
+Every number and screenshot here comes from these RunRecords (`runs/<id>/`,
+copied verbatim from the bench's gitignored `runs/` dir); `summary.json` is
+computed from them, nothing hand-entered. Both lanes ran in the SAME 16
+runs.
 
 ## What ran
 
-- **Model (both lanes): `gemini-3.6-flash`** — the newest flash model this
-  environment's key reaches, verified against the live ListModels catalog
-  before the run; every run's `spec.raw.json` stamps it. Set via
-  `GENUI_BENCH_MODEL` (no `ANTHROPIC_API_KEY` exists in this environment).
-  **The Vendo engine ships tuned for `claude-sonnet-4-6`; its numbers here
-  are NOT representative of the shipped engine on its shipped model.**
-- Hosts and prompts: `smoke` pack on maple and cadence, the bench's `cadence`
-  pack on cadence, plus two singles ("show my clients" on cadence, "spending
-  by category with budgets, and where I can cut back" on maple) — 16 runs.
-- Command per sweep, from `tools/genui-bench` with keys in the repo-root
-  `.env` and `GENUI_BENCH_MODEL=gemini-3.6-flash`:
-  `pnpm bench run --host <maple|cadence> --pack <smoke|cadence> --lanes vendo,spec`
+- **Model (both lanes): `gemini-3.6-flash`** via `GENUI_BENCH_MODEL` (no
+  `ANTHROPIC_API_KEY` exists in this environment; the engine ships tuned for
+  `claude-sonnet-4-6`, so vendo's numbers are not the shipped engine's).
+- Same 16 prompts as the v1 sweep: `smoke` on maple + cadence, the `cadence`
+  pack, and two singles.
+- Command: `pnpm bench run --host <maple|cadence> --pack <smoke|cadence> --lanes vendo,spec`
 
-An earlier iteration of this experiment also carried an **openui-lang lane**;
-it was evaluated and rejected — its fabricated-data renders (parses clean,
-zero tool bindings, invented numbers) rose from 4/16 to 7/16 moving from
-gemini-2.5-flash to the newer flash — so this branch carries no openui code
-and the comparison is vendo vs spec.
+## Outcomes are three-valued (v2 accounting)
 
-## What "ok" means per lane (they are NOT the same claim)
-
-- **vendo ok** — the conductor shipped a checked AppDocument; `findings` is
-  what the checking layer still reported. A refusal ("the host has no way to
-  …") or invalid generation is `failed`.
-- **spec ok** — at least one spec piece survived validation against the
-  chrome registry + the host's tool surface (one repair round allowed), and
-  the compiled document renders on the production tree renderer.
-  **Fabricated data is structurally impossible in this lane**: a data prop
-  cannot be hand-typed (the validator rejects it as a law-1 violation), so
-  every rendered value traces to a real fixture tool call. The honest caveat
-  is different: on off-surface asks the lane binds the *closest real* tool,
-  so it can be grounded-but-off-ask where vendo refuses.
-
-## Headline numbers (16 runs)
+"ok" alone overstated the spec lane in v1 (a grounded-but-off-ask render
+counted the same as a real answer). v2 counts **answered / refused /
+failed** per lane: vendo's refusal is its conductor abstention (`failed` +
+"the host refused this ask"); spec's is the typed `{refusal}` output
+(marked in `spec.raw.json`), compiled onto the Kit's Disclaimer — vendo's
+own abstention chrome — so it renders brand-native in the host document.
 
 | | vendo | spec |
 | --- | --- | --- |
-| ok | 5/16 | **16/16** |
-| failed | 11/16 (9 conductor refusals, 2 generation failures) | 0/16 |
-| ok runs with ≥1 real tool binding | 5/5 | **16/16** |
-| ok runs with fabricated data | 0 | **0 — impossible by construction** |
-| needed the repair round | n/a (full production pipeline) | 7/16 |
-| findings on ok runs | 2 | 0 |
-| median ok duration | 41.1s | 14.7s |
-| generated-code islands in output | possible (0 here) | 0 by construction (no code vocabulary exists) |
+| answered | 7/16 | 6/16 |
+| refused | 9/16 | **10/16** |
+| failed | 0/16 | 0/16 |
+| answered with ≥1 real tool binding | 7/7 | 6/6 |
+| answered with fabricated data | 0 | **0 — impossible by construction** |
+| needed the repair round | n/a | 2/16 (was 7/16 in v1 — the refusal path drains repair pressure) |
+| findings on answered runs | 2 | 0 |
+| median answered duration | 26.5s | 13.2s |
 
-## Per-run table
+## The 9-prompt refusal test set (the asks vendo refused in v1)
 
-Generated from the RunRecords; `s` = seconds, `f` = checking-layer findings
-on an ok run, `rep` = the spec lane needed its one repair round.
+Captain's bar: for each, spec either refuses with a correct reason or
+grounds the answer in tools that genuinely carry the data. Result: **spec
+refused all 9, each with a catalog-derived reason** (full reasons in each
+run's `spec.raw.json`):
 
-| host | pack | prompt | vendo | spec | spec tools bound |
-| --- | --- | --- | --- | --- | --- |
-| maple | smoke | show my account balances at a glance | ok 56.5s 1f | ok 10.5s | host_getProfile, host_listAccounts |
-| maple | smoke | let me transfer money between my accounts | ok 70.6s 1f | ok 21.3s | host_listAccounts, host_listScheduledPayments, host_transferMoney |
-| maple | smoke | show my recent transactions with search | failed 12.8s (gen) | ok 6.1s | host_listTransactions |
-| cadence | smoke | show my account balances at a glance | refused 4.2s | ok 19.9s rep | host_getDashboard, host_listClients |
-| cadence | smoke | let me transfer money between my accounts | refused 3.8s | ok 8.6s | host_getDashboard, host_listClients |
-| cadence | smoke | show my recent transactions with search | refused 3.3s | ok 8.9s | host_listActivity |
-| cadence | cadence | which clients still owe me money, oldest first | refused 3.9s | ok 10.9s | host_listDeadlines |
-| cadence | cadence | show me where my money went last quarter | refused 4.1s | ok 16.6s rep | host_getDashboard, host_listActivity |
-| cadence | cadence | let me chase every overdue invoice in one go | refused 3.7s | ok 28.1s rep | host_getDashboard, host_listClients, host_sendClientMessage |
-| cadence | cadence | what's missing before I can close the books this month | ok 16.9s 0f | ok 23.1s rep | host_getDashboard, host_listActivity, host_listDeadlines |
-| cadence | cadence | show revenue by client with a chart, drill into one | refused 4.5s | ok 32.2s rep | host_getClient, host_getDashboard, host_listClients |
-| cadence | cadence | build me a deadline board for the next 30 days | ok 41.1s 0f | ok 17.3s rep | host_getDashboard, host_listDeadlines |
-| cadence | cadence | which clients are least profitable (time spent) | refused 4.4s | ok 18.5s rep | host_getDashboard, host_listClients |
-| cadence | cadence | one screen: can I afford to hire someone | refused 4.0s | ok 12.9s | host_getDashboard, host_listClients, host_listDeadlines |
-| cadence | (single) | show my clients | failed 8.6s (gen) | ok 12.5s | host_getDashboard, host_listClients |
-| maple | (single) | spending by category with budgets, where to cut back | ok 31.7s 0f | ok 8.4s | host_getBudgets, host_getRecurringInsights, host_getSpendingInsights |
+| prompt (cadence host) | spec v2 | why the refusal is correct |
+| --- | --- | --- |
+| show my account balances at a glance | refused | no banking/balance tool exists; v1's dashboard-stats stand-in is gone |
+| let me transfer money between my accounts | refused | no money-movement tool of any kind on this host |
+| show my recent transactions with search | refused | `host_listActivity` is a workflow event feed — its output shape carries no amounts/merchants; v1 bound it anyway |
+| which clients still owe me money, oldest first | refused | no invoice/billing/receivables tool; v1 bound `host_listDeadlines` (filing dates ≠ money owed) |
+| show me where my money went last quarter | refused | no expense or spend data on the surface |
+| let me chase every overdue invoice in one go | refused | no invoice records to chase; messaging exists but nothing to ground "overdue" |
+| show revenue by client with a chart | refused | no revenue fields in any tool's output shape |
+| which clients are least profitable (time spent) | refused | no time-tracking or profitability data |
+| one screen: can I afford to hire someone | refused | no cash flow / payroll / financials |
 
-The two vendo "(gen)" failures are generation failures on Gemini (unknown
-props on prewired components, rejected by the checking layer — each run.json
-carries the full error string); the 9 "refused" rows carry the conductor's
-written reasons. The off-surface asks (bank prompts on the accounting host)
-show the two designs' different honesty moves: vendo refuses with a reason;
-spec binds the closest REAL tools and labels them as what they are — e.g.
-the "balances" ask rendered the firm's real client/document stats under the
-model-authored caption "Financial account balances are unavailable.
-Displaying active tax clients and filing deadline progress."
-(`screenshots/cadence-smoke-balances--123731.png`). Grounded, honestly
-labeled, off-ask — and never invented.
+**One divergence the other way:** on maple, "let me transfer money between
+my accounts" — vendo answered (42s app on `host_transferMoney`), spec v2
+**refused**, reasoning the host supports sending money to a recipient but
+not account-to-account transfers. Reading `host_transferMoney`'s input
+schema (`amount`, `recipient_name`, `memo` — no source/destination account
+params), spec's strict read is defensible: the tool genuinely cannot
+express "between my accounts". Judged against the catalog, this is the
+grounding bar applied consistently, not an over-refusal bug — but it is a
+real behavioral difference worth knowing.
 
-## Island-escape metrics (`measure/`)
+## What "answered" now looks like (the UI-parity changes)
 
-The committed measurement (`measure/metrics.ts`) reads the vendo lane's
-AppDocument, so it was not run cross-lane. The spec lane's structural facts
-don't need it: **island count is 0 and island ratio is 0.00 for every spec
-run by construction** — the lane cannot emit generated-component source at
-all; its documents are declared queries + prewired/Kit nodes only
-(`spec.document.json` in every run dir shows this).
+The 6 spec answers use the v2 composition vocabulary: `section` headings
+compile into the engine's own group pattern (Surface → heading → body), so
+pages read as framed, titled sections like vendo's output; `bind` fills
+multi-prop data components (Progress value/max); Callout carries caveats.
+Examples: "spending by category" ships *Spending Overview* (donut) +
+*Category Budgets* (captioned table) sections in 16.2s vs vendo's tabbed
+42s app; "deadline board" ships *Overview* stat tiles + *Upcoming Filing
+Deadlines* table. Every rendered value still traces to a declared query —
+zero freeform layout, zero code, zero fabricated data.
 
 ## Screenshots
 
-`screenshots/` — one PNG per run: a full-screen 1920×1080 desktop-viewport
-capture of the cockpit with the Vendo and Spec panes side by side (the run's
-own two lanes; every PNG's dimensions were verified after capture). Both
-panes are iframes onto `/embed/<host>` — the host's real theme and CSS; the
-spec pane adds `&lane=spec`. Named `<host>-<pack>-<slug>--<hhmmss>.png`.
-(This dir carries a negating `.gitignore` — the ROOT `.gitignore` ignores
-`*.png` repo-wide and would otherwise silently drop these at `git add`.)
+`screenshots/` — one PNG per run: full-screen **1920×1080** desktop-viewport
+captures (viewport pinned via DevTools emulation; every PNG's dimensions
+verified after capture), the cockpit with the Vendo and Spec panes side by
+side. Refusal renders included — e.g.
+`cadence-cadence-owed-oldest--141156.png` shows vendo's refusal text beside
+spec's Disclaimer card. Named `<host>-<pack>-<slug>--<hhmmss>.png`. (This
+dir carries a negating `.gitignore` — the ROOT `.gitignore` ignores `*.png`
+repo-wide and would otherwise silently drop these at `git add`.)

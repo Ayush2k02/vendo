@@ -1,0 +1,42 @@
+{
+  "format": "vendo/app@1",
+  "id": "app_bench_spec_ed47f3ea",
+  "name": "Refused: the host can't ground this ask",
+  "ui": "tree",
+  "tree": {
+    "formatVersion": "vendo-genui/v2",
+    "root": "app",
+    "nodes": [
+      {
+        "id": "app",
+        "component": "Stack",
+        "source": "prewired",
+        "props": {
+          "gap": 12
+        },
+        "children": [
+          "refusal",
+          "missing"
+        ]
+      },
+      {
+        "id": "refusal",
+        "component": "Disclaimer",
+        "source": "prewired",
+        "props": {
+          "reason": "The system manages tax document collection and filing deadlines, but does not support invoice tracking, billing management, or bulk invoice chasing.",
+          "title": "This host can't ground that ask"
+        }
+      },
+      {
+        "id": "missing",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Missing capability: Invoice and billing management tools · Automated bulk messaging capabilities for invoice reminders",
+          "variant": "caption"
+        }
+      }
+    ]
+  }
+}

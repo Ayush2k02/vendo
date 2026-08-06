@@ -1,0 +1,30 @@
+{
+  "id": "20260806-141111-47bc",
+  "createdAt": "2026-08-06T08:41:11.883Z",
+  "gitSha": "5fb84d8911ee3f9d812c6fe61736ea90b6bb2ba0",
+  "gitDirty": null,
+  "request": {
+    "prompt": "let me transfer money between my accounts",
+    "host": "maple",
+    "lanes": [
+      "vendo",
+      "spec"
+    ],
+    "packRef": {
+      "pack": "smoke",
+      "index": 1
+    }
+  },
+  "lanes": {
+    "vendo": {
+      "status": "ok",
+      "startedAt": 1786005645412,
+      "durationMs": 26455
+    },
+    "spec": {
+      "status": "ok",
+      "startedAt": 1786005645421,
+      "durationMs": 7477
+    }
+  }
+}

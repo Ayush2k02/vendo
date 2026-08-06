@@ -1,371 +1,483 @@
 {
   "model": "gemini-3.6-flash",
   "runs": 16,
-  "totals": {
+  "outcomes": {
     "vendo": {
-      "ok": 5,
-      "failed": 11
+      "answered": 7,
+      "refused": 9,
+      "failed": 0
     },
     "spec": {
-      "ok": 16,
+      "answered": 6,
+      "refused": 10,
       "failed": 0
     }
   },
-  "vendo": {
-    "refusals": 9,
-    "findingsOnOk": 2
-  },
   "spec": {
-    "repaired": 7,
-    "okWithZeroToolBindings": 0,
-    "findingsOnOk": 0
+    "repaired": 2,
+    "answeredWithZeroToolBindings": 0,
+    "findings": 0
+  },
+  "vendo": {
+    "findingsOnOk": 2
   },
   "rows": [
     {
-      "id": "20260806-123539-4bee",
+      "id": "20260806-141045-1e31",
       "host": "maple",
       "pack": "smoke",
       "prompt": "show my account balances at a glance",
       "vendo": {
         "status": "ok",
-        "durationMs": 56522,
-        "findings": 1
+        "durationMs": 57326,
+        "findings": 2,
+        "outcome": "answered"
       },
       "spec": {
         "status": "ok",
-        "durationMs": 10500,
+        "durationMs": 10294,
         "findings": 0,
         "repaired": false,
         "toolsBound": [
           "host_getProfile",
           "host_listAccounts"
         ],
-        "queryCount": 2
+        "sections": [
+          "Overview",
+          "Your Accounts"
+        ],
+        "pieces": [
+          "Stat",
+          "CardList"
+        ],
+        "outcome": "answered"
       }
     },
     {
-      "id": "20260806-123650-901f",
+      "id": "20260806-141111-47bc",
       "host": "maple",
       "pack": "smoke",
       "prompt": "let me transfer money between my accounts",
       "vendo": {
         "status": "ok",
-        "durationMs": 70602,
-        "findings": 1
+        "durationMs": 26455,
+        "findings": 0,
+        "outcome": "answered"
       },
       "spec": {
         "status": "ok",
-        "durationMs": 21270,
+        "durationMs": 7477,
         "findings": 0,
         "repaired": false,
-        "toolsBound": [
-          "host_listAccounts",
-          "host_listScheduledPayments",
-          "host_transferMoney"
-        ],
-        "queryCount": 2
+        "toolsBound": [],
+        "refusal": {
+          "reason": "The system does not support transferring funds internally between your own accounts.",
+          "missing": [
+            "Internal account-to-account transfer tool (selecting source and target accounts)"
+          ]
+        },
+        "sections": [],
+        "pieces": [],
+        "outcome": "refused"
       }
     },
     {
-      "id": "20260806-123703-3bbb",
+      "id": "20260806-141131-d3ec",
       "host": "maple",
       "pack": "smoke",
       "prompt": "show my recent transactions with search",
       "vendo": {
-        "status": "failed",
-        "durationMs": 12762,
-        "error": "generation failed: node \"stack-1\" sets unknown prop \"spacing\" on prewired component \"Stack\"; the renderer drops it. Allowed props: gap | node \"datatable-1\" sets unknown prop \"query\" on prewired component \"DataTable\"; the"
+        "status": "ok",
+        "durationMs": 19589,
+        "findings": 0,
+        "outcome": "answered"
       },
       "spec": {
         "status": "ok",
-        "durationMs": 6118,
+        "durationMs": 7517,
         "findings": 0,
         "repaired": false,
         "toolsBound": [
           "host_listTransactions"
         ],
-        "queryCount": 1
+        "sections": [],
+        "pieces": [
+          "DataTable"
+        ],
+        "outcome": "answered"
       }
     },
     {
-      "id": "20260806-123731-0512",
+      "id": "20260806-141136-c5d1",
       "host": "cadence",
       "pack": "smoke",
       "prompt": "show my account balances at a glance",
       "vendo": {
         "status": "failed",
-        "durationMs": 4160,
-        "error": "the host refused this ask: Your host has no tool or data source to show account balances."
+        "durationMs": 2973,
+        "error": "the host refused this ask: Your host has no way to show account balances.",
+        "outcome": "refused"
       },
       "spec": {
         "status": "ok",
-        "durationMs": 19867,
+        "durationMs": 4299,
         "findings": 0,
-        "repaired": true,
-        "toolsBound": [
-          "host_getDashboard",
-          "host_listClients"
-        ],
-        "queryCount": 2
+        "repaired": false,
+        "toolsBound": [],
+        "refusal": {
+          "reason": "I cannot display account balances because the system does not have integration with bank accounts or financial ledgers.",
+          "missing": [
+            "bank account balance tracking",
+            "financial accounts integration"
+          ]
+        },
+        "sections": [],
+        "pieces": [],
+        "outcome": "refused"
       }
     },
     {
-      "id": "20260806-123740-f9d3",
+      "id": "20260806-141140-2e18",
       "host": "cadence",
       "pack": "smoke",
       "prompt": "let me transfer money between my accounts",
       "vendo": {
         "status": "failed",
-        "durationMs": 3842,
-        "error": "the host refused this ask: Your host cannot transfer money between accounts."
+        "durationMs": 2709,
+        "error": "the host refused this ask: Your host cannot transfer money between your accounts.",
+        "outcome": "refused"
       },
       "spec": {
         "status": "ok",
-        "durationMs": 8629,
+        "durationMs": 3858,
         "findings": 0,
         "repaired": false,
-        "toolsBound": [
-          "host_getDashboard",
-          "host_listClients"
-        ],
-        "queryCount": 2
+        "toolsBound": [],
+        "refusal": {
+          "reason": "This platform handles tax document tracking and client workflows, so it does not support viewing bank accounts or transferring funds.",
+          "missing": [
+            "bank account management",
+            "money transfer functionality"
+          ]
+        },
+        "sections": [],
+        "pieces": [],
+        "outcome": "refused"
       }
     },
     {
-      "id": "20260806-123749-cfc7",
+      "id": "20260806-141145-1a73",
       "host": "cadence",
       "pack": "smoke",
       "prompt": "show my recent transactions with search",
       "vendo": {
         "status": "failed",
-        "durationMs": 3303,
-        "error": "the host refused this ask: Your host has no record of financial or banking transactions."
+        "durationMs": 4980,
+        "error": "the host refused this ask: Your host has no access to financial transactions or payment data.",
+        "outcome": "refused"
       },
       "spec": {
         "status": "ok",
-        "durationMs": 8927,
+        "durationMs": 4659,
         "findings": 0,
         "repaired": false,
-        "toolsBound": [
-          "host_listActivity"
-        ],
-        "queryCount": 1
+        "toolsBound": [],
+        "refusal": {
+          "reason": "The system does not have access to financial transaction data or transaction history.",
+          "missing": [
+            "financial transaction management and querying tool"
+          ]
+        },
+        "sections": [],
+        "pieces": [],
+        "outcome": "refused"
       }
     },
     {
-      "id": "20260806-123803-1333",
+      "id": "20260806-141156-7c8e",
       "host": "cadence",
       "pack": "cadence",
       "prompt": "which clients still owe me money, oldest first",
       "vendo": {
         "status": "failed",
-        "durationMs": 3854,
-        "error": "the host refused this ask: Your host has no tools or data to track client billing, invoices, or outstanding balances."
+        "durationMs": 3426,
+        "error": "the host refused this ask: Your host has no way to track which clients still owe you money.",
+        "outcome": "refused"
       },
       "spec": {
         "status": "ok",
-        "durationMs": 10871,
+        "durationMs": 5020,
         "findings": 0,
         "repaired": false,
-        "toolsBound": [
-          "host_listDeadlines"
-        ],
-        "queryCount": 1
+        "toolsBound": [],
+        "refusal": {
+          "reason": "The system does not track client invoices, billing records, or outstanding balances.",
+          "missing": [
+            "client billing and invoice tracking"
+          ]
+        },
+        "sections": [],
+        "pieces": [],
+        "outcome": "refused"
       }
     },
     {
-      "id": "20260806-123819-21e4",
+      "id": "20260806-141200-ed72",
       "host": "cadence",
       "pack": "cadence",
       "prompt": "show me where my money went last quarter",
       "vendo": {
         "status": "failed",
-        "durationMs": 4110,
-        "error": "the host refused this ask: Your host has no tool to track expenses or show where money went last quarter."
+        "durationMs": 3258,
+        "error": "the host refused this ask: Your host has no financial or expense tracking data to show where your money went last quarter.",
+        "outcome": "refused"
       },
       "spec": {
         "status": "ok",
-        "durationMs": 16607,
+        "durationMs": 4471,
         "findings": 0,
-        "repaired": true,
-        "toolsBound": [
-          "host_getDashboard",
-          "host_listActivity"
-        ],
-        "queryCount": 2
+        "repaired": false,
+        "toolsBound": [],
+        "refusal": {
+          "reason": "This platform manages tax client document checklists and filing deadlines, but does not have access to financial transaction history or expense tracking.",
+          "missing": [
+            "Financial transaction and expense data",
+            "Quarterly spending and cash outflow records"
+          ]
+        },
+        "sections": [],
+        "pieces": [],
+        "outcome": "refused"
       }
     },
     {
-      "id": "20260806-123847-786d",
+      "id": "20260806-141205-5492",
       "host": "cadence",
       "pack": "cadence",
       "prompt": "let me chase every overdue invoice in one go",
       "vendo": {
         "status": "failed",
-        "durationMs": 3736,
-        "error": "the host refused this ask: Your host manages tax document collection and filing deadlines, but has no system or tools for tracking or chasing invoices."
+        "durationMs": 3102,
+        "error": "the host refused this ask: Your host does not track invoices or handle invoice chasing.",
+        "outcome": "refused"
       },
       "spec": {
         "status": "ok",
-        "durationMs": 28102,
+        "durationMs": 4418,
         "findings": 0,
-        "repaired": true,
-        "toolsBound": [
-          "host_getDashboard",
-          "host_listClients",
-          "host_sendClientMessage"
-        ],
-        "queryCount": 2
+        "repaired": false,
+        "toolsBound": [],
+        "refusal": {
+          "reason": "The system manages tax document collection and filing deadlines, but does not support invoice tracking, billing management, or bulk invoice chasing.",
+          "missing": [
+            "Invoice and billing management tools",
+            "Automated bulk messaging capabilities for invoice reminders"
+          ]
+        },
+        "sections": [],
+        "pieces": [],
+        "outcome": "refused"
       }
     },
     {
-      "id": "20260806-123910-5e17",
+      "id": "20260806-141225-3372",
       "host": "cadence",
       "pack": "cadence",
       "prompt": "what's missing before I can close the books this month",
       "vendo": {
         "status": "ok",
-        "durationMs": 16918,
-        "findings": 0
+        "durationMs": 15840,
+        "findings": 0,
+        "outcome": "answered"
       },
       "spec": {
         "status": "ok",
-        "durationMs": 23054,
+        "durationMs": 20336,
         "findings": 0,
         "repaired": true,
         "toolsBound": [
           "host_getDashboard",
-          "host_listActivity",
           "host_listDeadlines"
         ],
-        "queryCount": 3
+        "sections": [
+          "Clients with Pending Documents",
+          "Firm Overview"
+        ],
+        "pieces": [
+          "Stat",
+          "Stat",
+          "Stat",
+          "DataTable"
+        ],
+        "outcome": "answered"
       }
     },
     {
-      "id": "20260806-123943-ec4a",
+      "id": "20260806-141229-7722",
       "host": "cadence",
       "pack": "cadence",
       "prompt": "show revenue by client with a chart, and let me drill into one",
       "vendo": {
         "status": "failed",
-        "durationMs": 4464,
-        "error": "the host refused this ask: Your host does not track client revenue, so revenue charts and client revenue drilldowns are unavailable."
+        "durationMs": 4114,
+        "error": "the host refused this ask: Your host does not store or track revenue data for clients.",
+        "outcome": "refused"
       },
       "spec": {
         "status": "ok",
-        "durationMs": 32189,
+        "durationMs": 4351,
         "findings": 0,
-        "repaired": true,
-        "toolsBound": [
-          "host_getClient",
-          "host_getDashboard",
-          "host_listClients"
-        ],
-        "queryCount": 2
+        "repaired": false,
+        "toolsBound": [],
+        "refusal": {
+          "reason": "The system does not track client financial or revenue data, so revenue charts and client revenue details cannot be displayed.",
+          "missing": [
+            "Client revenue and billing data"
+          ]
+        },
+        "sections": [],
+        "pieces": [],
+        "outcome": "refused"
       }
     },
     {
-      "id": "20260806-124024-387b",
+      "id": "20260806-141305-b7ed",
       "host": "cadence",
       "pack": "cadence",
       "prompt": "build me a deadline board for the next 30 days",
       "vendo": {
         "status": "ok",
-        "durationMs": 41125,
-        "findings": 0
+        "durationMs": 35995,
+        "findings": 0,
+        "outcome": "answered"
       },
       "spec": {
         "status": "ok",
-        "durationMs": 17285,
+        "durationMs": 19902,
         "findings": 0,
         "repaired": true,
         "toolsBound": [
           "host_getDashboard",
           "host_listDeadlines"
         ],
-        "queryCount": 2
+        "sections": [
+          "Overview",
+          "Upcoming Filing Deadlines"
+        ],
+        "pieces": [
+          "Stat",
+          "Stat",
+          "Stat",
+          "DataTable"
+        ],
+        "outcome": "answered"
       }
     },
     {
-      "id": "20260806-124042-f835",
+      "id": "20260806-141310-02cf",
       "host": "cadence",
       "pack": "cadence",
       "prompt": "which clients are least profitable once I account for time spent",
       "vendo": {
         "status": "failed",
-        "durationMs": 4365,
-        "error": "the host refused this ask: Your host does not track time spent or revenue to calculate client profitability."
+        "durationMs": 2396,
+        "error": "the host refused this ask: Your host does not track time spent or client profitability data.",
+        "outcome": "refused"
       },
       "spec": {
         "status": "ok",
-        "durationMs": 18506,
+        "durationMs": 4436,
         "findings": 0,
-        "repaired": true,
-        "toolsBound": [
-          "host_getDashboard",
-          "host_listClients"
-        ],
-        "queryCount": 2
+        "repaired": false,
+        "toolsBound": [],
+        "refusal": {
+          "reason": "I cannot determine client profitability or analyze time spent because time tracking and billing data are not available in the system.",
+          "missing": [
+            "Time tracking and hours logged per client",
+            "Client billing, revenue, or fee data"
+          ]
+        },
+        "sections": [],
+        "pieces": [],
+        "outcome": "refused"
       }
     },
     {
-      "id": "20260806-124055-d645",
+      "id": "20260806-141314-5fbc",
       "host": "cadence",
       "pack": "cadence",
       "prompt": "one screen that answers: can I afford to hire someone",
       "vendo": {
         "status": "failed",
-        "durationMs": 3980,
-        "error": "the host refused this ask: Your host has no cash flow, revenue, or payroll data to determine if you can afford to hire someone."
+        "durationMs": 3555,
+        "error": "the host refused this ask: Your host has no financial, cash flow, or payroll data to determine if you can afford to hire someone.",
+        "outcome": "refused"
       },
       "spec": {
         "status": "ok",
-        "durationMs": 12870,
+        "durationMs": 4624,
         "findings": 0,
         "repaired": false,
-        "toolsBound": [
-          "host_getDashboard",
-          "host_listClients",
-          "host_listDeadlines"
-        ],
-        "queryCount": 3
+        "toolsBound": [],
+        "refusal": {
+          "reason": "The system does not have access to financial statements, revenue metrics, cash flow data, or payroll expense details necessary to assess whether you can afford to hire someone.",
+          "missing": [
+            "Revenue and profit margin metrics",
+            "Cash balance and cash flow reporting",
+            "Payroll, compensation, and overhead expense data"
+          ]
+        },
+        "sections": [],
+        "pieces": [],
+        "outcome": "refused"
       }
     },
     {
-      "id": "20260806-124113-bf5c",
+      "id": "20260806-141338-b35f",
       "host": "cadence",
       "pack": null,
       "prompt": "show my clients",
       "vendo": {
-        "status": "failed",
-        "durationMs": 8598,
-        "error": "generation failed: node \"datatable-1\" sets unknown prop \"data\" on prewired component \"DataTable\"; the renderer drops it. Allowed props: rows, columns, sortBy, limit, filterableBy, searchable, paginate, emptyState, captio"
+        "status": "ok",
+        "durationMs": 17530,
+        "findings": 0,
+        "outcome": "answered"
       },
       "spec": {
         "status": "ok",
-        "durationMs": 12464,
+        "durationMs": 9794,
         "findings": 0,
         "repaired": false,
         "toolsBound": [
           "host_getDashboard",
           "host_listClients"
         ],
-        "queryCount": 2
+        "sections": [
+          "Clients",
+          "Overview"
+        ],
+        "pieces": [
+          "Stat",
+          "Stat",
+          "DataTable"
+        ],
+        "outcome": "answered"
       }
     },
     {
-      "id": "20260806-124146-07fd",
+      "id": "20260806-141421-d891",
       "host": "maple",
       "pack": null,
       "prompt": "spending by category with budgets, and where I can cut back",
       "vendo": {
         "status": "ok",
-        "durationMs": 31694,
-        "findings": 0
+        "durationMs": 42026,
+        "findings": 0,
+        "outcome": "answered"
       },
       "spec": {
         "status": "ok",
-        "durationMs": 8429,
+        "durationMs": 16196,
         "findings": 0,
         "repaired": false,
         "toolsBound": [
@@ -373,7 +485,18 @@
           "host_getRecurringInsights",
           "host_getSpendingInsights"
         ],
-        "queryCount": 3
+        "sections": [
+          "Category Budgets",
+          "Cutback Opportunities",
+          "Spending Overview"
+        ],
+        "pieces": [
+          "DonutChart",
+          "DataTable",
+          "Callout",
+          "DataTable"
+        ],
+        "outcome": "answered"
       }
     }
   ]

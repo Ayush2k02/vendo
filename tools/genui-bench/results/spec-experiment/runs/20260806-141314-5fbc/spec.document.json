@@ -1,0 +1,42 @@
+{
+  "format": "vendo/app@1",
+  "id": "app_bench_spec_9555a5f1",
+  "name": "Refused: the host can't ground this ask",
+  "ui": "tree",
+  "tree": {
+    "formatVersion": "vendo-genui/v2",
+    "root": "app",
+    "nodes": [
+      {
+        "id": "app",
+        "component": "Stack",
+        "source": "prewired",
+        "props": {
+          "gap": 12
+        },
+        "children": [
+          "refusal",
+          "missing"
+        ]
+      },
+      {
+        "id": "refusal",
+        "component": "Disclaimer",
+        "source": "prewired",
+        "props": {
+          "reason": "The system does not have access to financial statements, revenue metrics, cash flow data, or payroll expense details necessary to assess whether you can afford to hire someone.",
+          "title": "This host can't ground that ask"
+        }
+      },
+      {
+        "id": "missing",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Missing capability: Revenue and profit margin metrics · Cash balance and cash flow reporting · Payroll, compensation, and overhead expense data",
+          "variant": "caption"
+        }
+      }
+    ]
+  }
+}

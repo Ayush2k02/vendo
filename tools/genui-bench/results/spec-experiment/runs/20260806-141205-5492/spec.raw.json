@@ -1,0 +1,17 @@
+{
+  "model": "gemini-3.6-flash",
+  "responseText": "{\n  \"refusal\": {\n    \"reason\": \"The system manages tax document collection and filing deadlines, but does not support invoice tracking, billing management, or bulk invoice chasing.\",\n    \"missing\": [\n      \"Invoice and billing management tools\",\n      \"Automated bulk messaging capabilities for invoice reminders\"\n    ]\n  }\n}",
+  "repaired": false,
+  "refusal": {
+    "reason": "The system manages tax document collection and filing deadlines, but does not support invoice tracking, billing management, or bulk invoice chasing.",
+    "missing": [
+      "Invoice and billing management tools",
+      "Automated bulk messaging capabilities for invoice reminders"
+    ]
+  },
+  "pieces": [],
+  "specErrors": [],
+  "toolsBound": [],
+  "queryCount": 0,
+  "nodeCount": 3
+}

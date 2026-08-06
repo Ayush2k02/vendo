@@ -1,0 +1,42 @@
+{
+  "format": "vendo/app@1",
+  "id": "app_bench_spec_0f99029a",
+  "name": "Refused: the host can't ground this ask",
+  "ui": "tree",
+  "tree": {
+    "formatVersion": "vendo-genui/v2",
+    "root": "app",
+    "nodes": [
+      {
+        "id": "app",
+        "component": "Stack",
+        "source": "prewired",
+        "props": {
+          "gap": 12
+        },
+        "children": [
+          "refusal",
+          "missing"
+        ]
+      },
+      {
+        "id": "refusal",
+        "component": "Disclaimer",
+        "source": "prewired",
+        "props": {
+          "reason": "This platform manages tax client document checklists and filing deadlines, but does not have access to financial transaction history or expense tracking.",
+          "title": "This host can't ground that ask"
+        }
+      },
+      {
+        "id": "missing",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Missing capability: Financial transaction and expense data · Quarterly spending and cash outflow records",
+          "variant": "caption"
+        }
+      }
+    ]
+  }
+}

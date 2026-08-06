@@ -1,0 +1,42 @@
+{
+  "format": "vendo/app@1",
+  "id": "app_bench_spec_49ed83ab",
+  "name": "Refused: the host can't ground this ask",
+  "ui": "tree",
+  "tree": {
+    "formatVersion": "vendo-genui/v2",
+    "root": "app",
+    "nodes": [
+      {
+        "id": "app",
+        "component": "Stack",
+        "source": "prewired",
+        "props": {
+          "gap": 12
+        },
+        "children": [
+          "refusal",
+          "missing"
+        ]
+      },
+      {
+        "id": "refusal",
+        "component": "Disclaimer",
+        "source": "prewired",
+        "props": {
+          "reason": "The system does not have access to financial transaction data or transaction history.",
+          "title": "This host can't ground that ask"
+        }
+      },
+      {
+        "id": "missing",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Missing capability: financial transaction management and querying tool",
+          "variant": "caption"
+        }
+      }
+    ]
+  }
+}

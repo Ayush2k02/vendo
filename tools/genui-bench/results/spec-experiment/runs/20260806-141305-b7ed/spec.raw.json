@@ -1,0 +1,119 @@
+{
+  "model": "gemini-3.6-flash",
+  "responseText": "{\n  \"title\": \"Deadline Board\",\n  \"components\": [\n    {\n      \"use\": \"Stat\",\n      \"section\": \"Overview\",\n      \"tool\": \"host_getDashboard\",\n      \"params\": {},\n      \"select\": \"nearestDeadline\",\n      \"props\": {\n        \"label\": \"Nearest Deadline\",\n        \"format\": \"date\"\n      }\n    },\n    {\n      \"use\": \"Stat\",\n      \"section\": \"Overview\",\n      \"tool\": \"host_getDashboard\",\n      \"params\": {},\n      \"select\": \"clientsMissingDocs\",\n      \"props\": {\n        \"label\": \"Clients Missing Documents\",\n        \"tone\": \"warning\"\n      }\n    },\n    {\n      \"use\": \"Stat\",\n      \"section\": \"Overview\",\n      \"tool\": \"host_getDashboard\",\n      \"params\": {},\n      \"select\": \"documentsOutstanding\",\n      \"props\": {\n        \"label\": \"Outstanding Documents\"\n      }\n    },\n    {\n      \"use\": \"DataTable\",\n      \"section\": \"Upcoming Filing Deadlines\",\n      \"tool\": \"host_listDeadlines\",\n      \"params\": {},\n      \"props\": {\n        \"caption\": \"Clients ordered by filing deadline with document status\",\n        \"columns\": [\n          {\n            \"key\": \"businessName\",\n            \"label\": \"Client\"\n          },\n          {\n            \"key\": \"entityType\",\n            \"label\": \"Entity Type\"\n          },\n          {\n            \"key\": \"filingDeadline\",\n            \"label\": \"Deadline\",\n            \"format\": \"date\"\n          },\n          {\n            \"key\": \"status\",\n            \"label\": \"Status\"\n          },\n          {\n            \"key\": \"assignee.name\",\n            \"label\": \"Assigned Staff\"\n          },\n          {\n            \"key\": \"missingDocKinds\",\n            \"label\": \"Missing Documents\"\n          }\n        ],\n        \"sortBy\": \"filingDeadline asc\",\n        \"searchable\": true,\n        \"filterableBy\": [\n          \"status\",\n          \"entityType\"\n        ],\n        \"paginate\": 10\n      }\n    }\n  ]\n}",
+  "repairResponseText": "```json\n{\n  \"title\": \"Deadline Board\",\n  \"components\": [\n    {\n      \"use\": \"Stat\",\n      \"section\": \"Overview\",\n      \"tool\": \"host_getDashboard\",\n      \"params\": {},\n      \"select\": \"nearestDeadline\",\n      \"props\": {\n        \"label\": \"Nearest Deadline\",\n        \"format\": \"date\"\n      }\n    },\n    {\n      \"use\": \"Stat\",\n      \"section\": \"Overview\",\n      \"tool\": \"host_getDashboard\",\n      \"params\": {},\n      \"select\": \"clientsMissingDocs\",\n      \"props\": {\n        \"label\": \"Clients Missing Documents\",\n        \"tone\": \"danger\"\n      }\n    },\n    {\n      \"use\": \"Stat\",\n      \"section\": \"Overview\",\n      \"tool\": \"host_getDashboard\",\n      \"params\": {},\n      \"select\": \"documentsOutstanding\",\n      \"props\": {\n        \"label\": \"Outstanding Documents\"\n      }\n    },\n    {\n      \"use\": \"DataTable\",\n      \"section\": \"Upcoming Filing Deadlines\",\n      \"tool\": \"host_listDeadlines\",\n      \"params\": {},\n      \"props\": {\n        \"caption\": \"Clients ordered by filing deadline with document status\",\n        \"columns\": [\n          {\n            \"key\": \"businessName\",\n            \"label\": \"Client\"\n          },\n          {\n            \"key\": \"entityType\",\n            \"label\": \"Entity Type\"\n          },\n          {\n            \"key\": \"filingDeadline\",\n            \"label\": \"Deadline\",\n            \"format\": \"date\"\n          },\n          {\n            \"key\": \"status\",\n            \"label\": \"Status\"\n          },\n          {\n            \"key\": \"assignee.name\",\n            \"label\": \"Assigned Staff\"\n          },\n          {\n            \"key\": \"missingDocKinds\",\n            \"label\": \"Missing Documents\"\n          }\n        ],\n        \"sortBy\": \"filingDeadline asc\",\n        \"searchable\": true,\n        \"filterableBy\": [\n          \"status\",\n          \"entityType\"\n        ],\n        \"paginate\": 10\n      }\n    }\n  ]\n}\n```",
+  "repaired": true,
+  "spec": {
+    "title": "Deadline Board",
+    "components": [
+      {
+        "use": "Stat",
+        "section": "Overview",
+        "tool": "host_getDashboard",
+        "params": {},
+        "select": "nearestDeadline",
+        "props": {
+          "label": "Nearest Deadline",
+          "format": "date"
+        }
+      },
+      {
+        "use": "Stat",
+        "section": "Overview",
+        "tool": "host_getDashboard",
+        "params": {},
+        "select": "clientsMissingDocs",
+        "props": {
+          "label": "Clients Missing Documents",
+          "tone": "danger"
+        }
+      },
+      {
+        "use": "Stat",
+        "section": "Overview",
+        "tool": "host_getDashboard",
+        "params": {},
+        "select": "documentsOutstanding",
+        "props": {
+          "label": "Outstanding Documents"
+        }
+      },
+      {
+        "use": "DataTable",
+        "section": "Upcoming Filing Deadlines",
+        "tool": "host_listDeadlines",
+        "params": {},
+        "props": {
+          "caption": "Clients ordered by filing deadline with document status",
+          "columns": [
+            {
+              "key": "businessName",
+              "label": "Client"
+            },
+            {
+              "key": "entityType",
+              "label": "Entity Type"
+            },
+            {
+              "key": "filingDeadline",
+              "label": "Deadline",
+              "format": "date"
+            },
+            {
+              "key": "status",
+              "label": "Status"
+            },
+            {
+              "key": "assignee.name",
+              "label": "Assigned Staff"
+            },
+            {
+              "key": "missingDocKinds",
+              "label": "Missing Documents"
+            }
+          ],
+          "sortBy": "filingDeadline asc",
+          "searchable": true,
+          "filterableBy": [
+            "status",
+            "entityType"
+          ],
+          "paginate": 10
+        }
+      }
+    ]
+  },
+  "pieces": [
+    {
+      "index": 0,
+      "use": "Stat",
+      "tool": "host_getDashboard",
+      "errors": []
+    },
+    {
+      "index": 1,
+      "use": "Stat",
+      "tool": "host_getDashboard",
+      "errors": []
+    },
+    {
+      "index": 2,
+      "use": "Stat",
+      "tool": "host_getDashboard",
+      "errors": []
+    },
+    {
+      "index": 3,
+      "use": "DataTable",
+      "tool": "host_listDeadlines",
+      "errors": []
+    }
+  ],
+  "specErrors": [],
+  "toolsBound": [
+    "host_getDashboard",
+    "host_listDeadlines"
+  ],
+  "queryCount": 2,
+  "nodeCount": 13
+}

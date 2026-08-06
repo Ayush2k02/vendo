@@ -1,0 +1,18 @@
+{
+  "model": "gemini-3.6-flash",
+  "responseText": "{\n  \"refusal\": {\n    \"reason\": \"The system does not have access to financial statements, revenue metrics, cash flow data, or payroll expense details necessary to assess whether you can afford to hire someone.\",\n    \"missing\": [\n      \"Revenue and profit margin metrics\",\n      \"Cash balance and cash flow reporting\",\n      \"Payroll, compensation, and overhead expense data\"\n    ]\n  }\n}",
+  "repaired": false,
+  "refusal": {
+    "reason": "The system does not have access to financial statements, revenue metrics, cash flow data, or payroll expense details necessary to assess whether you can afford to hire someone.",
+    "missing": [
+      "Revenue and profit margin metrics",
+      "Cash balance and cash flow reporting",
+      "Payroll, compensation, and overhead expense data"
+    ]
+  },
+  "pieces": [],
+  "specErrors": [],
+  "toolsBound": [],
+  "queryCount": 0,
+  "nodeCount": 3
+}
