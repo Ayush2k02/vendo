@@ -1,11 +1,12 @@
 # genui-bench
 
 The interactive inner loop for the micro-app format and generation pipeline:
-type a prompt (or run a pack), watch four lanes answer it side by side — the
+type a prompt (or run a pack), watch five lanes answer it side by side — the
 Vendo lane as a fully interactive app on the production `@vendoai/ui` renderer
-with tool calls executing against canned host fixtures, and Thesys C1 /
-CopilotKit / Tambo rendered with their own SDKs — with every run persisted as
-a RunRecord you can reload, pin, and split-compare. Private workspace app,
+with tool calls executing against canned host fixtures, the Spec lane's
+compiled view specs on the same production renderer, and Thesys C1 /
+CopilotKit / Tambo rendered with their own SDKs — with every run
+persisted as a RunRecord you can reload, pin, and split-compare. Private workspace app,
 never published or deployed. There is deliberately no judging: eyes are the
 judge. Spec: `docs/superpowers/specs/2026-07-26-genui-bench-playground-design.md`.
 
@@ -70,6 +71,16 @@ model accepts; every history-rail entry shows the model its run used.
 `GENUI_BENCH_MODEL` still works as the headless override for the default
 path — it sets the id used when a run carries no model choice.
 
+**Keyless-Anthropic fallback.** When no `ANTHROPIC_API_KEY` is available but
+the root `.env` carries `GEMINI_API_KEY` + `GEMINI_MODEL`, every generating
+lane (vendo and spec; copilotkit excepted — it needs the Anthropic
+runtime) resolves that Gemini model instead, through `@ai-sdk/google`
+(provider inferred from the id prefix). One resolver
+(`runner/models.ts defaultModelId`) feeds the lanes AND the JSON summary
+line, so what ran is always what is reported; the same model drives every
+lane, keeping the comparison fair. `--model` (the Anthropic A/B table) still
+requires an Anthropic key.
+
 ## Lane keys
 
 Keys load from the repo-root `.env` (source-only; a missing key marks that
@@ -81,9 +92,10 @@ lane `{"status":"no-key"}` and the run proceeds):
 | copilotkit | `ANTHROPIC_API_KEY` | self-hosted runtime (keyless — no CopilotKit account needed) |
 | thesys-c1  | `THESYS_API_KEY`    | their API + their React renderer (model below)               |
 | tambo      | `TAMBO_API_KEY`     | their orchestration + harness component registry             |
+| spec       | `ANTHROPIC_API_KEY` | native view-spec (JSON, zero layout) compiled onto the production tree renderer |
 
-`GENUI_BENCH_MODEL` overrides the Vendo/CopilotKit default model id (a per-run
-`--model` wins over it — see Model controls).
+`GENUI_BENCH_MODEL` overrides the Vendo/CopilotKit/Spec default model id (a
+per-run `--model` wins over it — see Model controls).
 `GENUI_BENCH_FAKE_LANES=1` swaps every lane for a stub (tests, no keys).
 
 **Thesys C1 is model-agnostic.** Their catalog (`GET /v1/embed/models`, 34
@@ -97,6 +109,25 @@ final assistant content string wrapped in a `<content thesys="true"
 version="2">` envelope around an ```openui-lang``` program; the lane passes
 that string through untouched because `C1Component` parses the envelope
 itself.
+
+**Spec is the native "Custom Views" candidate.** The spec lane drives the
+constrained-generation hypothesis: the model emits a JSON **view spec** —
+components + tool bindings + params, ZERO layout (`lanes/spec/format.ts`) —
+validated against a chrome registry of eight real production components
+(`lanes/spec/registry.ts`, the same zod prop schemas and prop classes the
+engine consumes from `@vendoai/core`) and against the host fixture's tool
+surface (tool exists, params match its input schema). One bounded repair
+round re-prompts with the validator's errors; a piece still invalid after it
+is a warn Finding AND renders in-app as a failure Callout (per-piece honest
+failure). Valid pieces compile deterministically onto the production tree
+format (`lanes/spec/compile.ts` — layout entirely renderer-owned: tiles grid,
+blocks stack, actions become real gated Buttons), and SpecPane frames the
+compiled document in the same `/embed/<host>` host document the Vendo pane
+uses (`&lane=spec`) — production renderer, host theme, live queries and
+actions against `/api/tools`. Law 1 is structural in this lane: a data prop
+cannot be hand-typed (the validator rejects it); data enters only as a
+`$path` binding into a declared query. Same default model resolver as the
+other generating lanes.
 
 Working in a git worktree (or keeping keys outside the repo)? There is no
 `.env` at the worktree root, so source your key file into the shell first —

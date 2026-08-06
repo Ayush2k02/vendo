@@ -8,7 +8,7 @@ import { appDir, runsDir } from "../paths";
 const execFileAsync = promisify(execFile);
 
 const HOSTS: HostName[] = ["maple", "cadence"];
-const LANES: LaneName[] = ["vendo", "thesys-c1", "copilotkit", "tambo"];
+const LANES: LaneName[] = ["vendo", "thesys-c1", "copilotkit", "tambo", "spec"];
 
 export const dynamic = "force-dynamic";
 

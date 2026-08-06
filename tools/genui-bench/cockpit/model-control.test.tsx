@@ -20,6 +20,7 @@ const PANES: Record<LaneName, PaneComponent> = {
   "thesys-c1": GenericPane,
   copilotkit: GenericPane,
   tambo: GenericPane,
+  spec: GenericPane,
 };
 
 let runsDir: string;

@@ -10,6 +10,7 @@ const COMPETITOR_TAB_LABELS: Partial<Record<LaneName, string>> = {
   "thesys-c1": "C1 raw",
   copilotkit: "CopilotKit raw",
   tambo: "Tambo raw",
+  spec: "Spec raw",
 };
 
 /** Internals drawer: what the checking layer still found on the Vendo lane's

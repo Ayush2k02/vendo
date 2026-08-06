@@ -19,15 +19,15 @@ export default async function CadenceEmbedPage({
 }: {
   searchParams: Promise<EmbedSearchParams>;
 }) {
-  const { run, mode } = await searchParams;
-  const document = embedDocument(run);
+  const { run, mode, lane } = await searchParams;
+  const document = embedDocument(run, lane);
   return (
     <div
       className={`${inter.variable} ${splineMono.variable} font-sans antialiased`}
       style={{ padding: 16 }}
     >
       {document === null ? (
-        <EmbedNote>No Vendo document for run {run ?? "(none)"}.</EmbedNote>
+        <EmbedNote>No {lane === "spec" ? "Spec" : "Vendo"} document for run {run ?? "(none)"}.</EmbedNote>
       ) : (
         <ClientHostApp host="cadence" theme={cadenceFixture.theme} document={document} readOnly={mode === "readonly"} />
       )}

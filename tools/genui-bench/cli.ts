@@ -15,6 +15,7 @@ import { executeRun } from "./runner/run";
 import {
   EFFORT_LEVELS,
   PRODUCTION_MODEL,
+  defaultModelId,
   findModel,
   modelChoices,
   validateModelChoice,
@@ -25,7 +26,7 @@ import type { HostFixture, HostName, LaneAdapter, LaneName, RunRequest } from ".
 
 const APP_DIR = dirname(fileURLToPath(import.meta.url));
 const HOSTS: HostName[] = ["maple", "cadence"];
-const LANES: LaneName[] = ["vendo", "thesys-c1", "copilotkit", "tambo"];
+const LANES: LaneName[] = ["vendo", "thesys-c1", "copilotkit", "tambo", "spec"];
 
 async function main(): Promise<void> {
   const { values, positionals } = parseArgs({
@@ -75,8 +76,9 @@ async function main(): Promise<void> {
     console.log(join(runsDir, record.id, "run.json"));
 
     // The summary always names the model that actually ran, so an agent
-    // reading the line never has to know what the engine default is.
-    const entry: Record<string, unknown> = { prompt, model: model ?? { id: PRODUCTION_MODEL.id } };
+    // reading the line never has to know what the engine default is — the
+    // resolver covers GENUI_BENCH_MODEL and the Gemini fallback too.
+    const entry: Record<string, unknown> = { prompt, model: model ?? { id: defaultModelId() } };
     for (const lane of lanes) {
       const result = record.lanes[lane];
       if (!result) continue;
@@ -206,7 +208,7 @@ function loadRootEnv(): void {
 function usage(message: string): never {
   console.error(`genui-bench: ${message}`);
   console.error(
-    'usage: bench run --host <maple|cadence> (--prompt "..." [--prompt "..."] | --pack <name>) [--lanes vendo,thesys-c1,copilotkit,tambo] [--runs-dir <dir>]' +
+    'usage: bench run --host <maple|cadence> (--prompt "..." [--prompt "..."] | --pack <name>) [--lanes vendo,thesys-c1,copilotkit,tambo,spec] [--runs-dir <dir>]' +
       `\n       [--model <id|label>] [--temperature <0-1>] [--thinking <tokens|${EFFORT_LEVELS.join("|")}>]` +
       `\n       models: ${modelChoices()}` +
       `\n       (no --model = the engine default, ${PRODUCTION_MODEL.id})`,
