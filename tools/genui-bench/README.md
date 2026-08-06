@@ -111,9 +111,13 @@ that string through untouched because `C1Component` parses the envelope
 itself.
 
 **Spec is the native "Custom Views" candidate.** The spec lane drives the
-constrained-generation hypothesis: the model emits a JSON **view spec** —
-components + tool bindings + params, ZERO layout (`lanes/spec/format.ts`) —
-validated against a chrome registry of eight real production components
+constrained-generation hypothesis: the model emits either a JSON **view
+spec** — components + tool bindings + params + `section` headings, ZERO
+layout (`lanes/spec/format.ts`) — or, when the host's tool surface cannot
+ground the ask, a typed **refusal** that compiles onto the Kit's Disclaimer
+(vendo's own abstention chrome) and is marked in `spec.raw.json`
+(`refusal`) so accounting counts it as refused, never answered. Specs are
+validated against a chrome registry of ten real production components
 (`lanes/spec/registry.ts`, the same zod prop schemas and prop classes the
 engine consumes from `@vendoai/core`) and against the host fixture's tool
 surface (tool exists, params match its input schema). One bounded repair

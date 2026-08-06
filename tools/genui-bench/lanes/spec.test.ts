@@ -231,6 +231,58 @@ describe("spec adapter", () => {
   });
 });
 
+describe("spec refusal path", () => {
+  beforeEach(() => {
+    process.env.ANTHROPIC_API_KEY = "test-key";
+  });
+  afterEach(() => {
+    delete process.env.ANTHROPIC_API_KEY;
+  });
+
+  const REFUSAL = { refusal: { reason: "This host tracks tax documents, not client billing.", missing: ["invoice and payment records"] } };
+
+  it("a typed refusal is ok, renders vendo's Disclaimer chrome, and is marked in raw", async () => {
+    const adapter = createSpecAdapter({ generate: async () => JSON.stringify(REFUSAL) });
+    const result = await adapter.generate("which clients owe me money", host);
+    expect(result.status).toBe("ok");
+    if (result.status !== "ok") return;
+    const raw = result.raw as SpecRaw;
+    expect(raw.refusal).toEqual(REFUSAL.refusal);
+    expect(raw.toolsBound).toEqual([]);
+    expect(result.findings).toEqual([]);
+    const nodes = nodesOf(result);
+    const disclaimer = nodes.find((node) => node.component === "Disclaimer");
+    expect(disclaimer?.props?.reason).toBe(REFUSAL.refusal.reason);
+    expect(nodes.find((node) => node.component === "Text")?.props?.text).toContain("invoice and payment records");
+    expect((result.document?.tree as { queries?: unknown[] } | undefined)?.queries).toBeUndefined();
+  });
+
+  it("an output carrying both forms is contradictory and goes to repair", async () => {
+    const both = { refusal: REFUSAL.refusal, title: "x", components: [{ use: "DataTable", tool: "host_listClients" }] };
+    const generate = vi.fn<SpecGenerate>()
+      .mockResolvedValueOnce(JSON.stringify(both))
+      .mockResolvedValueOnce(JSON.stringify(REFUSAL));
+    const adapter = createSpecAdapter({ generate });
+    const result = await adapter.generate("owed", host);
+    expect(generate).toHaveBeenCalledTimes(2);
+    expect(result.status).toBe("ok");
+    if (result.status !== "ok") return;
+    expect((result.raw as SpecRaw).refusal).toEqual(REFUSAL.refusal);
+  });
+
+  it("a refusal with no reason fails validation", () => {
+    const verdict = validateSpec(JSON.stringify({ refusal: {} }), host.tools as Parameters<typeof validateSpec>[1]);
+    expect(verdict.refusal).toBeUndefined();
+    expect(verdict.specErrors.length).toBeGreaterThan(0);
+  });
+
+  it("the system prompt teaches both forms and the grounding bar", () => {
+    const system = buildSystemPrompt(host);
+    expect(system).toContain("refusal");
+    expect(system).toContain("GROUNDING IS THE BAR");
+  });
+});
+
 describe("spec validator", () => {
   const tools = host.tools as Parameters<typeof validateSpec>[1];
 
@@ -267,6 +319,21 @@ describe("spec validator", () => {
       tools,
     );
     expect(verdict.pieces[0]?.errors).toEqual(['required prop "label" is missing']);
+  });
+
+  it("rejects a `bind` key the component does not accept, and a Callout without its required title", () => {
+    const verdict = validateSpec(
+      JSON.stringify({
+        title: "x",
+        components: [
+          { use: "DataTable", tool: "host_listClients", bind: { rows: "data" } },
+          { use: "Callout", props: { tone: "info" } },
+        ],
+      }),
+      tools,
+    );
+    expect(verdict.pieces[0]?.errors[0]).toContain("`bind` names \"rows\"");
+    expect(verdict.pieces[1]?.errors[0]).toContain('required prop "title"');
   });
 
   it("requires at least one action on a Button piece, and rejects actions elsewhere", () => {
@@ -307,6 +374,57 @@ describe("spec compiler", () => {
     expect(grid?.children).toHaveLength(2);
   });
 
+  it("consecutive pieces sharing a section render as the engine's Surface group pattern", () => {
+    const { document } = compile({
+      title: "Firm overview",
+      components: [
+        { use: "Stat", section: "Documents", tool: "host_getDashboard", select: "clientsTotal", props: { label: "Clients" } },
+        { use: "Stat", section: "Documents", tool: "host_getDashboard", select: "clientsMissingDocs", props: { label: "Missing" } },
+        { use: "DataTable", tool: "host_listClients" },
+      ],
+    });
+    const tree = document.tree as unknown as Tree;
+    const surface = tree.nodes.find((node) => node.component === "Surface");
+    expect(surface).toBeDefined();
+    const headingId = surface?.children?.[0];
+    const heading = tree.nodes.find((node) => node.id === headingId);
+    expect(heading?.component).toBe("Text");
+    expect(heading?.props?.text).toBe("Documents");
+    const bodyId = surface?.children?.[1];
+    const body = tree.nodes.find((node) => node.id === bodyId);
+    // Inside the section, the two Stat tiles still share a Grid.
+    const grid = tree.nodes.find((node) => node.component === "Grid");
+    expect(body?.children).toContain(grid?.id);
+    // The unsectioned DataTable stays at root, outside the Surface.
+    const root = tree.nodes.find((node) => node.id === "app");
+    expect(root?.children).toContain(surface?.id);
+    expect(root?.children).toContain("piece-2");
+  });
+
+  it("`bind` fills extra data props from the same tool result (Progress value/max)", () => {
+    const { document, queryCount } = compile({
+      title: "Goal",
+      components: [
+        { use: "Progress", tool: "host_getDashboard", select: "documentsReceived", bind: { max: "documentsExpected" }, props: { label: "Docs received", showValue: true } },
+      ],
+    });
+    const tree = document.tree as unknown as Tree;
+    expect(queryCount).toBe(1);
+    const progress = tree.nodes.find((node) => node.component === "Progress");
+    expect(progress?.props?.value).toEqual({ $path: "/q0/documentsReceived" });
+    expect(progress?.props?.max).toEqual({ $path: "/q0/documentsExpected" });
+  });
+
+  it("a copy-only Callout piece renders as the real Callout with its authored props", () => {
+    const { document } = compile({
+      title: "Note",
+      components: [{ use: "Callout", props: { tone: "info", title: "Documents drive everything here" } }],
+    });
+    const tree = document.tree as unknown as Tree;
+    const callout = tree.nodes.find((node) => node.component === "Callout");
+    expect(callout?.props?.title).toBe("Documents drive everything here");
+  });
+
   it("select paths become JSON Pointers under the piece's query", () => {
     expect(selectPointer("q0", undefined)).toBe("/q0");
     expect(selectPointer("q0", "data")).toBe("/q0/data");
@@ -331,8 +449,16 @@ describe("chrome registry", () => {
     }
   });
 
-  it("holds 5–8 components, as the prototype scopes it", () => {
+  it("stays a bounded catalog (v2 widened it for UI-quality parity)", () => {
     expect(CHROME_REGISTRY.length).toBeGreaterThanOrEqual(5);
-    expect(CHROME_REGISTRY.length).toBeLessThanOrEqual(8);
+    expect(CHROME_REGISTRY.length).toBeLessThanOrEqual(12);
+  });
+
+  it("every extra data prop offered to `bind` is a data-class prop of the real spec", () => {
+    for (const entry of CHROME_REGISTRY) {
+      for (const prop of entry.extraDataProps ?? []) {
+        expect(entry.spec.props[prop]?.cls, `${entry.use}.${prop}`).toBe("data");
+      }
+    }
   });
 });

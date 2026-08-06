@@ -14,7 +14,7 @@ import type { PaneProps } from "../pane-props";
 import { PaneFootnote, PaneNonOk } from "./pane-chrome";
 
 const FOOTNOTE =
-  "native view-spec (JSON, zero layout) · one repair round · compiled onto the production tree renderer";
+  "native view-spec (JSON, zero layout) · refuses ungrounded asks · one repair round · compiled onto the production tree renderer";
 
 const FRAME_STYLE: React.CSSProperties = {
   display: "block",

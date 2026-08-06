@@ -17,7 +17,7 @@ export const LANE_FOOTNOTES: Record<LaneName, string> = {
   "thesys-c1": "their renderer, their theme · same prompt + tool context",
   copilotkit: "registered-components paradigm — drives predefined components, not open-ended generation",
   tambo: "component registry + AI orchestration · their SDK",
-  spec: "native view-spec (JSON, zero layout) · one repair round · compiled onto the production tree renderer",
+  spec: "native view-spec (JSON, zero layout) · refuses ungrounded asks · one repair round · compiled onto the production tree renderer",
 };
 
 /** What the checking layer still reported on the app that shipped (same count

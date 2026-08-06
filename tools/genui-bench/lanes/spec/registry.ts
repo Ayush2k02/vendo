@@ -30,8 +30,15 @@ export interface ChromeEntry {
   use: string;
   /** The REAL production component spec (zod props + classes + docs). */
   spec: KitComponentSpec;
-  /** Absent = a piece of this component binds no tool (Button: actions only). */
+  /** Absent = a piece of this component binds no tool (Button: actions only;
+   *  Callout: copy only). */
   dataSlot?: ChromeDataSlot;
+  /** Data-class props beyond the primary slot a piece may fill via `bind`
+   *  (dot-paths into the same tool result), e.g. Progress `max`. */
+  extraDataProps?: readonly string[];
+  /** Authorable props a piece of this component MUST set even though the kit
+   *  schema leaves them optional (a Callout with no title renders empty). */
+  requireProps?: readonly string[];
   /** Renderer-owned layout class — the spec itself carries ZERO layout.
    *  Consecutive tiles share a grid row; blocks get the full width. */
   layout: "tile" | "block";
@@ -83,6 +90,20 @@ export const CHROME_REGISTRY: readonly ChromeEntry[] = [
     layout: "block",
     actionSlots: false,
   }),
+  entry("Progress", {
+    dataSlot: { prop: "value", shape: "one number — a ratio 0..1, or a raw value with `bind: {\"max\": \"<field>\"}` for the denominator" },
+    extraDataProps: ["max"],
+    layout: "tile",
+    actionSlots: false,
+  }),
+  entry("Callout", {
+    // Copy-only notice (tone + title). The honest place for a caveat on an
+    // otherwise-grounded view; for a fully ungrounded ask the lane refuses
+    // instead (format.ts specRefusalSchema → the Kit Disclaimer).
+    requireProps: ["title"],
+    layout: "block",
+    actionSlots: false,
+  }),
   entry("Button", {
     // No data slot: a Button piece is pure action surface — its `actions[]`
     // ARE the buttons (label + host tool + params), action-gated like every
@@ -113,8 +134,14 @@ export function registryPrompt(): string {
     const lines = [`## ${item.use}`, item.spec.summary];
     if (item.dataSlot !== undefined) {
       lines.push(`Data slot: the bound tool's result fills \`${item.dataSlot.prop}\` — expects ${item.dataSlot.shape}.`);
+      if (item.extraDataProps !== undefined && item.extraDataProps.length > 0) {
+        lines.push(`Extra data props via \`bind\`: ${item.extraDataProps.map((prop) => `\`${prop}\``).join(", ")} (dot-paths into the same tool result).`);
+      }
     } else {
-      lines.push("No data slot: give this piece no `tool` — its `actions[]` are the whole surface.");
+      lines.push("No data slot: give this piece no `tool`.");
+    }
+    if (item.requireProps !== undefined && item.requireProps.length > 0) {
+      lines.push(`Required here: ${item.requireProps.map((prop) => `\`${prop}\``).join(", ")}.`);
     }
     lines.push(item.actionSlots
       ? "Action slots: `actions[]` may attach; each renders as an action-gated button."

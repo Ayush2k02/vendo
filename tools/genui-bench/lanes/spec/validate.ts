@@ -12,7 +12,7 @@
  */
 import { TREE_MAX_QUERIES } from "@vendoai/core";
 import { CHROME_REGISTRY, authorableProps, chromeEntry, type ChromeEntry } from "./registry";
-import { MAX_PIECES, viewSpecSchema, type SpecPiece, type ViewSpec } from "./format";
+import { MAX_PIECES, specRefusalSchema, viewSpecSchema, type SpecPiece, type SpecRefusal, type ViewSpec } from "./format";
 
 export interface HostToolLike {
   name: string;
@@ -31,6 +31,8 @@ export interface PieceVerdict {
 export interface SpecVerdict {
   /** Present when the top level parsed; pieces then carry per-piece verdicts. */
   spec?: ViewSpec;
+  /** Present when the model returned the typed abstention instead of a spec. */
+  refusal?: SpecRefusal["refusal"];
   /** Top-level failures (unparseable JSON, wrong shape, query budget). */
   specErrors: string[];
   pieces: PieceVerdict[];
@@ -108,11 +110,15 @@ function checkProps(entry: ChromeEntry, piece: SpecPiece): string[] {
 
   // Required authorable props are enforced on data-slot pieces (a Stat without
   // a label renders dishonestly); a Button piece's requireds (label) come from
-  // its actions, checked below.
+  // its actions, checked below. Registry entries may require props the kit
+  // schema leaves optional (a Callout with no title renders empty).
   if (entry.dataSlot !== undefined) {
     for (const [name, prop] of authorable) {
       if (prop.required && !(name in props)) errors.push(`required prop "${name}" is missing`);
     }
+  }
+  for (const name of entry.requireProps ?? []) {
+    if (!(name in props)) errors.push(`required prop "${name}" is missing`);
   }
   return errors;
 }
@@ -143,6 +149,17 @@ function checkPiece(piece: SpecPiece, index: number, toolsByName: Map<string, Ho
 
   errors.push(...checkProps(entry, piece));
 
+  const bind = piece.bind ?? {};
+  const extra = new Set(entry.extraDataProps ?? []);
+  for (const prop of Object.keys(bind)) {
+    if (!extra.has(prop)) {
+      errors.push(`\`bind\` names "${prop}", which ${entry.use} does not accept (bindable: ${[...extra].join(", ") || "none"})`);
+    }
+  }
+  if (Object.keys(bind).length > 0 && entry.dataSlot === undefined) {
+    errors.push(`${entry.use} binds no tool — \`bind\` has nothing to read from`);
+  }
+
   const actions = piece.actions ?? [];
   if (actions.length > 0 && !entry.actionSlots) {
     errors.push(`${entry.use} has no action slots — \`actions\` must be empty`);
@@ -160,8 +177,11 @@ function checkPiece(piece: SpecPiece, index: number, toolsByName: Map<string, Ho
   return { index, use: piece.use, ...(piece.tool === undefined ? {} : { tool: piece.tool }), errors };
 }
 
+const isPlainRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === "object" && value !== null && !Array.isArray(value);
+
 /** Validate raw model text (JSON, possibly fenced) against the registry and
- *  the host's tool surface. Never throws. */
+ *  the host's tool surface — or accept the typed refusal. Never throws. */
 export function validateSpec(jsonText: string, hostTools: readonly HostToolLike[]): SpecVerdict {
   let parsed: unknown;
   try {
@@ -169,6 +189,22 @@ export function validateSpec(jsonText: string, hostTools: readonly HostToolLike[
   } catch (error) {
     return { specErrors: [`output is not valid JSON: ${error instanceof Error ? error.message : String(error)}`], pieces: [] };
   }
+  // The typed abstention: `refusal` present means the model judged the ask
+  // ungroundable. A payload carrying BOTH forms is contradictory.
+  if (isPlainRecord(parsed) && "refusal" in parsed) {
+    if ("components" in parsed) {
+      return { specErrors: ["output carries both a refusal and components — answer with exactly one form"], pieces: [] };
+    }
+    const refused = specRefusalSchema.safeParse(parsed);
+    if (!refused.success) {
+      return {
+        specErrors: refused.error.issues.map((issue) => `${issue.path.join(".") || "refusal"}: ${issue.message}`),
+        pieces: [],
+      };
+    }
+    return { refusal: refused.data.refusal, specErrors: [], pieces: [] };
+  }
+
   const shaped = viewSpecSchema.safeParse(parsed);
   if (!shaped.success) {
     return {

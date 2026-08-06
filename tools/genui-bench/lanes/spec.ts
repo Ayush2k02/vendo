@@ -1,12 +1,16 @@
 /**
- * Spec lane — the native "Custom Views" candidate: one model call produces a
- * JSON VIEW SPEC (components + tool bindings + params, ZERO layout — see
- * lanes/spec/format.ts), validated against the chrome registry
- * (lanes/spec/registry.ts — the REAL @vendoai/core kit specs) and the host
- * fixture's tool surface, repaired at most ONCE by re-prompting with the
- * validator's errors, then compiled deterministically onto the production
- * tree format and rendered by the production renderer in `/embed/<host>`
- * (SpecPane frames it exactly like the Vendo pane frames its document).
+ * Spec lane — the native "Custom Views" candidate: one model call produces
+ * either a JSON VIEW SPEC (components + tool bindings + params + section
+ * headings, ZERO layout — see lanes/spec/format.ts) or a typed REFUSAL when
+ * the host's tool surface cannot ground the ask. Specs are validated against
+ * the chrome registry (lanes/spec/registry.ts — the REAL @vendoai/core kit
+ * specs) and the host fixture's tool surface, repaired at most ONCE by
+ * re-prompting with the validator's errors, then compiled deterministically
+ * onto the production tree format and rendered by the production renderer in
+ * `/embed/<host>` (SpecPane frames it exactly like the Vendo pane frames its
+ * document). A refusal compiles onto the Kit's Disclaimer — vendo's own
+ * "no tool backs the ask" chrome — and is marked in `raw.refusal` so the
+ * bench's honesty accounting counts it as refused, never as answered.
  *
  * The hypothesis under test: constrain generation to bindings-over-a-registry
  * and the failure modes shift — no free layout to get wrong, no code to
@@ -33,7 +37,7 @@ import type { HostFixture, LaneAdapter, LaneResult } from "../runner/types";
 import { extractJson } from "./spec/format";
 import { registryPrompt } from "./spec/registry";
 import { allErrors, validateSpec, type HostToolLike, type PieceVerdict, type SpecVerdict } from "./spec/validate";
-import { compileSpec } from "./spec/compile";
+import { compileRefusal, compileSpec } from "./spec/compile";
 
 /** Shape of `LaneResult.raw` for this lane (what the internals drawer shows;
  *  the render itself is the compiled document in the embed frame). */
@@ -46,6 +50,9 @@ export interface SpecRaw {
   repaired: boolean;
   /** The final parsed spec (post-repair), when the top level parsed. */
   spec?: unknown;
+  /** The typed abstention, when the model refused instead of answering —
+   *  the honesty accounting's "refused" marker for this lane. */
+  refusal?: { reason: string; missing?: string[] };
   /** Per-piece validator verdicts on the final spec. */
   pieces: PieceVerdict[];
   /** Top-level validator errors on the final spec. */
@@ -102,11 +109,11 @@ export function buildSystemPrompt(host: HostFixture): string {
   });
 
   return [
-    "You are composing a CUSTOM VIEW for a host application. Your entire output is one",
-    "JSON view spec — no prose, no code, no markup. The host renders it with its own",
-    "production components; you never control layout, styling, or markup.",
+    "You are composing a CUSTOM VIEW for a host application. Your entire output is ONE",
+    "JSON object — no prose, no code, no markup — in exactly one of two forms. The host",
+    "renders it with its own production components; you never control layout or markup.",
     "",
-    "The spec:",
+    "Form 1 — a view spec, when the host's tools can ground the ask:",
     "```",
     JSON.stringify(
       {
@@ -114,9 +121,11 @@ export function buildSystemPrompt(host: HostFixture): string {
         components: [
           {
             use: "<a registry component>",
+            section: "<optional group heading — consecutive pieces sharing it render as one framed section>",
             tool: "<host tool whose result fills the data slot>",
             params: { "<tool input>": "…" },
             select: "<optional dot-path into the tool result, e.g. \"data\" when rows live under a data field>",
+            bind: { "<extra data prop>": "<dot-path into the same tool result>" },
             props: { "<config/copy props from the registry>": "…" },
             actions: [{ label: "button text", tool: "<host mutation>", params: {} }],
           },
@@ -127,18 +136,33 @@ export function buildSystemPrompt(host: HostFixture): string {
     ),
     "```",
     "",
+    "Form 2 — a refusal, when they cannot:",
+    "```",
+    JSON.stringify(
+      { refusal: { reason: "<user-facing sentence: why this host can't ground the ask>", missing: ["<capability the host lacks>"] } },
+      null,
+      2,
+    ),
+    "```",
+    "",
     "Laws:",
     "1. Data comes ONLY from tools. You never write business data — a component's data",
     "   slot is filled from its `tool` result. Props marked [copy] are yours to write;",
     "   [config] props tune behavior. There is no way to hand-type a data value.",
-    "2. ZERO layout. Order your components by importance; the host lays them out.",
-    "3. `actions` name host mutations and render as action-gated buttons. Only attach",
+    "2. GROUNDING IS THE BAR. Before answering, check the tool catalog below: a tool",
+    "   grounds the ask only if its documented OUTPUT SHAPE actually carries the fields",
+    "   the answer needs. Data that merely resembles or is adjacent to the ask does",
+    "   NOT ground it — if no tool's output carries those fields, refuse and name what",
+    "   the host lacks. A partial answer is fine only when every piece you ship is",
+    "   truly grounded and copy says what is not covered.",
+    "3. ZERO layout. Order components by importance; group related pieces with",
+    "   `section` headings; the host lays them out.",
+    "4. `actions` name host mutations and render as action-gated buttons. Only attach",
     "   actions the ask needs.",
-    "4. Match each tool's input schema exactly, and read its output shape before",
-    "   binding: when the rows live under a field (e.g. `data`), set `select` to it.",
-    "5. Money values are integer CENTS — use format \"money\" so the host formats them.",
-    "6. `components` must not be empty. When no tool matches the ask exactly, bind the",
-    "   closest REAL tool and say so in copy — never invent data to fill the gap.",
+    "5. Match each tool's input schema exactly, and read its output shape before",
+    "   binding: when the rows live under a field (e.g. `data`), set `select` to it;",
+    "   fill a component's extra data props (e.g. Progress `max`) via `bind`.",
+    "6. Money values are integer CENTS — use format \"money\" so the host formats them.",
     "",
     "# The chrome registry",
     "",
@@ -156,7 +180,7 @@ function repairPrompt(originalAsk: string, previousText: string, errors: string[
   return [
     `The ask: ${originalAsk}`,
     "",
-    "Your previous view spec failed validation:",
+    "Your previous answer failed validation:",
     "```",
     extractJson(previousText),
     "```",
@@ -247,10 +271,29 @@ export function createSpecAdapter(deps: SpecDeps = {}): LaneAdapter {
           ...(repairResponseText === undefined ? {} : { repairResponseText }),
           repaired: repairResponseText !== undefined,
           ...(verdict.spec === undefined ? {} : { spec: verdict.spec }),
+          ...(verdict.refusal === undefined ? {} : { refusal: verdict.refusal }),
           pieces: verdict.pieces,
           specErrors: verdict.specErrors,
           toolsBound: toolsBoundBy(verdict),
         };
+
+        // The typed abstention: rendered through vendo's own refusal chrome
+        // (the Kit Disclaimer), zero findings, zero tool bindings. Counted
+        // as "refused" — not "answered" — by the bench's honesty accounting
+        // (raw.refusal is the marker).
+        if (verdict.refusal !== undefined) {
+          const compiled = compileRefusal(verdict.refusal);
+          raw.queryCount = compiled.queryCount;
+          raw.nodeCount = compiled.nodeCount;
+          return {
+            status: "ok",
+            startedAt,
+            durationMs: Date.now() - startedAt,
+            document: compiled.document,
+            findings: [],
+            raw,
+          };
+        }
 
         if (verdict.spec === undefined) {
           return {
