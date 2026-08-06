@@ -80,7 +80,7 @@ describe("guarded openui adapter", () => {
     expect(raw.toolsReferenced).toEqual(["host_listClients"]);
     expect(raw.repairs).toBe(0);
     expect(result.findings).toEqual([]);
-    expect(result.usage).toEqual({ promptTokens: 100, outputTokens: 50 });
+    expect(result.usage).toEqual({ promptTokens: 100, outputTokens: 50, cachedInputTokens: 0 });
   });
 
   it("strips markdown fences from a chatty response", () => {
@@ -123,7 +123,7 @@ describe("guarded openui adapter", () => {
     expect(repairCall.prompt).toContain('host_getSpending');
     expect(repairCall.prompt).toContain("the host tools are: host_listClients, host_sendClientMessage");
     // Usage summed across both calls.
-    expect(result.usage).toEqual({ promptTokens: 200, outputTokens: 100 });
+    expect(result.usage).toEqual({ promptTokens: 200, outputTokens: 100, cachedInputTokens: 0 });
   });
 
   it("a block the repairs cannot fix is an honest failed, never a silent broken render", async () => {

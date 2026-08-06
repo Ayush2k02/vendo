@@ -61,6 +61,7 @@ import {
   benchLibrarySchema,
   benchPromptOptions,
 } from "./vendo-openui-library";
+import { cachedSystemName } from "./gemini-cache";
 
 interface HostToolLike {
   name: string;
@@ -142,20 +143,29 @@ export type OpenUIGenerate = (args: {
 /** Default generation: generateText from @vendoai/apps's module space (the
  *  same "ai" instance the engine runs on), provider routed by id prefix
  *  (`gemini*` through this app's own @ai-sdk/google, anything else through
- *  the Anthropic provider in apps's module space — vendo lane pattern). */
+ *  the Anthropic provider in apps's module space — vendo lane pattern).
+ *
+ *  On the Gemini path the static system prefix is served from a context cache
+ *  (gemini-cache.ts): when a cache name resolves, the request is sent with NO
+ *  `system` and `providerOptions.google.cachedContent` set — the cache
+ *  supplies the identical system instruction, so output is unchanged and the
+ *  cached input is billed at a discount. `cachedInputTokens` is reported
+ *  separately from the total. */
 const runGeneration: OpenUIGenerate = async ({ modelId, system, prompt }) => {
   const appsEntry = createRequire(import.meta.url).resolve("@vendoai/apps");
   const appsRequire = createRequire(appsEntry);
   const { generateText } = appsRequire("ai") as {
     generateText: (options: {
       model: unknown;
-      system: string;
+      system?: string;
       prompt: string;
       maxOutputTokens: number;
-    }) => Promise<{ text: string; usage?: { inputTokens?: number; outputTokens?: number } }>;
+      providerOptions?: Record<string, Record<string, unknown>>;
+    }) => Promise<{ text: string; usage?: { inputTokens?: number; outputTokens?: number; cachedInputTokens?: number } }>;
   };
+  const isGemini = providerKeyFor(modelId) === "GEMINI_API_KEY";
   let model: unknown;
-  if (providerKeyFor(modelId) === "GEMINI_API_KEY") {
+  if (isGemini) {
     model = createGoogleGenerativeAI({ apiKey: process.env.GEMINI_API_KEY as string })(modelId);
   } else {
     const { createAnthropic } = appsRequire("@ai-sdk/anthropic") as {
@@ -163,12 +173,21 @@ const runGeneration: OpenUIGenerate = async ({ modelId, system, prompt }) => {
     };
     model = createAnthropic({ apiKey: process.env.ANTHROPIC_API_KEY as string })(modelId);
   }
-  const { text, usage } = await generateText({ model, system, prompt, maxOutputTokens: MAX_OUTPUT_TOKENS });
+
+  // Gemini: try to serve the static system prefix from a context cache. Any
+  // miss falls back to sending it inline (correctness never needs the cache).
+  const cacheName = isGemini ? await cachedSystemName(modelId, system) : null;
+  const call = cacheName === null
+    ? { model, system, prompt, maxOutputTokens: MAX_OUTPUT_TOKENS }
+    : { model, prompt, maxOutputTokens: MAX_OUTPUT_TOKENS, providerOptions: { google: { cachedContent: cacheName } } };
+
+  const { text, usage } = await generateText(call);
   return {
     text,
     usage: {
       promptTokens: usage?.inputTokens ?? 0,
       outputTokens: usage?.outputTokens ?? 0,
+      cachedInputTokens: usage?.cachedInputTokens ?? 0,
     },
   };
 };
@@ -242,7 +261,7 @@ async function guardedTurn(
   const modelId = defaultModelId();
   if (!process.env[providerKeyFor(modelId)]) return { result: { status: "no-key" } };
   const startedAt = Date.now();
-  const usage: LaneUsage = { promptTokens: 0, outputTokens: 0 };
+  const usage: LaneUsage = { promptTokens: 0, outputTokens: 0, cachedInputTokens: 0 };
   let calls = 0;
 
   const hostToolNames = (host.tools as HostToolLike[]).map((tool) => tool.name);
@@ -256,6 +275,7 @@ async function guardedTurn(
     calls += 1;
     usage.promptTokens += answer.usage?.promptTokens ?? 0;
     usage.outputTokens += answer.usage?.outputTokens ?? 0;
+    usage.cachedInputTokens = (usage.cachedInputTokens ?? 0) + (answer.usage?.cachedInputTokens ?? 0);
     return answer.text;
   };
 

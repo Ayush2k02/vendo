@@ -79,6 +79,34 @@ describe("OpenUIPane", () => {
     expect(screen.getByText(new RegExp(`openui-lang · their parser.*${MODEL}`))).toBeTruthy();
   });
 
+  it("humanizes an enum column with format \"label\" (missing_docs → Missing docs)", async () => {
+    // Its own transport stub: a row whose status is a raw enum code.
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (input: RequestInfo | URL) => {
+        if (String(input).startsWith("/api/theme")) {
+          return { ok: true, status: 200, json: async () => ({ theme: null }) };
+        }
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({ status: "ok", output: [{ businessName: "Rivera Design Co", status: "missing_docs" }] }),
+        };
+      }),
+    );
+    const program = [
+      'clients = Query("host_listClients", {}, [])',
+      'tbl = DataTable(clients, [{key: "businessName", label: "Business"}, {key: "status", label: "Status", format: "label"}])',
+      'root = Stack([tbl])',
+    ].join("\n");
+    const labelRaw: OpenUIRaw = { ...raw, program, responseText: program };
+    const result: LaneResult = { status: "ok", startedAt: 0, durationMs: 1, findings: [], raw: labelRaw };
+    render(<OpenUIPane lane="openui" result={result} host="cadence" runId="run_test" />);
+    // The humanized label renders; the raw code never reaches the DOM.
+    await waitFor(() => expect(screen.getByText("Missing docs")).toBeTruthy());
+    expect(screen.queryByText("missing_docs")).toBeNull();
+  });
+
   it("a refusal renders the PRESERVED program plus the Disclaimer-card refusal", async () => {
     const reasons = ["Your host has no profitability data."];
     const refused: LaneResult = {

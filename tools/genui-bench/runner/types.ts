@@ -28,10 +28,17 @@ export interface RunRequest {
 }
 
 /** Model-call accounting for one lane result, summed across every model call
- *  the result took (initial generation plus repair rounds). */
+ *  the result took (initial generation plus repair rounds).
+ *
+ *  `promptTokens` is the TOTAL input (cached + uncached); `cachedInputTokens`
+ *  is the slice served from a Gemini context cache and billed at a discount
+ *  (the openui lane caches its static kit-schema system prefix). Kept as a
+ *  separate field, never folded into `promptTokens`, so the cost picture is
+ *  honest: uncached input = promptTokens − cachedInputTokens. */
 export interface LaneUsage {
   promptTokens: number;
   outputTokens: number;
+  cachedInputTokens?: number;
 }
 
 /** Fields every substantive result carries: wall time, token accounting, how

@@ -252,11 +252,18 @@ function tokenCount(value: unknown): number {
   return typeof total === "number" ? total : 0;
 }
 
-/** Provider-call usage read defensively across SDK dialects. */
+/** Provider-call usage read defensively across SDK dialects. The vendo lane
+ *  sets no explicit cache, but Gemini may implicitly cache a repeated prefix
+ *  across the engine's many internal calls, so cache-read tokens are recorded
+ *  too — the same honest cached-vs-uncached split the openui lane reports. */
 function addUsage(sink: LaneUsage, usage: unknown): void {
-  const u = usage as { inputTokens?: unknown; outputTokens?: unknown; promptTokens?: unknown; completionTokens?: unknown } | undefined;
+  const u = usage as {
+    inputTokens?: unknown; outputTokens?: unknown; promptTokens?: unknown; completionTokens?: unknown;
+    cachedInputTokens?: unknown;
+  } | undefined;
   sink.promptTokens += tokenCount(u?.inputTokens ?? u?.promptTokens);
   sink.outputTokens += tokenCount(u?.outputTokens ?? u?.completionTokens);
+  sink.cachedInputTokens = (sink.cachedInputTokens ?? 0) + tokenCount(u?.cachedInputTokens);
 }
 
 /**
@@ -370,7 +377,7 @@ export function createVendoAdapter(overrides: VendoAdapterOverrides = {}): LaneA
     name: "vendo",
     async generate(prompt: string, host: HostFixture, options: LaneRunOptions = {}): Promise<LaneResult> {
       const startedAt = Date.now();
-      const usage: LaneUsage = { promptTokens: 0, outputTokens: 0 };
+      const usage: LaneUsage = { promptTokens: 0, outputTokens: 0, cachedInputTokens: 0 };
       try {
         const conduct = overrides.conduct ?? conductCreate;
         const model = withUsageCounting(modelFor(options.model, overrides), usage);
@@ -388,7 +395,7 @@ export function createVendoAdapter(overrides: VendoAdapterOverrides = {}): LaneA
       return {
         async turn(ask: string): Promise<LaneResult> {
           const startedAt = Date.now();
-          const usage: LaneUsage = { promptTokens: 0, outputTokens: 0 };
+          const usage: LaneUsage = { promptTokens: 0, outputTokens: 0, cachedInputTokens: 0 };
           try {
             const model = withUsageCounting(modelFor(options.model, overrides), usage);
             const deps = depsFor(host, model);

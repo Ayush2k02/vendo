@@ -36,14 +36,20 @@ import { openuiLibrary } from "@openuidev/react-ui";
 
 const rows = z.array(z.record(z.string(), z.unknown()));
 const valueFormat = z.enum(["money", "date", "datetime", "time", "percent", "number", "text"]);
+// The cell/value format tokens plus "label": humanizes an enum/status/category
+// CODE into a display label (missing_docs → "Missing docs", s_corp → "S corp").
+// Available where a single raw string field is shown as text — DataTable
+// columns, CardList fields, Stat — so raw codes never leak into a cell.
+const cellFormat = z.enum(["money", "date", "datetime", "time", "percent", "number", "text", "label"])
+  .describe('value tier format; "label" humanizes an enum/status/category code (missing_docs → "Missing docs")');
 const seriesInput = z.array(z.union([z.string(), z.object({ key: z.string(), label: z.string().optional() })]));
 const tableColumn = z.object({
   key: z.string(),
   label: z.string().optional(),
-  format: valueFormat.optional(),
+  format: cellFormat.optional(),
   align: z.enum(["start", "center", "end"]).optional(),
 });
-const cardField = z.object({ key: z.string(), label: z.string().optional(), format: valueFormat.optional() });
+const cardField = z.object({ key: z.string(), label: z.string().optional(), format: cellFormat.optional() });
 const hostTool = z.string().describe("names a host tool");
 const children = z.array(z.any()).describe("child components");
 
@@ -65,9 +71,9 @@ const KIT_ENTRIES: KitEntry[] = [
       align: z.enum(["start", "center", "end", "stretch"]).optional().describe("cross-axis alignment"),
       justify: z.enum(["start", "center", "end", "between"]).optional().describe("main-axis distribution"),
     }) },
-  { name: "Grid", description: "Equal-width columns. Use for a grid of cards or stats.",
+  { name: "Grid", description: "Equal-width columns. Use for a grid of cards or stats, or to sit a summary card beside its table.",
     props: z.object({ children, columns: z.number().optional().describe("column count"), gap: z.number().optional().describe("pixels between cells") }) },
-  { name: "Surface", description: "A bordered, elevated container with an optional title.",
+  { name: "Surface", description: "A bordered, elevated container with an optional title. The FRAME for a section — wrap each table, chart, or summary in one with a title so the screen reads as grouped sections, not a flat stack.",
     props: z.object({ children, title: z.string().optional().describe("container heading") }) },
   { name: "Divider", description: "A horizontal rule between blocks.", props: z.object({}) },
 
@@ -82,7 +88,7 @@ const KIT_ENTRIES: KitEntry[] = [
     props: z.object({ value: z.number().describe("a ratio 0..1"), fractionDigits: z.number().optional().describe("decimal places"), whole: z.boolean().optional().describe("value is already a whole percent") }) },
   { name: "Num", description: "A grouped number. Use notation \"compact\" for large counts (1.5M).",
     props: z.object({ value: z.number().describe("the number"), notation: z.enum(["standard", "compact"]).optional().describe("grouping style"), maximumFractionDigits: z.number().optional().describe("decimal places") }) },
-  { name: "EnumBadge", description: "A status pill for an enum field. Humanizes the raw value (past_due → Past due) and tone-maps it.",
+  { name: "EnumBadge", description: "A status pill for a SINGLE enum value. Humanizes the raw code (past_due → Past due) and tone-maps it. Use for one record's status (in a Stat, a Surface header, or beside a title); for an enum COLUMN in a table use DataTable's format \"label\" instead.",
     props: z.object({
       value: z.string().nullable().describe("the raw enum value"),
       labels: z.record(z.string(), z.string()).optional().describe("value → display label overrides"),
@@ -90,10 +96,10 @@ const KIT_ENTRIES: KitEntry[] = [
     }) },
 
   // Data
-  { name: "DataTable", description: "The smart table. Sorts, filters, searches, paginates, resolves dot-path column keys, and formats each cell — you only pass rows and columns.",
+  { name: "DataTable", description: "The smart table. Sorts, filters, searches, paginates, resolves dot-path column keys, and formats each cell — you only pass rows and columns. Give every enum/status/category column format \"label\" so codes render humanized, and money/date/percent columns their tier format.",
     props: z.object({
       rows: rows.describe("rows from a tool call"),
-      columns: z.array(tableColumn).optional().describe("column descriptions; key supports dot-paths like client.name; format is a value tier token"),
+      columns: z.array(tableColumn).optional().describe('column descriptions; key supports dot-paths like client.name; format is a value tier token ("money"/"date"/"percent"/"number"/"label"). Use "label" for any enum/status/category field so a code like missing_docs renders "Missing docs" — never bind a raw code column without it'),
       sortBy: z.string().optional().describe('initial sort, e.g. "dueDate asc"'),
       limit: z.number().optional().describe("hard cap on rows shown"),
       filterableBy: z.array(z.string()).optional().describe("column keys to expose as filter dropdowns"),
@@ -102,22 +108,22 @@ const KIT_ENTRIES: KitEntry[] = [
       emptyState: z.string().optional().describe("text when the query returns no rows"),
       caption: z.string().optional().describe("table caption"),
     }) },
-  { name: "CardList", description: "One branded card per record. Use when rows read better as cards than a table.",
+  { name: "CardList", description: "One branded card per record. Use when rows read better as cards than a table. badgeField renders its value as a humanized, tone-mapped status pill (an EnumBadge) — point it at the record's status/stage field.",
     props: z.object({
       items: rows.describe("items from a tool call"),
       titleField: z.string().optional().describe("field for each card title"),
-      badgeField: z.string().optional().describe("field rendered as a status pill"),
-      fields: z.array(cardField).optional().describe("label/value rows shown on each card"),
+      badgeField: z.string().optional().describe("enum/status field rendered as a humanized status pill (EnumBadge) — e.g. status, stage"),
+      fields: z.array(cardField).optional().describe('label/value rows shown on each card; give an enum/category field format "label" to humanize its code'),
       columns: z.number().optional().describe("cards per row"),
       emptyState: z.string().optional().describe("text when there are no items"),
     }) },
-  { name: "Stat", description: "A KPI/metric summary. Formats its value (money takes cents) and shows an optional trend.",
+  { name: "Stat", description: "A KPI/metric summary. Formats its value (money takes cents) and shows an optional trend. Lead a summary section with one Stat, tone \"accent\" for the headline metric or \"danger\" when it needs attention.",
     props: z.object({
       label: z.string().describe("metric name"),
       value: z.union([z.number(), z.string()]).describe("raw value"),
-      format: valueFormat.optional().describe("value tier format"),
+      format: cellFormat.optional().describe('value tier format; "label" humanizes an enum/status value'),
       trend: z.string().optional().describe("delta caption, e.g. +12% MoM"),
-      tone: z.enum(["default", "accent", "danger"]).optional().describe("emphasis"),
+      tone: z.enum(["default", "accent", "danger"]).optional().describe("emphasis — accent for the headline metric, danger when it needs attention"),
     }) },
   { name: "Badge", description: "A small literal status label the model writes. For enum data fields use EnumBadge instead.",
     props: z.object({ label: z.string().describe("badge text"), tone: z.enum(["neutral", "accent", "success", "warning", "danger"]).optional().describe("color tone") }) },
@@ -302,36 +308,64 @@ export const benchComponentNames: readonly string[] = Object.keys(benchLibrary.c
  *  examples and rules re-authored for OUR components; their generic language
  *  rules ride the generated prompt unchanged). */
 export const benchPromptOptions: PromptOptions = {
-  preamble: "You generate UI over the HOST's own component kit (the signatures below are the host's real components) using openui-lang. The host's brand, formatting, and action-gating come from these components — use them as documented.",
+  preamble: [
+    "You generate UI over the HOST's own component kit (the signatures below are the host's real components) using openui-lang. The host's brand, formatting, and action-gating come from these components — use them as documented.",
+    "",
+    "COMPOSE WITH HIERARCHY, never a flat stack of everything. A good screen reads top-down as: (1) a SUMMARY that leads — the one metric or headline the person came for, as a Stat (tone \"accent\"/\"danger\") or a Callout, sitting in its own Surface or in a Grid beside the detail; (2) DETAIL — tables and charts, each wrapped in its OWN titled Surface so sections are visually framed; (3) SECONDARY views moved into Tabs rather than stacked below. When a summary metric pairs with a table, put them side by side in a Grid(2) — the summary card left, the framed table right. Reach for Surface, Grid, and Tabs the way the host's own app does; a bare top-level Stack of a title + three stats + one wide table is the flat layout to avoid.",
+    "",
+    "FORMAT EVERY VALUE — a raw code on screen is a bug. Money is integer cents with format \"money\"; dates with \"date\"/\"datetime\"; ratios with \"percent\". ENUM, STATUS, and CATEGORY fields (values like s_corp, missing_docs, in_review, past_due) MUST be humanized: give the DataTable/CardList/Stat column format \"label\", or show a single record's status with an EnumBadge or CardList badgeField. Never bind an enum/status/category field as plain text — missing_docs must read \"Missing docs\", never missing_docs.",
+  ].join("\n"),
   examples: [
     [
-      'root = Stack([title, kpis, tbl], 14)',
-      'title = Text("Overdue invoices", "heading")',
-      'kpis = Row([totalStat, countStat], 12)',
-      'totalStat = Stat("Total overdue", 1284500, "money", "+12% MoM")',
-      'countStat = Stat("Invoices", 17, "number")',
-      'tbl = DataTable(rowsData, [{key: "client.name", label: "Client"}, {key: "amountCents", format: "money", align: "end"}, {key: "dueDate", format: "date"}], "dueDate asc")',
-      'rowsData = [{client: {name: "Acme"}, amountCents: 129900, dueDate: "2026-07-01"}]',
+      'root = Stack([header, body], 16)',
+      'header = Text("Overdue invoices", "heading")',
+      'body = Grid([summary, tableCard], 2, 16)',
+      'summary = Surface([totalStat, countStat], "At a glance")',
+      'totalStat = Stat("Total overdue", 1284500, "money", "+12% MoM", "danger")',
+      'countStat = Stat("Open invoices", 17, "number")',
+      'tableCard = Surface([tbl], "Invoices")',
+      'tbl = DataTable(rowsData, [{key: "client.name", label: "Client"}, {key: "amountCents", label: "Amount", format: "money", align: "end"}, {key: "status", label: "Status", format: "label"}, {key: "dueDate", label: "Due", format: "date"}], "dueDate asc")',
+      'rowsData = [{client: {name: "Acme"}, amountCents: 129900, status: "past_due", dueDate: "2026-07-01"}]',
     ].join("\n"),
   ],
   toolExamples: [
     [
-      'root = Stack([title, chart, tbl], 14)',
-      'title = Text("Spending by category", "heading")',
+      '# Lead with a framed summary, then the detail in its own Surface, secondary view in a Tab.',
+      'root = Stack([header, tabs], 16)',
+      'header = Text("Spending by category", "heading")',
       'txns = Query("host_listTransactions", { limit: 100 }, [])',
+      'tabs = Tabs([byChart, byTable])',
+      'byChart = TabItem("chart", "Overview", [chartCard])',
+      'byTable = TabItem("table", "All transactions", [tableCard])',
+      'chartCard = Surface([chart], "Where the money went")',
       'chart = DonutChart(txns, "category", "amountCents", "money")',
-      'tbl = DataTable(txns, [{key: "merchant"}, {key: "amountCents", format: "money", align: "end"}, {key: "postedAt", format: "date"}], "postedAt desc", 20)',
+      'tableCard = Surface([tbl], "Transactions")',
+      'tbl = DataTable(txns, [{key: "merchant", label: "Merchant"}, {key: "category", label: "Category", format: "label"}, {key: "amountCents", label: "Amount", format: "money", align: "end"}, {key: "postedAt", label: "Posted", format: "date"}], "postedAt desc", 20)',
     ].join("\n"),
     [
-      'root = Stack([title, form], 14)',
-      'title = Text("Send a reminder", "heading")',
+      '# A record list where each card leads with a humanized status pill.',
+      'clients = Query("host_listClients", {}, [])',
+      'root = Stack([header, listCard], 16)',
+      'header = Text("Clients", "heading")',
+      'listCard = Surface([list], "Roster")',
+      'list = CardList(clients, "businessName", "status", [entityField, deadlineField], 2)',
+      'entityField = {key: "entityType", label: "Entity", format: "label"}',
+      'deadlineField = {key: "filingDeadline", label: "Filing deadline", format: "date"}',
+    ].join("\n"),
+    [
+      'root = Stack([header, formCard], 14)',
+      'header = Text("Send a reminder", "heading")',
+      'formCard = Surface([form], "New message")',
       'form = Form([noteField, sendBtn], "host_sendClientMessage", "Send")',
       'noteField = Textarea("Message", null, "What should we say?", 4)',
       'sendBtn = Button("Send reminder", "host_sendClientMessage", "primary")',
     ].join("\n"),
   ],
   additionalRules: [
-    "Money values are integer CENTS everywhere (Money.cents, Stat format \"money\", chart format \"money\") — never dollars.",
+    "COMPOSE hierarchically: lead with a summary Stat/Callout, frame every table and chart in its OWN titled Surface, and move secondary views into Tabs. Do NOT emit a flat top-level Stack of a title + stat row + one wide table.",
+    "When a headline metric pairs with a detail table, sit them side by side in Grid(2): the summary card on the left, the framed table on the right — the arrangement the host's own engine reaches for.",
+    "HUMANIZE every enum/status/category field: DataTable and CardList columns get format \"label\", a single record's status gets an EnumBadge or CardList badgeField. A raw code (s_corp, missing_docs, in_review) on screen is a defect.",
+    "Money values are integer CENTS everywhere (Money.cents, Stat format \"money\", chart format \"money\") — never dollars. Dates get format \"date\"/\"datetime\"; ratios get \"percent\".",
     "Charts take rows + key names: LineChart/BarChart(data, xKey, series), DonutChart(data, categoryKey, valueKey). Do NOT build parallel label/value arrays.",
     "DataTable does its own sorting/filtering/searching — pass rows and column descriptions, do not pre-sort with @Sort unless the ask needs a derived list.",
     "Button.onClick, Form.onSubmit, and every onChange NAME a host tool (a plain string from the tools list). Do not put Action([...]) expressions in those slots.",

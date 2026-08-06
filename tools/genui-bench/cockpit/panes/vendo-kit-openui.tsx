@@ -20,9 +20,63 @@ import {
   LineChart, Money, Num, Percent, Progress, Row, Select, Sparkline, Stack,
   Stat, Surface, Tabs, Text, Textarea,
   BarChart,
+  humanizeEnum,
 } from "@vendoai/ui/kit";
 import type { ComponentRenderProps, Library } from "@openuidev/lang-core";
 import { buildBenchLibrary } from "../../lanes/vendo-openui-library";
+
+/**
+ * The "label" value-format token (vendo-openui-library.ts) humanizes an enum
+ * CODE (missing_docs → "Missing docs"). The real kit DataTable/CardList/Stat
+ * only know money/date/percent/number/text, so this deterministic bench-side
+ * pass resolves "label" columns BEFORE the value reaches them: it humanizes
+ * the bound cell/value and hands the component the humanized text. The vendo
+ * kit itself is untouched — this is the bench's own post-bind formatter, the
+ * escape the follow-up brief allows for known-enum shapes. */
+const LABEL = "label";
+type Col = { key?: unknown; format?: unknown };
+
+const isLabelCol = (col: unknown): col is { key: string; format: string } =>
+  typeof col === "object" && col !== null && (col as Col).format === LABEL && typeof (col as Col).key === "string";
+
+/** Read `row[dotted.path]` the way the kit's DataTable resolves column keys. */
+const readPath = (row: unknown, key: string): unknown =>
+  key.split(".").reduce<unknown>((value, part) => (typeof value === "object" && value !== null ? (value as Record<string, unknown>)[part] : undefined), row);
+
+const humanizeCell = (value: unknown): unknown => (typeof value === "string" && value !== "" ? humanizeEnum(value) : value);
+
+/** Rewrite a row so each label-column's field is humanized in place, and strip
+ *  the "label" token from the columns to the kit's own text default. */
+function resolveLabelColumns(
+  rowsValue: unknown,
+  columnsValue: unknown,
+): { rows: unknown; columns: unknown } {
+  const columns = Array.isArray(columnsValue) ? columnsValue : undefined;
+  const labelKeys = (columns ?? []).filter(isLabelCol).map((col) => col.key);
+  if (labelKeys.length === 0) return { rows: rowsValue, columns: columnsValue };
+  const rows = Array.isArray(rowsValue)
+    ? rowsValue.map((row) => {
+        const next = { ...(row as Record<string, unknown>) };
+        for (const key of labelKeys) {
+          // Dotted keys are written back at the same path so the kit resolves them.
+          if (!key.includes(".")) next[key] = humanizeCell(next[key]);
+          else {
+            const humanized = humanizeCell(readPath(row, key));
+            const parts = key.split(".");
+            let cursor = next;
+            for (let i = 0; i < parts.length - 1; i += 1) {
+              cursor[parts[i] as string] = { ...(cursor[parts[i] as string] as Record<string, unknown>) };
+              cursor = cursor[parts[i] as string] as Record<string, unknown>;
+            }
+            cursor[parts[parts.length - 1] as string] = humanized;
+          }
+        }
+        return next;
+      })
+    : rowsValue;
+  const nextColumns = columns?.map((col) => (isLabelCol(col) ? { ...col, format: "text" } : col));
+  return { rows, columns: nextColumns };
+}
 
 /** Executes a host tool by name (OpenUIPane binds this to /api/tools). */
 export type KitToolRunner = (tool: string, input: Record<string, unknown>) => Promise<unknown>;
@@ -137,9 +191,21 @@ const wrappers: Record<string, Wrapper> = {
   Percent: ({ props }) => <Percent value={0} {...p<object>(props)} />,
   Num: ({ props }) => <Num value={0} {...p<object>(props)} />,
   EnumBadge: ({ props }) => <EnumBadge value={null} {...p<object>(props)} />,
-  DataTable: ({ props }) => <DataTable rows={[]} {...p<object>(props)} />,
-  CardList: ({ props }) => <CardList items={[]} {...p<object>(props)} />,
-  Stat: ({ props }) => <Stat label="" value="" {...p<object>(props)} />,
+  DataTable: ({ props }) => {
+    const { rows, columns } = resolveLabelColumns(props.rows, props.columns);
+    return <DataTable rows={[]} {...p<object>({ ...props, rows, columns })} />;
+  },
+  CardList: ({ props }) => {
+    // CardList reuses the table's label resolution for its `fields`; the
+    // `items` prop is the row set, so we route it through the same rewrite.
+    const { rows, columns } = resolveLabelColumns(props.items, props.fields);
+    return <CardList items={[]} {...p<object>({ ...props, items: rows, fields: columns })} />;
+  },
+  Stat: ({ props }) => {
+    const value = props.format === "label" ? humanizeCell(props.value) : props.value;
+    const format = props.format === "label" ? "text" : props.format;
+    return <Stat label="" value="" {...p<object>({ ...props, value, format })} />;
+  },
   Badge: ({ props }) => <Badge label="" {...p<object>(props)} />,
   LineChart: ({ props }) => <LineChart data={[]} xKey="" series={[]} {...p<object>(props)} />,
   BarChart: ({ props }) => <BarChart data={[]} xKey="" series={[]} {...p<object>(props)} />,
