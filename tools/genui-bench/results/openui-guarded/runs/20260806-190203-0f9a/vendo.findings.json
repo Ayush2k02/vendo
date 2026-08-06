@@ -1,0 +1,7 @@
+[
+  {
+    "severity": "warn",
+    "where": "<Stat> labeled \"Clients Missing Documents\"",
+    "message": "The user explicitly asked to remove the missing-documents stat, but `<Stat label=\"Clients Missing Documents\">` remains in the dashboard summary."
+  }
+]

@@ -1,0 +1,47 @@
+{
+  "id": "20260806-185651-0243",
+  "createdAt": "2026-08-06T13:26:51.299Z",
+  "gitSha": "0176ce2ea4fd97e5e126e1956caf221c23a99c6e",
+  "gitDirty": null,
+  "request": {
+    "prompt": "which clients still owe me money, oldest first",
+    "host": "cadence",
+    "lanes": [
+      "vendo",
+      "openui"
+    ],
+    "packRef": {
+      "pack": "cadence",
+      "index": 0
+    }
+  },
+  "lanes": {
+    "vendo": {
+      "status": "refused",
+      "startedAt": 1786022804225,
+      "durationMs": 4019,
+      "usage": {
+        "promptTokens": 2013,
+        "outputTokens": 547,
+        "cachedInputTokens": 0
+      },
+      "reasons": [
+        "Your host has no records of client balances or money owed."
+      ]
+    },
+    "openui": {
+      "status": "refused",
+      "startedAt": 1786022804286,
+      "durationMs": 6996,
+      "reasons": [
+        "Your host has no billing or accounts receivable data, so information on which clients owe money cannot be provided."
+      ],
+      "usage": {
+        "promptTokens": 7603,
+        "outputTokens": 580,
+        "cachedInputTokens": 7586
+      },
+      "repairs": 0
+    }
+  }
+}

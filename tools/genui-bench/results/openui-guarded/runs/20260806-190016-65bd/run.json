@@ -1,0 +1,45 @@
+{
+  "id": "20260806-190016-65bd",
+  "createdAt": "2026-08-06T13:30:16.821Z",
+  "gitSha": "0176ce2ea4fd97e5e126e1956caf221c23a99c6e",
+  "gitDirty": null,
+  "request": {
+    "prompt": "add a line chart of my cashflow over the last months",
+    "host": "maple",
+    "lanes": [
+      "vendo",
+      "openui"
+    ],
+    "conversationRef": {
+      "fixture": "maple-spending-workspace",
+      "turn": 7,
+      "of": 7
+    }
+  },
+  "lanes": {
+    "vendo": {
+      "status": "failed",
+      "startedAt": 1786023007751,
+      "durationMs": 7330,
+      "usage": {
+        "promptTokens": 2487,
+        "outputTokens": 1488,
+        "cachedInputTokens": 0
+      },
+      "error": "generation failed: node \"linechart-1\" sets unknown prop \"query\" on prewired component \"LineChart\"; the renderer drops it. Allowed props: data, xKey, series, format, height, emptyState",
+      "editFindings": []
+    },
+    "openui": {
+      "status": "ok",
+      "startedAt": 1786023007764,
+      "durationMs": 9056,
+      "usage": {
+        "promptTokens": 8903,
+        "outputTokens": 1511,
+        "cachedInputTokens": 8154
+      },
+      "repairs": 0,
+      "editFindings": []
+    }
+  }
+}

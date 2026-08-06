@@ -1,0 +1,47 @@
+{
+  "id": "20260806-185637-e487",
+  "createdAt": "2026-08-06T13:26:37.528Z",
+  "gitSha": "0176ce2ea4fd97e5e126e1956caf221c23a99c6e",
+  "gitDirty": null,
+  "request": {
+    "prompt": "let me transfer money between my accounts",
+    "host": "cadence",
+    "lanes": [
+      "vendo",
+      "openui"
+    ],
+    "packRef": {
+      "pack": "smoke",
+      "index": 1
+    }
+  },
+  "lanes": {
+    "vendo": {
+      "status": "refused",
+      "startedAt": 1786022795081,
+      "durationMs": 1943,
+      "usage": {
+        "promptTokens": 2011,
+        "outputTokens": 212,
+        "cachedInputTokens": 0
+      },
+      "reasons": [
+        "Your host has no way to transfer money between accounts."
+      ]
+    },
+    "openui": {
+      "status": "refused",
+      "startedAt": 1786022795090,
+      "durationMs": 2423,
+      "reasons": [
+        "Your host has no banking or account transfer tools, so money cannot be transferred between accounts."
+      ],
+      "usage": {
+        "promptTokens": 7601,
+        "outputTokens": 289,
+        "cachedInputTokens": 7586
+      },
+      "repairs": 0
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "id": "20260806-185655-9664",
+  "createdAt": "2026-08-06T13:26:55.321Z",
+  "gitSha": "0176ce2ea4fd97e5e126e1956caf221c23a99c6e",
+  "gitDirty": null,
+  "request": {
+    "prompt": "show me where my money went last quarter",
+    "host": "cadence",
+    "lanes": [
+      "vendo",
+      "openui"
+    ],
+    "packRef": {
+      "pack": "cadence",
+      "index": 1
+    }
+  },
+  "lanes": {
+    "vendo": {
+      "status": "refused",
+      "startedAt": 1786022811299,
+      "durationMs": 2729,
+      "usage": {
+        "promptTokens": 2012,
+        "outputTokens": 356,
+        "cachedInputTokens": 0
+      },
+      "reasons": [
+        "Your host has no tools to track expenses or spending from last quarter."
+      ]
+    },
+    "openui": {
+      "status": "refused",
+      "startedAt": 1786022811308,
+      "durationMs": 3997,
+      "reasons": [
+        "Your host has no financial transaction or expense data, so last quarter's spending cannot be displayed."
+      ],
+      "usage": {
+        "promptTokens": 7602,
+        "outputTokens": 562,
+        "cachedInputTokens": 7586
+      },
+      "repairs": 0
+    }
+  }
+}

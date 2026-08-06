@@ -1,0 +1,44 @@
+{
+  "id": "20260806-190136-bf0d",
+  "createdAt": "2026-08-06T13:31:36.881Z",
+  "gitSha": "0176ce2ea4fd97e5e126e1956caf221c23a99c6e",
+  "gitDirty": null,
+  "request": {
+    "prompt": "show the deadlines as a table with client, filing deadline, and the missing document kinds",
+    "host": "cadence",
+    "lanes": [
+      "vendo",
+      "openui"
+    ],
+    "conversationRef": {
+      "fixture": "cadence-deadline-workspace",
+      "turn": 3,
+      "of": 6
+    }
+  },
+  "lanes": {
+    "openui": {
+      "status": "ok",
+      "startedAt": 1786023084513,
+      "durationMs": 7614,
+      "usage": {
+        "promptTokens": 8735,
+        "outputTokens": 1230,
+        "cachedInputTokens": 7946
+      },
+      "repairs": 0,
+      "editFindings": []
+    },
+    "vendo": {
+      "status": "ok",
+      "startedAt": 1786023084488,
+      "durationMs": 12393,
+      "usage": {
+        "promptTokens": 4366,
+        "outputTokens": 2311,
+        "cachedInputTokens": 0
+      },
+      "editFindings": []
+    }
+  }
+}

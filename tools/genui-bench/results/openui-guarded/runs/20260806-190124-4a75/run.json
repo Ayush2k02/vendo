@@ -1,0 +1,50 @@
+{
+  "id": "20260806-190124-4a75",
+  "createdAt": "2026-08-06T13:31:24.487Z",
+  "gitSha": "0176ce2ea4fd97e5e126e1956caf221c23a99c6e",
+  "gitDirty": null,
+  "request": {
+    "prompt": "add a stat card with how many clients are missing documents",
+    "host": "cadence",
+    "lanes": [
+      "vendo",
+      "openui"
+    ],
+    "conversationRef": {
+      "fixture": "cadence-deadline-workspace",
+      "turn": 2,
+      "of": 6
+    }
+  },
+  "lanes": {
+    "openui": {
+      "status": "ok",
+      "startedAt": 1786023067511,
+      "durationMs": 10820,
+      "usage": {
+        "promptTokens": 8680,
+        "outputTokens": 1622,
+        "cachedInputTokens": 7946
+      },
+      "repairs": 0,
+      "editFindings": [
+        {
+          "severity": "warn",
+          "where": "element \"missingStat\"",
+          "message": "preservation: this Stat disappeared on a turn that only asked to add — regression on untouched UI"
+        }
+      ]
+    },
+    "vendo": {
+      "status": "ok",
+      "startedAt": 1786023067486,
+      "durationMs": 17001,
+      "usage": {
+        "promptTokens": 4317,
+        "outputTokens": 3184,
+        "cachedInputTokens": 0
+      },
+      "editFindings": []
+    }
+  }
+}

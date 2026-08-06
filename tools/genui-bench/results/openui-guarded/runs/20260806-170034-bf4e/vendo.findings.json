@@ -1,7 +1,0 @@
-[
-  {
-    "severity": "warn",
-    "where": "<CadenceMissingDocsHero>",
-    "message": "The user requested to remove the missing-documents stat, but CadenceMissingDocsHero is still included in the layout."
-  }
-]

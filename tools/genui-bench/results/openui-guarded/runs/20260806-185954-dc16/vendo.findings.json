@@ -1,0 +1,7 @@
+[
+  {
+    "severity": "block",
+    "where": "<Stat> labeled \"Total Balance\"",
+    "message": "The Stat value binds to the accounts query object instead of accounts.data, which causes the total balance calculation to fail or show zero; bind to accounts.data | sum(balance) instead."
+  }
+]

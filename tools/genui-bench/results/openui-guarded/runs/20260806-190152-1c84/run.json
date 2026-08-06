@@ -1,0 +1,45 @@
+{
+  "id": "20260806-190152-1c84",
+  "createdAt": "2026-08-06T13:31:52.857Z",
+  "gitSha": "0176ce2ea4fd97e5e126e1956caf221c23a99c6e",
+  "gitDirty": null,
+  "request": {
+    "prompt": "add a donut chart of clients by status",
+    "host": "cadence",
+    "lanes": [
+      "vendo",
+      "openui"
+    ],
+    "conversationRef": {
+      "fixture": "cadence-deadline-workspace",
+      "turn": 5,
+      "of": 6
+    }
+  },
+  "lanes": {
+    "openui": {
+      "status": "ok",
+      "startedAt": 1786023101718,
+      "durationMs": 9158,
+      "usage": {
+        "promptTokens": 8780,
+        "outputTokens": 1854,
+        "cachedInputTokens": 7946
+      },
+      "repairs": 0,
+      "editFindings": []
+    },
+    "vendo": {
+      "status": "failed",
+      "startedAt": 1786023101704,
+      "durationMs": 11152,
+      "usage": {
+        "promptTokens": 2881,
+        "outputTokens": 2107,
+        "cachedInputTokens": 0
+      },
+      "error": "generation failed: node \"donutchart-1\" sets unknown prop \"items\" on prewired component \"DonutChart\"; the renderer drops it. Allowed props: data, categoryKey, valueKey, format, donut, height, emptyState | node \"donutchart-1\" sets unknown prop \"categoryField\" on prewired component \"DonutChart\"; the renderer drops it. Allowed props: data, categoryKey, valueKey, format, donut, height, emptyState | node \"donutchart-1\" sets unknown prop \"title\" on prewired component \"DonutChart\"; the renderer drops it. Allowed props: data, categoryKey, valueKey, format, donut, height, emptyState",
+      "editFindings": []
+    }
+  }
+}

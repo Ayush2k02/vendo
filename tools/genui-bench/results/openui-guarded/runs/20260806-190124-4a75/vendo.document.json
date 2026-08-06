@@ -1,0 +1,286 @@
+{
+  "format": "vendo/app@1",
+  "name": "Upcoming Deadlines Board",
+  "tree": {
+    "formatVersion": "vendo-genui/v2",
+    "root": "root",
+    "nodes": [
+      {
+        "id": "root",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "tabs"
+        ]
+      },
+      {
+        "id": "tabs",
+        "component": "Tabs",
+        "source": "prewired",
+        "props": {
+          "tabs": [
+            {
+              "value": "Overview",
+              "label": "Overview"
+            },
+            {
+              "value": "30-Day Schedule",
+              "label": "30-Day Schedule"
+            },
+            {
+              "value": "Document Readiness",
+              "label": "Document Readiness"
+            }
+          ],
+          "value": "Overview"
+        },
+        "children": [
+          "tab-0",
+          "stack-1",
+          "stack-2"
+        ]
+      },
+      {
+        "id": "tab-0",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "group-0"
+        ]
+      },
+      {
+        "id": "group-0",
+        "component": "Surface",
+        "source": "prewired",
+        "children": [
+          "group-0-title",
+          "group-0-body"
+        ]
+      },
+      {
+        "id": "group-0-title",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Deadline Summary",
+          "variant": "heading"
+        }
+      },
+      {
+        "id": "group-0-body",
+        "component": "Grid",
+        "source": "prewired",
+        "props": {
+          "columns": 3
+        },
+        "children": [
+          "group-0-body-stat-1",
+          "group-0-body-stat-2",
+          "group-0-body-stat-3"
+        ]
+      },
+      {
+        "id": "group-0-body-stat-1",
+        "component": "Stat",
+        "source": "prewired",
+        "props": {
+          "label": "Nearest Filing Deadline",
+          "value": {
+            "$path": "/dashboard/nearestDeadline"
+          },
+          "format": "date",
+          "suffix": {
+            "$path": "/dashboard/nearestDeadlineClient/businessName"
+          }
+        }
+      },
+      {
+        "id": "group-0-body-stat-2",
+        "component": "Stat",
+        "source": "prewired",
+        "props": {
+          "label": "Clients Missing Documents",
+          "value": {
+            "$path": "/dashboard/clientsMissingDocs"
+          },
+          "format": "number",
+          "tone": "danger"
+        }
+      },
+      {
+        "id": "group-0-body-stat-3",
+        "component": "Stat",
+        "source": "prewired",
+        "props": {
+          "label": "Outstanding Documents Ratio",
+          "value": {
+            "$expr": "dashboard.documentsOutstanding / dashboard.documentsTotal"
+          },
+          "format": "percent"
+        }
+      },
+      {
+        "id": "stack-1",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "group-1"
+        ]
+      },
+      {
+        "id": "group-1",
+        "component": "Surface",
+        "source": "prewired",
+        "children": [
+          "group-1-title",
+          "stat-1",
+          "group-1-body"
+        ]
+      },
+      {
+        "id": "group-1-title",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Filings Due in Next 30 Days",
+          "variant": "heading"
+        }
+      },
+      {
+        "id": "stat-1",
+        "component": "Stat",
+        "source": "prewired",
+        "props": {
+          "label": "Clients Missing Documents",
+          "value": {
+            "$path": "/dashboard/clientsMissingDocs"
+          },
+          "tone": "danger"
+        }
+      },
+      {
+        "id": "group-1-body",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "group-1-body-datatable-1"
+        ]
+      },
+      {
+        "id": "group-1-body-datatable-1",
+        "component": "DataTable",
+        "source": "prewired",
+        "props": {
+          "rows": {
+            "$path": "/deadlines"
+          },
+          "sortBy": "filingDeadline asc",
+          "columns": [
+            {
+              "key": "filingDeadline",
+              "label": "Filing Date",
+              "format": "date"
+            },
+            {
+              "key": "businessName",
+              "label": "Client Name"
+            },
+            {
+              "key": "progress",
+              "label": "Collection Progress"
+            },
+            {
+              "key": "missingDocKinds",
+              "label": "Missing Document Types"
+            }
+          ],
+          "emptyState": "No filings due in the next 30 days"
+        }
+      },
+      {
+        "id": "stack-2",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "group-2"
+        ]
+      },
+      {
+        "id": "group-2",
+        "component": "Surface",
+        "source": "prewired",
+        "children": [
+          "group-2-title",
+          "group-2-body"
+        ]
+      },
+      {
+        "id": "group-2-title",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Action Needed Before Filing",
+          "variant": "heading"
+        }
+      },
+      {
+        "id": "group-2-body",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "group-2-body-cardlist-1"
+        ]
+      },
+      {
+        "id": "group-2-body-cardlist-1",
+        "component": "CardList",
+        "source": "prewired",
+        "props": {
+          "items": {
+            "$path": "/deadlines"
+          },
+          "titleField": "businessName",
+          "badgeField": "status",
+          "fields": [
+            {
+              "key": "entityType",
+              "label": "Entity Type"
+            },
+            {
+              "key": "filingDeadline",
+              "label": "Deadline",
+              "format": "date"
+            },
+            {
+              "key": "missingDocKinds",
+              "label": "Missing Documents"
+            },
+            {
+              "key": "contactName",
+              "label": "Contact Name"
+            },
+            {
+              "key": "contactEmail",
+              "label": "Contact Email"
+            }
+          ],
+          "columns": 3,
+          "emptyState": "No outstanding documents for upcoming deadlines."
+        }
+      }
+    ],
+    "queries": [
+      {
+        "name": "deadlines",
+        "tool": "host_listDeadlines",
+        "input": {}
+      },
+      {
+        "name": "dashboard",
+        "tool": "host_getDashboard",
+        "input": {}
+      }
+    ]
+  },
+  "id": "app_bench_mshk0qqm"
+}

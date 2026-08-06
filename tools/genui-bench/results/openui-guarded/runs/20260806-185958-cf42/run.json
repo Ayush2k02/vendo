@@ -1,0 +1,50 @@
+{
+  "id": "20260806-185958-cf42",
+  "createdAt": "2026-08-06T13:29:58.051Z",
+  "gitSha": "0176ce2ea4fd97e5e126e1956caf221c23a99c6e",
+  "gitDirty": null,
+  "request": {
+    "prompt": "also show my credit score next to it",
+    "host": "maple",
+    "lanes": [
+      "vendo",
+      "openui"
+    ],
+    "conversationRef": {
+      "fixture": "maple-spending-workspace",
+      "turn": 5,
+      "of": 7
+    }
+  },
+  "lanes": {
+    "vendo": {
+      "status": "refused",
+      "startedAt": 1786022994209,
+      "durationMs": 2461,
+      "usage": {
+        "promptTokens": 2558,
+        "outputTokens": 344,
+        "cachedInputTokens": 0
+      },
+      "reasons": [
+        "Your host has no tool or data source for showing credit scores."
+      ],
+      "editFindings": []
+    },
+    "openui": {
+      "status": "refused",
+      "startedAt": 1786022994224,
+      "durationMs": 3826,
+      "reasons": [
+        "Your host does not provide credit score data."
+      ],
+      "usage": {
+        "promptTokens": 8981,
+        "outputTokens": 429,
+        "cachedInputTokens": 8154
+      },
+      "repairs": 0,
+      "editFindings": []
+    }
+  }
+}

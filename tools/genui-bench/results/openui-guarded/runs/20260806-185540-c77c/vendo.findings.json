@@ -1,0 +1,12 @@
+[
+  {
+    "severity": "warn",
+    "where": "group \"Overview\"",
+    "message": "could not be built after 2 fix-it attempts, so it shows a note asking for a retry instead of made-up content. What was still wrong: \"sum\" does not name a declared <Query> or state"
+  },
+  {
+    "severity": "warn",
+    "where": "<Stack>",
+    "message": "The app does not display account balances from the accounts query, showing only placeholder failure text instead."
+  }
+]

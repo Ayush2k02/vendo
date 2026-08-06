@@ -1,9 +1,0 @@
-<App name="Recent Transactions">
-  <Query id="transactions" tool="host_listTransactions" input={{ limit: 20 }}/>
-  <Surface id="group-0">
-    <Text id="group-0-title" text="Recent Activity" variant="heading"/>
-    <Stack id="group-0-body">
-      <DataTable id="group-0-body-datatable-1" rows={transactions.data} columns={[{ key: "timestamp", label: "Date", format: "date" }, { key: "merchant", label: "Merchant" }, { key: "category", label: "Category" }, { key: "amount", label: "Amount", format: "money", align: "end" }, { key: "accountId", label: "Account" }]} sortBy="timestamp desc" searchable emptyState="No recent transactions"/>
-    </Stack>
-  </Surface>
-</App>

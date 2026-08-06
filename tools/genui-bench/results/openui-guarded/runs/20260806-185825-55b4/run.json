@@ -1,0 +1,43 @@
+{
+  "id": "20260806-185825-55b4",
+  "createdAt": "2026-08-06T13:28:25.186Z",
+  "gitSha": "0176ce2ea4fd97e5e126e1956caf221c23a99c6e",
+  "gitDirty": null,
+  "request": {
+    "prompt": "show my clients",
+    "host": "maple",
+    "lanes": [
+      "vendo",
+      "openui"
+    ]
+  },
+  "lanes": {
+    "vendo": {
+      "status": "refused",
+      "startedAt": 1786022899630,
+      "durationMs": 3190,
+      "usage": {
+        "promptTokens": 2067,
+        "outputTokens": 402,
+        "cachedInputTokens": 0
+      },
+      "reasons": [
+        "Your host has no client management or CRM features to list clients."
+      ]
+    },
+    "openui": {
+      "status": "refused",
+      "startedAt": 1786022899695,
+      "durationMs": 5471,
+      "reasons": [
+        "Your host has no client management or client list data, so your clients cannot be displayed."
+      ],
+      "usage": {
+        "promptTokens": 7805,
+        "outputTokens": 394,
+        "cachedInputTokens": 7794
+      },
+      "repairs": 0
+    }
+  }
+}

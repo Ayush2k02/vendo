@@ -1,0 +1,44 @@
+{
+  "id": "20260806-185717-1089",
+  "createdAt": "2026-08-06T13:27:17.952Z",
+  "gitSha": "0176ce2ea4fd97e5e126e1956caf221c23a99c6e",
+  "gitDirty": null,
+  "request": {
+    "prompt": "what's missing before I can close the books this month",
+    "host": "cadence",
+    "lanes": [
+      "vendo",
+      "openui"
+    ],
+    "packRef": {
+      "pack": "cadence",
+      "index": 3
+    }
+  },
+  "lanes": {
+    "vendo": {
+      "status": "ok",
+      "startedAt": 1786022819445,
+      "durationMs": 18481,
+      "usage": {
+        "promptTokens": 4843,
+        "outputTokens": 3183,
+        "cachedInputTokens": 0
+      }
+    },
+    "openui": {
+      "status": "refused",
+      "startedAt": 1786022819454,
+      "durationMs": 8158,
+      "reasons": [
+        "Your host has no accounting or general ledger data for closing the books, so outstanding month-end items cannot be determined."
+      ],
+      "usage": {
+        "promptTokens": 7606,
+        "outputTokens": 1206,
+        "cachedInputTokens": 7586
+      },
+      "repairs": 0
+    }
+  }
+}

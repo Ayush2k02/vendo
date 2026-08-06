@@ -1,0 +1,83 @@
+{
+  "format": "vendo/app@1",
+  "name": "Recent Transactions",
+  "tree": {
+    "formatVersion": "vendo-genui/v2",
+    "root": "root",
+    "nodes": [
+      {
+        "id": "root",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "group-0"
+        ]
+      },
+      {
+        "id": "group-0",
+        "component": "Surface",
+        "source": "prewired",
+        "children": [
+          "group-0-title",
+          "group-0-body"
+        ]
+      },
+      {
+        "id": "group-0-title",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Recent Activity",
+          "variant": "heading"
+        }
+      },
+      {
+        "id": "group-0-body",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "stat-1",
+          "maplespendingdonut-1"
+        ]
+      },
+      {
+        "id": "stat-1",
+        "component": "Stat",
+        "source": "prewired",
+        "props": {
+          "label": "Total Balance",
+          "value": {
+            "$path": "/accounts",
+            "$reshape": [
+              {
+                "op": "sum",
+                "args": [
+                  "balance"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "maplespendingdonut-1",
+        "component": "MapleSpendingDonut",
+        "source": "host",
+        "props": {
+          "query": "spending"
+        }
+      }
+    ],
+    "queries": [
+      {
+        "name": "spending",
+        "tool": "host_getSpendingInsights"
+      },
+      {
+        "name": "accounts",
+        "tool": "host_listAccounts"
+      }
+    ]
+  },
+  "id": "app_bench_mshjz95v"
+}

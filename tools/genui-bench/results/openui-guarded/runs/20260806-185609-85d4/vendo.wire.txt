@@ -1,0 +1,19 @@
+<App name="Transfer money">
+  <Query id="accounts" tool="host_listAccounts" input={{}}/>
+  <Query id="hostListAccounts" tool="host_listAccounts" input={{}}/>
+  <Surface id="group-0">
+    <Text id="group-0-title" text="Account Balances" variant="heading"/>
+    <Stack id="group-0-body">
+      <DataTable id="group-0-body-datatable-1" rows={hostListAccounts} columns={[{ key: "name", label: "Account Name" }, { key: "kind", label: "Type" }, { key: "mask", label: "Mask" }, { key: "accountNumber", label: "Account Number" }, { key: "balance", label: "Balance", format: "money", align: "end" }]} sortBy="name asc" filterableBy={["kind"]} searchable emptyState="No accounts available" caption="Overview of accounts and current balances"/>
+    </Stack>
+  </Surface>
+  <Surface id="group-1">
+    <Text id="group-1-title" text="Initiate Transfer" variant="heading"/>
+    <Stack id="group-1-body">
+      <Form id="group-1-body-form-1" onSubmit="host_transferMoney" submitLabel="Transfer money">
+        <Select id="group-1-body-select-1" label="Destination account" name="to_account_id" options={accounts} labelField="name" valueField="id"/>
+        <Input id="group-1-body-input-1" label="Transfer amount" name="amount" type="number"/>
+      </Form>
+    </Stack>
+  </Surface>
+</App>
