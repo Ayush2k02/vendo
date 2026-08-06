@@ -244,11 +244,19 @@ export function failureReason(error: unknown): string {
   return issues.length === 0 ? message : `${message}: ${issues.join(" | ")}`;
 }
 
+/** One usage slot across SDK dialects: a plain number (generate results),
+ *  or the v3 stream-finish shape `{ total, ... }`. */
+function tokenCount(value: unknown): number {
+  if (typeof value === "number") return value;
+  const total = (value as { total?: unknown } | undefined)?.total;
+  return typeof total === "number" ? total : 0;
+}
+
 /** Provider-call usage read defensively across SDK dialects. */
 function addUsage(sink: LaneUsage, usage: unknown): void {
-  const u = usage as { inputTokens?: number; outputTokens?: number; promptTokens?: number; completionTokens?: number } | undefined;
-  sink.promptTokens += u?.inputTokens ?? u?.promptTokens ?? 0;
-  sink.outputTokens += u?.outputTokens ?? u?.completionTokens ?? 0;
+  const u = usage as { inputTokens?: unknown; outputTokens?: unknown; promptTokens?: unknown; completionTokens?: unknown } | undefined;
+  sink.promptTokens += tokenCount(u?.inputTokens ?? u?.promptTokens);
+  sink.outputTokens += tokenCount(u?.outputTokens ?? u?.completionTokens);
 }
 
 /**
