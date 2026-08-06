@@ -1,0 +1,212 @@
+{
+  "format": "vendo/app@1",
+  "name": "Category Spending & Budget Insights",
+  "tree": {
+    "formatVersion": "vendo-genui/v2",
+    "root": "app",
+    "nodes": [
+      {
+        "id": "app",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "tabs"
+        ]
+      },
+      {
+        "id": "tabs",
+        "component": "Tabs",
+        "source": "prewired",
+        "props": {
+          "tabs": [
+            {
+              "value": "Budgets & Spending",
+              "label": "Budgets & Spending"
+            },
+            {
+              "value": "Where to Cut Back",
+              "label": "Where to Cut Back"
+            }
+          ],
+          "value": "Budgets & Spending"
+        },
+        "children": [
+          "tab-0",
+          "tab-1"
+        ]
+      },
+      {
+        "id": "tab-0",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "group-0"
+        ]
+      },
+      {
+        "id": "tab-1",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "group-1"
+        ]
+      },
+      {
+        "id": "group-0",
+        "component": "Surface",
+        "source": "prewired",
+        "children": [
+          "group-0-title",
+          "group-0-body"
+        ]
+      },
+      {
+        "id": "group-0-title",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Category Breakdown",
+          "variant": "heading"
+        }
+      },
+      {
+        "id": "group-0-body",
+        "component": "Grid",
+        "source": "prewired",
+        "props": {
+          "columns": 2
+        },
+        "children": [
+          "group-0-body-maplespendingdonut-1",
+          "group-0-body-datatable-1"
+        ]
+      },
+      {
+        "id": "group-0-body-maplespendingdonut-1",
+        "component": "MapleSpendingDonut",
+        "source": "host",
+        "props": {
+          "slices": {
+            "$path": "/spending"
+          }
+        }
+      },
+      {
+        "id": "group-0-body-datatable-1",
+        "component": "DataTable",
+        "source": "prewired",
+        "props": {
+          "rows": {
+            "$path": "/budgets"
+          },
+          "columns": [
+            {
+              "key": "category",
+              "label": "Category"
+            },
+            {
+              "key": "limit",
+              "label": "Budget Cap",
+              "format": "money",
+              "align": "end"
+            },
+            {
+              "key": "spent",
+              "label": "Spent to Date",
+              "format": "money",
+              "align": "end"
+            }
+          ],
+          "emptyState": "No category budgets available"
+        }
+      },
+      {
+        "id": "group-1",
+        "component": "Surface",
+        "source": "prewired",
+        "children": [
+          "group-1-title",
+          "group-1-body"
+        ]
+      },
+      {
+        "id": "group-1-title",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Optimization Opportunities",
+          "variant": "heading"
+        }
+      },
+      {
+        "id": "group-1-body",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "group-1-body-datatable-1"
+        ]
+      },
+      {
+        "id": "group-1-body-datatable-1",
+        "component": "DataTable",
+        "source": "prewired",
+        "props": {
+          "rows": {
+            "$path": "/recurring"
+          },
+          "columns": [
+            {
+              "key": "merchant",
+              "label": "Merchant"
+            },
+            {
+              "key": "category",
+              "label": "Category"
+            },
+            {
+              "key": "cadence",
+              "label": "Cadence"
+            },
+            {
+              "key": "amount",
+              "label": "Amount",
+              "format": "money",
+              "align": "end"
+            },
+            {
+              "key": "nextDate",
+              "label": "Next Charge Date",
+              "format": "date"
+            }
+          ],
+          "sortBy": "amount desc",
+          "filterableBy": [
+            "category",
+            "cadence"
+          ],
+          "searchable": true,
+          "caption": "Detected recurring subscriptions and expenses",
+          "emptyState": "No recurring subscriptions or expenses detected for optimization."
+        }
+      }
+    ],
+    "queries": [
+      {
+        "name": "budgets",
+        "tool": "host_getBudgets",
+        "input": {}
+      },
+      {
+        "name": "spending",
+        "tool": "host_getSpendingInsights",
+        "input": {}
+      },
+      {
+        "name": "recurring",
+        "tool": "host_getRecurringInsights",
+        "input": {}
+      }
+    ]
+  },
+  "id": "app_bench_msh6g7ic"
+}

@@ -1,0 +1,71 @@
+{
+  "model": "gemini-3.6-flash",
+  "responseText": "```json\n{\n  \"title\": \"Account Transfer & Overview\",\n  \"components\": [\n    {\n      \"use\": \"Stat\",\n      \"tool\": \"host_getDashboard\",\n      \"select\": \"clientsTotal\",\n      \"params\": {},\n      \"props\": {\n        \"label\": \"Total Client Accounts (Money transfer feature unavailable in this portal)\"\n      }\n    },\n    {\n      \"use\": \"DataTable\",\n      \"tool\": \"host_listClients\",\n      \"params\": {},\n      \"props\": {\n        \"caption\": \"Direct money transfers between bank accounts are not supported in this tax management system. Displaying client account records below.\",\n        \"columns\": [\n          {\n            \"key\": \"businessName\",\n            \"label\": \"Business Name\"\n          },\n          {\n            \"key\": \"entityType\",\n            \"label\": \"Entity Type\"\n          },\n          {\n            \"key\": \"contactName\",\n            \"label\": \"Contact Name\"\n          },\n          {\n            \"key\": \"status\",\n            \"label\": \"Status\"\n          },\n          {\n            \"key\": \"filingDeadline\",\n            \"label\": \"Filing Deadline\"\n          }\n        ],\n        \"emptyState\": \"No accounts found.\"\n      }\n    }\n  ]\n}\n```",
+  "repaired": false,
+  "spec": {
+    "title": "Account Transfer & Overview",
+    "components": [
+      {
+        "use": "Stat",
+        "tool": "host_getDashboard",
+        "params": {},
+        "select": "clientsTotal",
+        "props": {
+          "label": "Total Client Accounts (Money transfer feature unavailable in this portal)"
+        }
+      },
+      {
+        "use": "DataTable",
+        "tool": "host_listClients",
+        "params": {},
+        "props": {
+          "caption": "Direct money transfers between bank accounts are not supported in this tax management system. Displaying client account records below.",
+          "columns": [
+            {
+              "key": "businessName",
+              "label": "Business Name"
+            },
+            {
+              "key": "entityType",
+              "label": "Entity Type"
+            },
+            {
+              "key": "contactName",
+              "label": "Contact Name"
+            },
+            {
+              "key": "status",
+              "label": "Status"
+            },
+            {
+              "key": "filingDeadline",
+              "label": "Filing Deadline"
+            }
+          ],
+          "emptyState": "No accounts found."
+        }
+      }
+    ]
+  },
+  "pieces": [
+    {
+      "index": 0,
+      "use": "Stat",
+      "tool": "host_getDashboard",
+      "errors": []
+    },
+    {
+      "index": 1,
+      "use": "DataTable",
+      "tool": "host_listClients",
+      "errors": []
+    }
+  ],
+  "specErrors": [],
+  "toolsBound": [
+    "host_getDashboard",
+    "host_listClients"
+  ],
+  "queryCount": 2,
+  "nodeCount": 5
+}

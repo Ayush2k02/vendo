@@ -1,0 +1,26 @@
+{
+  "id": "20260806-124146-07fd",
+  "createdAt": "2026-08-06T07:11:46.219Z",
+  "gitSha": "875c73097c250a30a8803d26c19bbe99a823a31d",
+  "gitDirty": null,
+  "request": {
+    "prompt": "spending by category with budgets, and where I can cut back",
+    "host": "maple",
+    "lanes": [
+      "vendo",
+      "spec"
+    ]
+  },
+  "lanes": {
+    "vendo": {
+      "status": "ok",
+      "startedAt": 1786000274436,
+      "durationMs": 31694
+    },
+    "spec": {
+      "status": "ok",
+      "startedAt": 1786000274449,
+      "durationMs": 8429
+    }
+  }
+}

@@ -1,0 +1,7 @@
+[
+  {
+    "severity": "block",
+    "where": "node \"group-1-body-datatable-1\" prop \"rows\"",
+    "message": "on <DataTable> binds /hostListTransactions, a object field, but this slot takes a different RAW type (rows from a tool call) — bind the raw field with that type (e.g. the integer-cents field, not a pre-formatted display string)."
+  }
+]

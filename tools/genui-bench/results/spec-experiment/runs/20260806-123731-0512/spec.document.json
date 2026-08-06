@@ -1,0 +1,136 @@
+{
+  "format": "vendo/app@1",
+  "id": "app_bench_spec_281fa75f",
+  "name": "Firm Overview & Client List",
+  "ui": "tree",
+  "tree": {
+    "formatVersion": "vendo-genui/v2",
+    "root": "app",
+    "nodes": [
+      {
+        "id": "app",
+        "component": "Stack",
+        "source": "prewired",
+        "props": {
+          "gap": 16
+        },
+        "children": [
+          "title",
+          "grid-1",
+          "piece-3"
+        ]
+      },
+      {
+        "id": "title",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Firm Overview & Client List",
+          "variant": "heading"
+        }
+      },
+      {
+        "id": "piece-0",
+        "component": "Stat",
+        "source": "prewired",
+        "props": {
+          "label": "Outstanding Documents",
+          "tone": "danger",
+          "value": {
+            "$path": "/q0/documentsOutstanding"
+          }
+        }
+      },
+      {
+        "id": "piece-1",
+        "component": "Stat",
+        "source": "prewired",
+        "props": {
+          "label": "Clients Missing Documents",
+          "value": {
+            "$path": "/q0/clientsMissingDocs"
+          }
+        }
+      },
+      {
+        "id": "piece-2",
+        "component": "Stat",
+        "source": "prewired",
+        "props": {
+          "label": "Total Clients",
+          "value": {
+            "$path": "/q0/clientsTotal"
+          }
+        }
+      },
+      {
+        "id": "piece-3",
+        "component": "DataTable",
+        "source": "prewired",
+        "props": {
+          "caption": "Financial account balances are unavailable. Displaying active tax clients and filing deadline progress.",
+          "searchable": true,
+          "filterableBy": [
+            "status",
+            "entityType"
+          ],
+          "columns": [
+            {
+              "key": "businessName",
+              "label": "Client Business"
+            },
+            {
+              "key": "contactName",
+              "label": "Contact Name"
+            },
+            {
+              "key": "entityType",
+              "label": "Entity Type"
+            },
+            {
+              "key": "status",
+              "label": "Status"
+            },
+            {
+              "key": "filingDeadline",
+              "label": "Filing Deadline",
+              "format": "date"
+            },
+            {
+              "key": "assignee.name",
+              "label": "Assigned Staff"
+            }
+          ],
+          "emptyState": "No clients found.",
+          "rows": {
+            "$path": "/q1"
+          }
+        }
+      },
+      {
+        "id": "grid-1",
+        "component": "Grid",
+        "source": "prewired",
+        "props": {
+          "columns": 3,
+          "gap": 12
+        },
+        "children": [
+          "piece-0",
+          "piece-1",
+          "piece-2"
+        ]
+      }
+    ],
+    "queries": [
+      {
+        "name": "q0",
+        "tool": "host_getDashboard"
+      },
+      {
+        "name": "q1",
+        "tool": "host_listClients"
+      }
+    ]
+  }
+}

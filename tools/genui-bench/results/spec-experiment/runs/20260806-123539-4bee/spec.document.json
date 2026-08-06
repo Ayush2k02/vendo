@@ -1,0 +1,117 @@
+{
+  "format": "vendo/app@1",
+  "id": "app_bench_spec_d24ed8df",
+  "name": "Account Balances at a Glance",
+  "ui": "tree",
+  "tree": {
+    "formatVersion": "vendo-genui/v2",
+    "root": "app",
+    "nodes": [
+      {
+        "id": "app",
+        "component": "Stack",
+        "source": "prewired",
+        "props": {
+          "gap": 16
+        },
+        "children": [
+          "title",
+          "grid-1",
+          "piece-1",
+          "piece-2"
+        ]
+      },
+      {
+        "id": "title",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Account Balances at a Glance",
+          "variant": "heading"
+        }
+      },
+      {
+        "id": "piece-0",
+        "component": "Stat",
+        "source": "prewired",
+        "props": {
+          "label": "Total Net Worth",
+          "format": "money",
+          "value": {
+            "$path": "/q0/netWorth"
+          }
+        }
+      },
+      {
+        "id": "piece-1",
+        "component": "BarChart",
+        "source": "prewired",
+        "props": {
+          "xKey": "name",
+          "series": [
+            "balance"
+          ],
+          "format": "money",
+          "horizontal": true,
+          "height": 220,
+          "data": {
+            "$path": "/q1"
+          }
+        }
+      },
+      {
+        "id": "grid-1",
+        "component": "Grid",
+        "source": "prewired",
+        "props": {
+          "columns": 1,
+          "gap": 12
+        },
+        "children": [
+          "piece-0"
+        ]
+      },
+      {
+        "id": "piece-2",
+        "component": "DataTable",
+        "source": "prewired",
+        "props": {
+          "columns": [
+            {
+              "key": "name",
+              "label": "Account Name"
+            },
+            {
+              "key": "kind",
+              "label": "Type"
+            },
+            {
+              "key": "mask",
+              "label": "Account Mask"
+            },
+            {
+              "key": "balance",
+              "label": "Balance",
+              "format": "money"
+            }
+          ],
+          "sortBy": "balance desc",
+          "caption": "Account Overview",
+          "rows": {
+            "$path": "/q1"
+          }
+        }
+      }
+    ],
+    "queries": [
+      {
+        "name": "q0",
+        "tool": "host_getProfile"
+      },
+      {
+        "name": "q1",
+        "tool": "host_listAccounts"
+      }
+    ]
+  }
+}

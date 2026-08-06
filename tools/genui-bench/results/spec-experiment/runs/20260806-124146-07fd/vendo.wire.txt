@@ -1,0 +1,24 @@
+<App name="Category Spending & Budget Insights">
+  <Query id="budgets" tool="host_getBudgets" input={{}}/>
+  <Query id="spending" tool="host_getSpendingInsights" input={{}}/>
+  <Query id="recurring" tool="host_getRecurringInsights" input={{}}/>
+  <Tabs id="tabs" tabs={[{ value: "Budgets & Spending", label: "Budgets & Spending" }, { value: "Where to Cut Back", label: "Where to Cut Back" }]} value="Budgets & Spending">
+    <Stack id="tab-0">
+      <Surface id="group-0">
+        <Text id="group-0-title" text="Category Breakdown" variant="heading"/>
+        <Grid id="group-0-body" columns={2}>
+          <MapleSpendingDonut id="group-0-body-maplespendingdonut-1" slices={spending}/>
+          <DataTable id="group-0-body-datatable-1" rows={budgets} columns={[{ key: "category", label: "Category" }, { key: "limit", label: "Budget Cap", format: "money", align: "end" }, { key: "spent", label: "Spent to Date", format: "money", align: "end" }]} emptyState="No category budgets available"/>
+        </Grid>
+      </Surface>
+    </Stack>
+    <Stack id="tab-1">
+      <Surface id="group-1">
+        <Text id="group-1-title" text="Optimization Opportunities" variant="heading"/>
+        <Stack id="group-1-body">
+          <DataTable id="group-1-body-datatable-1" rows={recurring} columns={[{ key: "merchant", label: "Merchant" }, { key: "category", label: "Category" }, { key: "cadence", label: "Cadence" }, { key: "amount", label: "Amount", format: "money", align: "end" }, { key: "nextDate", label: "Next Charge Date", format: "date" }]} sortBy="amount desc" filterableBy={["category", "cadence"]} searchable caption="Detected recurring subscriptions and expenses" emptyState="No recurring subscriptions or expenses detected for optimization."/>
+        </Stack>
+      </Surface>
+    </Stack>
+  </Tabs>
+</App>

@@ -1,0 +1,153 @@
+{
+  "format": "vendo/app@1",
+  "id": "app_bench_spec_bfd864c3",
+  "name": "Document Collection & Client Reminders",
+  "ui": "tree",
+  "tree": {
+    "formatVersion": "vendo-genui/v2",
+    "root": "app",
+    "nodes": [
+      {
+        "id": "app",
+        "component": "Stack",
+        "source": "prewired",
+        "props": {
+          "gap": 16
+        },
+        "children": [
+          "title",
+          "grid-1",
+          "piece-2",
+          "piece-2-actions"
+        ]
+      },
+      {
+        "id": "title",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Document Collection & Client Reminders",
+          "variant": "heading"
+        }
+      },
+      {
+        "id": "piece-0",
+        "component": "Stat",
+        "source": "prewired",
+        "props": {
+          "label": "Clients Missing Documents",
+          "tone": "danger",
+          "value": {
+            "$path": "/q0/clientsMissingDocs"
+          }
+        }
+      },
+      {
+        "id": "piece-1",
+        "component": "Stat",
+        "source": "prewired",
+        "props": {
+          "label": "Total Documents Outstanding",
+          "tone": "accent",
+          "value": {
+            "$path": "/q0/documentsOutstanding"
+          }
+        }
+      },
+      {
+        "id": "piece-2",
+        "component": "DataTable",
+        "source": "prewired",
+        "props": {
+          "caption": "Clients with pending document requests (Note: System tracks tax document intake and filing deadlines; invoice management is not available)",
+          "searchable": true,
+          "sortBy": "filingDeadline asc",
+          "emptyState": "No clients are currently missing documents.",
+          "columns": [
+            {
+              "key": "businessName",
+              "label": "Business Name"
+            },
+            {
+              "key": "contactName",
+              "label": "Contact Name"
+            },
+            {
+              "key": "contactEmail",
+              "label": "Email"
+            },
+            {
+              "key": "filingDeadline",
+              "label": "Filing Deadline"
+            },
+            {
+              "key": "status",
+              "label": "Status"
+            },
+            {
+              "key": "assignee.name",
+              "label": "Assigned Staff"
+            }
+          ],
+          "rows": {
+            "$path": "/q1"
+          }
+        }
+      },
+      {
+        "id": "piece-2-actions",
+        "component": "Row",
+        "source": "prewired",
+        "props": {
+          "gap": 8
+        },
+        "children": [
+          "piece-2-action-0"
+        ]
+      },
+      {
+        "id": "piece-2-action-0",
+        "component": "Button",
+        "source": "prewired",
+        "props": {
+          "label": "Send Document Reminder",
+          "onClick": {
+            "$action": "host_sendClientMessage",
+            "payload": {
+              "id": "cl_missing",
+              "body": {
+                "body": "Friendly reminder: Please upload your outstanding tax documents as soon as possible so we can proceed with your filing."
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "grid-1",
+        "component": "Grid",
+        "source": "prewired",
+        "props": {
+          "columns": 2,
+          "gap": 12
+        },
+        "children": [
+          "piece-0",
+          "piece-1"
+        ]
+      }
+    ],
+    "queries": [
+      {
+        "name": "q0",
+        "tool": "host_getDashboard"
+      },
+      {
+        "name": "q1",
+        "tool": "host_listClients",
+        "input": {
+          "filter": "missing_docs"
+        }
+      }
+    ]
+  }
+}

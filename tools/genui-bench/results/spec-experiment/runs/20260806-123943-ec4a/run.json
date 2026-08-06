@@ -1,0 +1,31 @@
+{
+  "id": "20260806-123943-ec4a",
+  "createdAt": "2026-08-06T07:09:43.211Z",
+  "gitSha": "875c73097c250a30a8803d26c19bbe99a823a31d",
+  "gitDirty": null,
+  "request": {
+    "prompt": "show revenue by client with a chart, and let me drill into one",
+    "host": "cadence",
+    "lanes": [
+      "vendo",
+      "spec"
+    ],
+    "packRef": {
+      "pack": "cadence",
+      "index": 4
+    }
+  },
+  "lanes": {
+    "vendo": {
+      "status": "failed",
+      "startedAt": 1786000150987,
+      "durationMs": 4464,
+      "error": "the host refused this ask: Your host does not track client revenue, so revenue charts and client revenue drilldowns are unavailable."
+    },
+    "spec": {
+      "status": "ok",
+      "startedAt": 1786000150996,
+      "durationMs": 32189
+    }
+  }
+}

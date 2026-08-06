@@ -1,0 +1,89 @@
+{
+  "model": "gemini-3.6-flash",
+  "responseText": "{\n  \"title\": \"Account Balances at a Glance\",\n  \"components\": [\n    {\n      \"use\": \"Stat\",\n      \"tool\": \"host_getProfile\",\n      \"params\": {},\n      \"select\": \"netWorth\",\n      \"props\": {\n        \"label\": \"Total Net Worth\",\n        \"format\": \"money\"\n      }\n    },\n    {\n      \"use\": \"BarChart\",\n      \"tool\": \"host_listAccounts\",\n      \"params\": {},\n      \"props\": {\n        \"xKey\": \"name\",\n        \"series\": [\"balance\"],\n        \"format\": \"money\",\n        \"horizontal\": true,\n        \"height\": 220\n      }\n    },\n    {\n      \"use\": \"DataTable\",\n      \"tool\": \"host_listAccounts\",\n      \"params\": {},\n      \"props\": {\n        \"columns\": [\n          {\n            \"key\": \"name\",\n            \"label\": \"Account Name\"\n          },\n          {\n            \"key\": \"kind\",\n            \"label\": \"Type\"\n          },\n          {\n            \"key\": \"mask\",\n            \"label\": \"Account Mask\"\n          },\n          {\n            \"key\": \"balance\",\n            \"label\": \"Balance\",\n            \"format\": \"money\"\n          }\n        ],\n        \"sortBy\": \"balance desc\",\n        \"caption\": \"Account Overview\"\n      }\n    }\n  ]\n}",
+  "repaired": false,
+  "spec": {
+    "title": "Account Balances at a Glance",
+    "components": [
+      {
+        "use": "Stat",
+        "tool": "host_getProfile",
+        "params": {},
+        "select": "netWorth",
+        "props": {
+          "label": "Total Net Worth",
+          "format": "money"
+        }
+      },
+      {
+        "use": "BarChart",
+        "tool": "host_listAccounts",
+        "params": {},
+        "props": {
+          "xKey": "name",
+          "series": [
+            "balance"
+          ],
+          "format": "money",
+          "horizontal": true,
+          "height": 220
+        }
+      },
+      {
+        "use": "DataTable",
+        "tool": "host_listAccounts",
+        "params": {},
+        "props": {
+          "columns": [
+            {
+              "key": "name",
+              "label": "Account Name"
+            },
+            {
+              "key": "kind",
+              "label": "Type"
+            },
+            {
+              "key": "mask",
+              "label": "Account Mask"
+            },
+            {
+              "key": "balance",
+              "label": "Balance",
+              "format": "money"
+            }
+          ],
+          "sortBy": "balance desc",
+          "caption": "Account Overview"
+        }
+      }
+    ]
+  },
+  "pieces": [
+    {
+      "index": 0,
+      "use": "Stat",
+      "tool": "host_getProfile",
+      "errors": []
+    },
+    {
+      "index": 1,
+      "use": "BarChart",
+      "tool": "host_listAccounts",
+      "errors": []
+    },
+    {
+      "index": 2,
+      "use": "DataTable",
+      "tool": "host_listAccounts",
+      "errors": []
+    }
+  ],
+  "specErrors": [],
+  "toolsBound": [
+    "host_getProfile",
+    "host_listAccounts"
+  ],
+  "queryCount": 2,
+  "nodeCount": 6
+}

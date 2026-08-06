@@ -1,0 +1,93 @@
+{
+  "format": "vendo/app@1",
+  "name": "Account Balances",
+  "tree": {
+    "formatVersion": "vendo-genui/v2",
+    "root": "root",
+    "nodes": [
+      {
+        "id": "root",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "group-0"
+        ]
+      },
+      {
+        "id": "group-0",
+        "component": "Surface",
+        "source": "prewired",
+        "children": [
+          "group-0-title",
+          "group-0-body"
+        ]
+      },
+      {
+        "id": "group-0-title",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Account Balances",
+          "variant": "heading"
+        }
+      },
+      {
+        "id": "group-0-body",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "group-0-body-maplenetworthcard-1",
+          "group-0-body-datatable-1"
+        ]
+      },
+      {
+        "id": "group-0-body-maplenetworthcard-1",
+        "component": "MapleNetWorthCard",
+        "source": "host",
+        "props": {
+          "valueCents": {
+            "$expr": "sum(accounts.balance)"
+          },
+          "series": {
+            "$path": "/accounts/0/sparkline"
+          }
+        }
+      },
+      {
+        "id": "group-0-body-datatable-1",
+        "component": "DataTable",
+        "source": "prewired",
+        "props": {
+          "rows": {
+            "$path": "/accounts"
+          },
+          "columns": [
+            {
+              "key": "name",
+              "label": "Account Name"
+            },
+            {
+              "key": "kind",
+              "label": "Type"
+            },
+            {
+              "key": "balance_cents",
+              "label": "Balance",
+              "format": "money",
+              "align": "end"
+            }
+          ],
+          "emptyState": "No accounts found"
+        }
+      }
+    ],
+    "queries": [
+      {
+        "name": "accounts",
+        "tool": "host_listAccounts",
+        "input": {}
+      }
+    ]
+  },
+  "id": "app_bench_msh67tjb"
+}

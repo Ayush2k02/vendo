@@ -1,0 +1,145 @@
+{
+  "format": "vendo/app@1",
+  "id": "app_bench_spec_4fbfaa77",
+  "name": "Account Transfer",
+  "ui": "tree",
+  "tree": {
+    "formatVersion": "vendo-genui/v2",
+    "root": "app",
+    "nodes": [
+      {
+        "id": "app",
+        "component": "Stack",
+        "source": "prewired",
+        "props": {
+          "gap": 16
+        },
+        "children": [
+          "title",
+          "piece-0",
+          "piece-0-actions",
+          "piece-1"
+        ]
+      },
+      {
+        "id": "title",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Account Transfer",
+          "variant": "heading"
+        }
+      },
+      {
+        "id": "piece-0",
+        "component": "CardList",
+        "source": "prewired",
+        "props": {
+          "titleField": "name",
+          "badgeField": "kind",
+          "fields": [
+            {
+              "key": "accountNumber",
+              "label": "Account Number"
+            },
+            {
+              "key": "balance",
+              "label": "Available Balance",
+              "format": "money"
+            }
+          ],
+          "columns": 2,
+          "emptyState": "No accounts found.",
+          "items": {
+            "$path": "/q0"
+          }
+        }
+      },
+      {
+        "id": "piece-0-actions",
+        "component": "Row",
+        "source": "prewired",
+        "props": {
+          "gap": 8
+        },
+        "children": [
+          "piece-0-action-0",
+          "piece-0-action-1"
+        ]
+      },
+      {
+        "id": "piece-0-action-0",
+        "component": "Button",
+        "source": "prewired",
+        "props": {
+          "label": "Transfer $100 to Savings",
+          "onClick": {
+            "$action": "host_transferMoney",
+            "payload": {
+              "amount": 10000,
+              "recipient_name": "Savings Account",
+              "memo": "Internal account transfer"
+            }
+          }
+        }
+      },
+      {
+        "id": "piece-0-action-1",
+        "component": "Button",
+        "source": "prewired",
+        "props": {
+          "label": "Transfer $500 to Savings",
+          "onClick": {
+            "$action": "host_transferMoney",
+            "payload": {
+              "amount": 50000,
+              "recipient_name": "Savings Account",
+              "memo": "Internal account transfer"
+            }
+          }
+        }
+      },
+      {
+        "id": "piece-1",
+        "component": "DataTable",
+        "source": "prewired",
+        "props": {
+          "columns": [
+            {
+              "key": "payeeName",
+              "label": "Recipient"
+            },
+            {
+              "key": "amount",
+              "label": "Amount",
+              "format": "money"
+            },
+            {
+              "key": "cadence",
+              "label": "Frequency"
+            },
+            {
+              "key": "nextDate",
+              "label": "Next Date"
+            }
+          ],
+          "caption": "Scheduled Recurring Transfers",
+          "emptyState": "No scheduled transfers found.",
+          "rows": {
+            "$path": "/q1"
+          }
+        }
+      }
+    ],
+    "queries": [
+      {
+        "name": "q0",
+        "tool": "host_listAccounts"
+      },
+      {
+        "name": "q1",
+        "tool": "host_listScheduledPayments"
+      }
+    ]
+  }
+}

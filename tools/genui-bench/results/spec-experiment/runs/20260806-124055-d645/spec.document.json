@@ -1,0 +1,180 @@
+{
+  "format": "vendo/app@1",
+  "id": "app_bench_spec_169d1962",
+  "name": "Hiring & Capacity Assessment",
+  "ui": "tree",
+  "tree": {
+    "formatVersion": "vendo-genui/v2",
+    "root": "app",
+    "nodes": [
+      {
+        "id": "app",
+        "component": "Stack",
+        "source": "prewired",
+        "props": {
+          "gap": 16
+        },
+        "children": [
+          "title",
+          "grid-1",
+          "piece-3",
+          "piece-4"
+        ]
+      },
+      {
+        "id": "title",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Hiring & Capacity Assessment",
+          "variant": "heading"
+        }
+      },
+      {
+        "id": "piece-0",
+        "component": "Stat",
+        "source": "prewired",
+        "props": {
+          "label": "Total Active Clients",
+          "format": "number",
+          "value": {
+            "$path": "/q0/clientsTotal"
+          }
+        }
+      },
+      {
+        "id": "piece-1",
+        "component": "Stat",
+        "source": "prewired",
+        "props": {
+          "label": "Outstanding Document Workload",
+          "format": "number",
+          "value": {
+            "$path": "/q0/documentsOutstanding"
+          }
+        }
+      },
+      {
+        "id": "piece-2",
+        "component": "Stat",
+        "source": "prewired",
+        "props": {
+          "label": "Clients Pending Documents",
+          "format": "number",
+          "value": {
+            "$path": "/q0/clientsMissingDocs"
+          }
+        }
+      },
+      {
+        "id": "piece-3",
+        "component": "DataTable",
+        "source": "prewired",
+        "props": {
+          "caption": "Current Client Assignments & Workload Capacity (Note: Financial/payroll tools are not connected to this environment; evaluate hiring need via active client load and staff distribution below).",
+          "searchable": true,
+          "filterableBy": [
+            "status",
+            "entityType"
+          ],
+          "columns": [
+            {
+              "key": "businessName",
+              "label": "Client Name"
+            },
+            {
+              "key": "entityType",
+              "label": "Entity Type"
+            },
+            {
+              "key": "assignee.name",
+              "label": "Assigned Staff"
+            },
+            {
+              "key": "assignee.role",
+              "label": "Staff Role"
+            },
+            {
+              "key": "status",
+              "label": "Status"
+            },
+            {
+              "key": "progress.received",
+              "label": "Docs Received",
+              "format": "number"
+            },
+            {
+              "key": "progress.total",
+              "label": "Total Docs Required",
+              "format": "number"
+            }
+          ],
+          "emptyState": "No clients found.",
+          "rows": {
+            "$path": "/q1"
+          }
+        }
+      },
+      {
+        "id": "grid-1",
+        "component": "Grid",
+        "source": "prewired",
+        "props": {
+          "columns": 3,
+          "gap": 12
+        },
+        "children": [
+          "piece-0",
+          "piece-1",
+          "piece-2"
+        ]
+      },
+      {
+        "id": "piece-4",
+        "component": "DataTable",
+        "source": "prewired",
+        "props": {
+          "caption": "Upcoming Filing Deadlines & Staff Coverage Risk",
+          "searchable": true,
+          "columns": [
+            {
+              "key": "businessName",
+              "label": "Client Name"
+            },
+            {
+              "key": "filingDeadline",
+              "label": "Deadline",
+              "format": "date"
+            },
+            {
+              "key": "assignee.name",
+              "label": "Assigned Staff"
+            },
+            {
+              "key": "status",
+              "label": "Filing Status"
+            }
+          ],
+          "emptyState": "No upcoming deadlines.",
+          "rows": {
+            "$path": "/q2"
+          }
+        }
+      }
+    ],
+    "queries": [
+      {
+        "name": "q0",
+        "tool": "host_getDashboard"
+      },
+      {
+        "name": "q1",
+        "tool": "host_listClients"
+      },
+      {
+        "name": "q2",
+        "tool": "host_listDeadlines"
+      }
+    ]
+  }
+}

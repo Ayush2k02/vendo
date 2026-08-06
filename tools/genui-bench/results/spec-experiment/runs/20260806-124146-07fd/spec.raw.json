@@ -1,0 +1,105 @@
+{
+  "model": "gemini-3.6-flash",
+  "responseText": "{\n  \"title\": \"Spending Analysis & Budget Cutbacks\",\n  \"components\": [\n    {\n      \"use\": \"DonutChart\",\n      \"tool\": \"host_getSpendingInsights\",\n      \"params\": {},\n      \"props\": {\n        \"categoryKey\": \"category\",\n        \"valueKey\": \"amount\",\n        \"format\": \"money\"\n      }\n    },\n    {\n      \"use\": \"DataTable\",\n      \"tool\": \"host_getBudgets\",\n      \"params\": {},\n      \"props\": {\n        \"caption\": \"Budgets vs. Current Spending\",\n        \"columns\": [\n          {\n            \"key\": \"category\",\n            \"label\": \"Category\"\n          },\n          {\n            \"key\": \"spent\",\n            \"label\": \"Spent\",\n            \"format\": \"money\"\n          },\n          {\n            \"key\": \"limit\",\n            \"label\": \"Budget Limit\",\n            \"format\": \"money\"\n          }\n        ],\n        \"sortBy\": \"spent desc\"\n      }\n    },\n    {\n      \"use\": \"DataTable\",\n      \"tool\": \"host_getRecurringInsights\",\n      \"params\": {},\n      \"props\": {\n        \"caption\": \"Recurring Charges & Subscriptions to Review for Cutbacks\",\n        \"columns\": [\n          {\n            \"key\": \"merchant\",\n            \"label\": \"Merchant\"\n          },\n          {\n            \"key\": \"category\",\n            \"label\": \"Category\"\n          },\n          {\n            \"key\": \"cadence\",\n            \"label\": \"Frequency\"\n          },\n          {\n            \"key\": \"nextDate\",\n            \"label\": \"Next Date\"\n          },\n          {\n            \"key\": \"amount\",\n            \"label\": \"Amount\",\n            \"format\": \"money\"\n          }\n        ],\n        \"sortBy\": \"amount desc\"\n      }\n    }\n  ]\n}",
+  "repaired": false,
+  "spec": {
+    "title": "Spending Analysis & Budget Cutbacks",
+    "components": [
+      {
+        "use": "DonutChart",
+        "tool": "host_getSpendingInsights",
+        "params": {},
+        "props": {
+          "categoryKey": "category",
+          "valueKey": "amount",
+          "format": "money"
+        }
+      },
+      {
+        "use": "DataTable",
+        "tool": "host_getBudgets",
+        "params": {},
+        "props": {
+          "caption": "Budgets vs. Current Spending",
+          "columns": [
+            {
+              "key": "category",
+              "label": "Category"
+            },
+            {
+              "key": "spent",
+              "label": "Spent",
+              "format": "money"
+            },
+            {
+              "key": "limit",
+              "label": "Budget Limit",
+              "format": "money"
+            }
+          ],
+          "sortBy": "spent desc"
+        }
+      },
+      {
+        "use": "DataTable",
+        "tool": "host_getRecurringInsights",
+        "params": {},
+        "props": {
+          "caption": "Recurring Charges & Subscriptions to Review for Cutbacks",
+          "columns": [
+            {
+              "key": "merchant",
+              "label": "Merchant"
+            },
+            {
+              "key": "category",
+              "label": "Category"
+            },
+            {
+              "key": "cadence",
+              "label": "Frequency"
+            },
+            {
+              "key": "nextDate",
+              "label": "Next Date"
+            },
+            {
+              "key": "amount",
+              "label": "Amount",
+              "format": "money"
+            }
+          ],
+          "sortBy": "amount desc"
+        }
+      }
+    ]
+  },
+  "pieces": [
+    {
+      "index": 0,
+      "use": "DonutChart",
+      "tool": "host_getSpendingInsights",
+      "errors": []
+    },
+    {
+      "index": 1,
+      "use": "DataTable",
+      "tool": "host_getBudgets",
+      "errors": []
+    },
+    {
+      "index": 2,
+      "use": "DataTable",
+      "tool": "host_getRecurringInsights",
+      "errors": []
+    }
+  ],
+  "specErrors": [],
+  "toolsBound": [
+    "host_getBudgets",
+    "host_getRecurringInsights",
+    "host_getSpendingInsights"
+  ],
+  "queryCount": 3,
+  "nodeCount": 5
+}

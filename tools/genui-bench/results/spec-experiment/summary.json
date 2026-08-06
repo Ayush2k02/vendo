@@ -1,0 +1,380 @@
+{
+  "model": "gemini-3.6-flash",
+  "runs": 16,
+  "totals": {
+    "vendo": {
+      "ok": 5,
+      "failed": 11
+    },
+    "spec": {
+      "ok": 16,
+      "failed": 0
+    }
+  },
+  "vendo": {
+    "refusals": 9,
+    "findingsOnOk": 2
+  },
+  "spec": {
+    "repaired": 7,
+    "okWithZeroToolBindings": 0,
+    "findingsOnOk": 0
+  },
+  "rows": [
+    {
+      "id": "20260806-123539-4bee",
+      "host": "maple",
+      "pack": "smoke",
+      "prompt": "show my account balances at a glance",
+      "vendo": {
+        "status": "ok",
+        "durationMs": 56522,
+        "findings": 1
+      },
+      "spec": {
+        "status": "ok",
+        "durationMs": 10500,
+        "findings": 0,
+        "repaired": false,
+        "toolsBound": [
+          "host_getProfile",
+          "host_listAccounts"
+        ],
+        "queryCount": 2
+      }
+    },
+    {
+      "id": "20260806-123650-901f",
+      "host": "maple",
+      "pack": "smoke",
+      "prompt": "let me transfer money between my accounts",
+      "vendo": {
+        "status": "ok",
+        "durationMs": 70602,
+        "findings": 1
+      },
+      "spec": {
+        "status": "ok",
+        "durationMs": 21270,
+        "findings": 0,
+        "repaired": false,
+        "toolsBound": [
+          "host_listAccounts",
+          "host_listScheduledPayments",
+          "host_transferMoney"
+        ],
+        "queryCount": 2
+      }
+    },
+    {
+      "id": "20260806-123703-3bbb",
+      "host": "maple",
+      "pack": "smoke",
+      "prompt": "show my recent transactions with search",
+      "vendo": {
+        "status": "failed",
+        "durationMs": 12762,
+        "error": "generation failed: node \"stack-1\" sets unknown prop \"spacing\" on prewired component \"Stack\"; the renderer drops it. Allowed props: gap | node \"datatable-1\" sets unknown prop \"query\" on prewired component \"DataTable\"; the"
+      },
+      "spec": {
+        "status": "ok",
+        "durationMs": 6118,
+        "findings": 0,
+        "repaired": false,
+        "toolsBound": [
+          "host_listTransactions"
+        ],
+        "queryCount": 1
+      }
+    },
+    {
+      "id": "20260806-123731-0512",
+      "host": "cadence",
+      "pack": "smoke",
+      "prompt": "show my account balances at a glance",
+      "vendo": {
+        "status": "failed",
+        "durationMs": 4160,
+        "error": "the host refused this ask: Your host has no tool or data source to show account balances."
+      },
+      "spec": {
+        "status": "ok",
+        "durationMs": 19867,
+        "findings": 0,
+        "repaired": true,
+        "toolsBound": [
+          "host_getDashboard",
+          "host_listClients"
+        ],
+        "queryCount": 2
+      }
+    },
+    {
+      "id": "20260806-123740-f9d3",
+      "host": "cadence",
+      "pack": "smoke",
+      "prompt": "let me transfer money between my accounts",
+      "vendo": {
+        "status": "failed",
+        "durationMs": 3842,
+        "error": "the host refused this ask: Your host cannot transfer money between accounts."
+      },
+      "spec": {
+        "status": "ok",
+        "durationMs": 8629,
+        "findings": 0,
+        "repaired": false,
+        "toolsBound": [
+          "host_getDashboard",
+          "host_listClients"
+        ],
+        "queryCount": 2
+      }
+    },
+    {
+      "id": "20260806-123749-cfc7",
+      "host": "cadence",
+      "pack": "smoke",
+      "prompt": "show my recent transactions with search",
+      "vendo": {
+        "status": "failed",
+        "durationMs": 3303,
+        "error": "the host refused this ask: Your host has no record of financial or banking transactions."
+      },
+      "spec": {
+        "status": "ok",
+        "durationMs": 8927,
+        "findings": 0,
+        "repaired": false,
+        "toolsBound": [
+          "host_listActivity"
+        ],
+        "queryCount": 1
+      }
+    },
+    {
+      "id": "20260806-123803-1333",
+      "host": "cadence",
+      "pack": "cadence",
+      "prompt": "which clients still owe me money, oldest first",
+      "vendo": {
+        "status": "failed",
+        "durationMs": 3854,
+        "error": "the host refused this ask: Your host has no tools or data to track client billing, invoices, or outstanding balances."
+      },
+      "spec": {
+        "status": "ok",
+        "durationMs": 10871,
+        "findings": 0,
+        "repaired": false,
+        "toolsBound": [
+          "host_listDeadlines"
+        ],
+        "queryCount": 1
+      }
+    },
+    {
+      "id": "20260806-123819-21e4",
+      "host": "cadence",
+      "pack": "cadence",
+      "prompt": "show me where my money went last quarter",
+      "vendo": {
+        "status": "failed",
+        "durationMs": 4110,
+        "error": "the host refused this ask: Your host has no tool to track expenses or show where money went last quarter."
+      },
+      "spec": {
+        "status": "ok",
+        "durationMs": 16607,
+        "findings": 0,
+        "repaired": true,
+        "toolsBound": [
+          "host_getDashboard",
+          "host_listActivity"
+        ],
+        "queryCount": 2
+      }
+    },
+    {
+      "id": "20260806-123847-786d",
+      "host": "cadence",
+      "pack": "cadence",
+      "prompt": "let me chase every overdue invoice in one go",
+      "vendo": {
+        "status": "failed",
+        "durationMs": 3736,
+        "error": "the host refused this ask: Your host manages tax document collection and filing deadlines, but has no system or tools for tracking or chasing invoices."
+      },
+      "spec": {
+        "status": "ok",
+        "durationMs": 28102,
+        "findings": 0,
+        "repaired": true,
+        "toolsBound": [
+          "host_getDashboard",
+          "host_listClients",
+          "host_sendClientMessage"
+        ],
+        "queryCount": 2
+      }
+    },
+    {
+      "id": "20260806-123910-5e17",
+      "host": "cadence",
+      "pack": "cadence",
+      "prompt": "what's missing before I can close the books this month",
+      "vendo": {
+        "status": "ok",
+        "durationMs": 16918,
+        "findings": 0
+      },
+      "spec": {
+        "status": "ok",
+        "durationMs": 23054,
+        "findings": 0,
+        "repaired": true,
+        "toolsBound": [
+          "host_getDashboard",
+          "host_listActivity",
+          "host_listDeadlines"
+        ],
+        "queryCount": 3
+      }
+    },
+    {
+      "id": "20260806-123943-ec4a",
+      "host": "cadence",
+      "pack": "cadence",
+      "prompt": "show revenue by client with a chart, and let me drill into one",
+      "vendo": {
+        "status": "failed",
+        "durationMs": 4464,
+        "error": "the host refused this ask: Your host does not track client revenue, so revenue charts and client revenue drilldowns are unavailable."
+      },
+      "spec": {
+        "status": "ok",
+        "durationMs": 32189,
+        "findings": 0,
+        "repaired": true,
+        "toolsBound": [
+          "host_getClient",
+          "host_getDashboard",
+          "host_listClients"
+        ],
+        "queryCount": 2
+      }
+    },
+    {
+      "id": "20260806-124024-387b",
+      "host": "cadence",
+      "pack": "cadence",
+      "prompt": "build me a deadline board for the next 30 days",
+      "vendo": {
+        "status": "ok",
+        "durationMs": 41125,
+        "findings": 0
+      },
+      "spec": {
+        "status": "ok",
+        "durationMs": 17285,
+        "findings": 0,
+        "repaired": true,
+        "toolsBound": [
+          "host_getDashboard",
+          "host_listDeadlines"
+        ],
+        "queryCount": 2
+      }
+    },
+    {
+      "id": "20260806-124042-f835",
+      "host": "cadence",
+      "pack": "cadence",
+      "prompt": "which clients are least profitable once I account for time spent",
+      "vendo": {
+        "status": "failed",
+        "durationMs": 4365,
+        "error": "the host refused this ask: Your host does not track time spent or revenue to calculate client profitability."
+      },
+      "spec": {
+        "status": "ok",
+        "durationMs": 18506,
+        "findings": 0,
+        "repaired": true,
+        "toolsBound": [
+          "host_getDashboard",
+          "host_listClients"
+        ],
+        "queryCount": 2
+      }
+    },
+    {
+      "id": "20260806-124055-d645",
+      "host": "cadence",
+      "pack": "cadence",
+      "prompt": "one screen that answers: can I afford to hire someone",
+      "vendo": {
+        "status": "failed",
+        "durationMs": 3980,
+        "error": "the host refused this ask: Your host has no cash flow, revenue, or payroll data to determine if you can afford to hire someone."
+      },
+      "spec": {
+        "status": "ok",
+        "durationMs": 12870,
+        "findings": 0,
+        "repaired": false,
+        "toolsBound": [
+          "host_getDashboard",
+          "host_listClients",
+          "host_listDeadlines"
+        ],
+        "queryCount": 3
+      }
+    },
+    {
+      "id": "20260806-124113-bf5c",
+      "host": "cadence",
+      "pack": null,
+      "prompt": "show my clients",
+      "vendo": {
+        "status": "failed",
+        "durationMs": 8598,
+        "error": "generation failed: node \"datatable-1\" sets unknown prop \"data\" on prewired component \"DataTable\"; the renderer drops it. Allowed props: rows, columns, sortBy, limit, filterableBy, searchable, paginate, emptyState, captio"
+      },
+      "spec": {
+        "status": "ok",
+        "durationMs": 12464,
+        "findings": 0,
+        "repaired": false,
+        "toolsBound": [
+          "host_getDashboard",
+          "host_listClients"
+        ],
+        "queryCount": 2
+      }
+    },
+    {
+      "id": "20260806-124146-07fd",
+      "host": "maple",
+      "pack": null,
+      "prompt": "spending by category with budgets, and where I can cut back",
+      "vendo": {
+        "status": "ok",
+        "durationMs": 31694,
+        "findings": 0
+      },
+      "spec": {
+        "status": "ok",
+        "durationMs": 8429,
+        "findings": 0,
+        "repaired": false,
+        "toolsBound": [
+          "host_getBudgets",
+          "host_getRecurringInsights",
+          "host_getSpendingInsights"
+        ],
+        "queryCount": 3
+      }
+    }
+  ]
+}

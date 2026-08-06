@@ -1,0 +1,174 @@
+{
+  "format": "vendo/app@1",
+  "id": "app_bench_spec_be9e3f5b",
+  "name": "Outstanding Documents & Closing Items",
+  "ui": "tree",
+  "tree": {
+    "formatVersion": "vendo-genui/v2",
+    "root": "app",
+    "nodes": [
+      {
+        "id": "app",
+        "component": "Stack",
+        "source": "prewired",
+        "props": {
+          "gap": 16
+        },
+        "children": [
+          "title",
+          "grid-1",
+          "piece-3",
+          "piece-4"
+        ]
+      },
+      {
+        "id": "title",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Outstanding Documents & Closing Items",
+          "variant": "heading"
+        }
+      },
+      {
+        "id": "piece-0",
+        "component": "Stat",
+        "source": "prewired",
+        "props": {
+          "label": "Documents Outstanding",
+          "tone": "danger",
+          "value": {
+            "$path": "/q0/documentsOutstanding"
+          }
+        }
+      },
+      {
+        "id": "piece-1",
+        "component": "Stat",
+        "source": "prewired",
+        "props": {
+          "label": "Clients Missing Documents",
+          "tone": "danger",
+          "value": {
+            "$path": "/q0/clientsMissingDocs"
+          }
+        }
+      },
+      {
+        "id": "piece-2",
+        "component": "Stat",
+        "source": "prewired",
+        "props": {
+          "label": "Nearest Filing Deadline",
+          "value": {
+            "$path": "/q0/nearestDeadline"
+          }
+        }
+      },
+      {
+        "id": "piece-3",
+        "component": "DataTable",
+        "source": "prewired",
+        "props": {
+          "caption": "Clients with approaching filing deadlines and missing tax documents",
+          "columns": [
+            {
+              "key": "businessName",
+              "label": "Client"
+            },
+            {
+              "key": "filingDeadline",
+              "label": "Filing Deadline"
+            },
+            {
+              "key": "status",
+              "label": "Status"
+            },
+            {
+              "key": "progress.received",
+              "label": "Received Docs"
+            },
+            {
+              "key": "progress.total",
+              "label": "Total Required"
+            },
+            {
+              "key": "missingDocKinds",
+              "label": "Missing Document Kinds"
+            },
+            {
+              "key": "assignee.name",
+              "label": "Assigned Staff"
+            }
+          ],
+          "sortBy": "filingDeadline asc",
+          "searchable": true,
+          "filterableBy": [
+            "status"
+          ],
+          "paginate": 10,
+          "rows": {
+            "$path": "/q1"
+          }
+        }
+      },
+      {
+        "id": "grid-1",
+        "component": "Grid",
+        "source": "prewired",
+        "props": {
+          "columns": 3,
+          "gap": 12
+        },
+        "children": [
+          "piece-0",
+          "piece-1",
+          "piece-2"
+        ]
+      },
+      {
+        "id": "piece-4",
+        "component": "DataTable",
+        "source": "prewired",
+        "props": {
+          "caption": "Recent Activity & Document Status Changes",
+          "columns": [
+            {
+              "key": "at",
+              "label": "Time"
+            },
+            {
+              "key": "type",
+              "label": "Event Type"
+            },
+            {
+              "key": "summary",
+              "label": "Summary"
+            }
+          ],
+          "paginate": 5,
+          "rows": {
+            "$path": "/q2"
+          }
+        }
+      }
+    ],
+    "queries": [
+      {
+        "name": "q0",
+        "tool": "host_getDashboard"
+      },
+      {
+        "name": "q1",
+        "tool": "host_listDeadlines"
+      },
+      {
+        "name": "q2",
+        "tool": "host_listActivity",
+        "input": {
+          "limit": 10
+        }
+      }
+    ]
+  }
+}

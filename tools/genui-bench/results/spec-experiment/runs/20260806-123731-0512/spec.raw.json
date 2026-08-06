@@ -1,0 +1,113 @@
+{
+  "model": "gemini-3.6-flash",
+  "responseText": "{\n  \"title\": \"Firm Dashboard & Client Overview\",\n  \"components\": [\n    {\n      \"use\": \"Stat\",\n      \"tool\": \"host_getDashboard\",\n      \"params\": {},\n      \"select\": \"documentsOutstanding\",\n      \"props\": {\n        \"label\": \"Outstanding Documents\",\n        \"tone\": \"caution\"\n      }\n    },\n    {\n      \"use\": \"Stat\",\n      \"tool\": \"host_getDashboard\",\n      \"params\": {},\n      \"select\": \"clientsMissingDocs\",\n      \"props\": {\n        \"label\": \"Clients Missing Documents\"\n      }\n    },\n    {\n      \"use\": \"Stat\",\n      \"tool\": \"host_getDashboard\",\n      \"params\": {},\n      \"select\": \"clientsTotal\",\n      \"props\": {\n        \"label\": \"Total Clients\"\n      }\n    },\n    {\n      \"use\": \"DataTable\",\n      \"tool\": \"host_listClients\",\n      \"params\": {},\n      \"props\": {\n        \"caption\": \"Financial account balance data is not available in this portal. Displaying active tax clients and document progress instead.\",\n        \"searchable\": true,\n        \"filterableBy\": [\n          \"status\",\n          \"entityType\"\n        ],\n        \"columns\": [\n          {\n            \"key\": \"businessName\",\n            \"label\": \"Client Business\"\n          },\n          {\n            \"key\": \"contactName\",\n            \"label\": \"Contact Name\"\n          },\n          {\n            \"key\": \"entityType\",\n            \"label\": \"Entity Type\"\n          },\n          {\n            \"key\": \"status\",\n            \"label\": \"Status\"\n          },\n          {\n            \"key\": \"filingDeadline\",\n            \"label\": \"Filing Deadline\",\n            \"format\": \"date\"\n          },\n          {\n            \"key\": \"assignee.name\",\n            \"label\": \"Assigned Staff\"\n          }\n        ],\n        \"emptyState\": \"No clients found.\"\n      }\n    }\n  ]\n}",
+  "repairResponseText": "{\n  \"title\": \"Firm Overview & Client List\",\n  \"components\": [\n    {\n      \"use\": \"Stat\",\n      \"tool\": \"host_getDashboard\",\n      \"params\": {},\n      \"select\": \"documentsOutstanding\",\n      \"props\": {\n        \"label\": \"Outstanding Documents\",\n        \"tone\": \"danger\"\n      }\n    },\n    {\n      \"use\": \"Stat\",\n      \"tool\": \"host_getDashboard\",\n      \"params\": {},\n      \"select\": \"clientsMissingDocs\",\n      \"props\": {\n        \"label\": \"Clients Missing Documents\"\n      }\n    },\n    {\n      \"use\": \"Stat\",\n      \"tool\": \"host_getDashboard\",\n      \"params\": {},\n      \"select\": \"clientsTotal\",\n      \"props\": {\n        \"label\": \"Total Clients\"\n      }\n    },\n    {\n      \"use\": \"DataTable\",\n      \"tool\": \"host_listClients\",\n      \"params\": {},\n      \"props\": {\n        \"caption\": \"Financial account balances are unavailable. Displaying active tax clients and filing deadline progress.\",\n        \"searchable\": true,\n        \"filterableBy\": [\n          \"status\",\n          \"entityType\"\n        ],\n        \"columns\": [\n          {\n            \"key\": \"businessName\",\n            \"label\": \"Client Business\"\n          },\n          {\n            \"key\": \"contactName\",\n            \"label\": \"Contact Name\"\n          },\n          {\n            \"key\": \"entityType\",\n            \"label\": \"Entity Type\"\n          },\n          {\n            \"key\": \"status\",\n            \"label\": \"Status\"\n          },\n          {\n            \"key\": \"filingDeadline\",\n            \"label\": \"Filing Deadline\",\n            \"format\": \"date\"\n          },\n          {\n            \"key\": \"assignee.name\",\n            \"label\": \"Assigned Staff\"\n          }\n        ],\n        \"emptyState\": \"No clients found.\"\n      }\n    }\n  ]\n}",
+  "repaired": true,
+  "spec": {
+    "title": "Firm Overview & Client List",
+    "components": [
+      {
+        "use": "Stat",
+        "tool": "host_getDashboard",
+        "params": {},
+        "select": "documentsOutstanding",
+        "props": {
+          "label": "Outstanding Documents",
+          "tone": "danger"
+        }
+      },
+      {
+        "use": "Stat",
+        "tool": "host_getDashboard",
+        "params": {},
+        "select": "clientsMissingDocs",
+        "props": {
+          "label": "Clients Missing Documents"
+        }
+      },
+      {
+        "use": "Stat",
+        "tool": "host_getDashboard",
+        "params": {},
+        "select": "clientsTotal",
+        "props": {
+          "label": "Total Clients"
+        }
+      },
+      {
+        "use": "DataTable",
+        "tool": "host_listClients",
+        "params": {},
+        "props": {
+          "caption": "Financial account balances are unavailable. Displaying active tax clients and filing deadline progress.",
+          "searchable": true,
+          "filterableBy": [
+            "status",
+            "entityType"
+          ],
+          "columns": [
+            {
+              "key": "businessName",
+              "label": "Client Business"
+            },
+            {
+              "key": "contactName",
+              "label": "Contact Name"
+            },
+            {
+              "key": "entityType",
+              "label": "Entity Type"
+            },
+            {
+              "key": "status",
+              "label": "Status"
+            },
+            {
+              "key": "filingDeadline",
+              "label": "Filing Deadline",
+              "format": "date"
+            },
+            {
+              "key": "assignee.name",
+              "label": "Assigned Staff"
+            }
+          ],
+          "emptyState": "No clients found."
+        }
+      }
+    ]
+  },
+  "pieces": [
+    {
+      "index": 0,
+      "use": "Stat",
+      "tool": "host_getDashboard",
+      "errors": []
+    },
+    {
+      "index": 1,
+      "use": "Stat",
+      "tool": "host_getDashboard",
+      "errors": []
+    },
+    {
+      "index": 2,
+      "use": "Stat",
+      "tool": "host_getDashboard",
+      "errors": []
+    },
+    {
+      "index": 3,
+      "use": "DataTable",
+      "tool": "host_listClients",
+      "errors": []
+    }
+  ],
+  "specErrors": [],
+  "toolsBound": [
+    "host_getDashboard",
+    "host_listClients"
+  ],
+  "queryCount": 2,
+  "nodeCount": 7
+}

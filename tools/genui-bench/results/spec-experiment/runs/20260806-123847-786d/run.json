@@ -1,0 +1,31 @@
+{
+  "id": "20260806-123847-786d",
+  "createdAt": "2026-08-06T07:08:47.904Z",
+  "gitSha": "875c73097c250a30a8803d26c19bbe99a823a31d",
+  "gitDirty": null,
+  "request": {
+    "prompt": "let me chase every overdue invoice in one go",
+    "host": "cadence",
+    "lanes": [
+      "vendo",
+      "spec"
+    ],
+    "packRef": {
+      "pack": "cadence",
+      "index": 2
+    }
+  },
+  "lanes": {
+    "vendo": {
+      "status": "failed",
+      "startedAt": 1786000099777,
+      "durationMs": 3736,
+      "error": "the host refused this ask: Your host manages tax document collection and filing deadlines, but has no system or tools for tracking or chasing invoices."
+    },
+    "spec": {
+      "status": "ok",
+      "startedAt": 1786000099787,
+      "durationMs": 28102
+    }
+  }
+}

@@ -1,0 +1,4 @@
+# The ROOT .gitignore ignores *.png repo-wide, which silently drops committed
+# experiment evidence at `git add`. These PNGs are the experiment's evidence
+# and belong in the tree.
+!*.png
