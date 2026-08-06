@@ -34,8 +34,10 @@ import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { join } from "node:path";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import {
   conductCreate,
+  conductEdit,
   type ConductedResult,
   type ConductorOptions,
   type GenerationDependencies,
@@ -51,13 +53,22 @@ import {
 } from "@vendoai/core";
 import {
   MAX_OUTPUT_TOKENS,
-  PRODUCTION_MODEL,
+  defaultModelId,
   findModel,
+  providerKeyFor,
   validateModelChoice,
   type BenchModel,
   type RunModel,
 } from "../runner/models";
-import type { HostFixture, LaneAdapter, LaneResult, LaneRunOptions } from "../runner/types";
+import type {
+  HostFixture,
+  LaneAdapter,
+  LaneResult,
+  LaneRunOptions,
+  LaneSession,
+  LaneUsage,
+  SessionSnapshot,
+} from "../runner/types";
 
 export interface VendoAdapterOverrides {
   /** Test seam: a conductor-shaped fake (default: the real conductCreate). */
@@ -66,14 +77,17 @@ export interface VendoAdapterOverrides {
     deps: GenerationDependencies,
     options?: ConductorOptions,
   ) => Promise<ConductedResult>;
+  /** Test seam for edit turns (default: the real conductEdit). */
+  conductEditTurn?: (
+    input: { app: AppDocument; instruction: string; session?: ConductedResult["session"] },
+    deps: GenerationDependencies,
+    options?: ConductorOptions,
+  ) => Promise<ConductedResult>;
   /** Test seam: an injected model instance (default: Anthropic from root .env). */
   model?: GenerationDependencies["model"];
   /** Test seam: build a provider model for an id (default: Anthropic from root .env). */
   createModel?: (id: string) => GenerationDependencies["model"];
 }
-
-/** Keep in sync with runner/models.ts PRODUCTION_MODEL. */
-const DEFAULT_MODEL_ID = PRODUCTION_MODEL.id;
 
 /** Source-only root .env load (cli.ts pattern, duplicated because cli.ts runs
  *  its main on import): fills unset process.env keys, never prints values. */
@@ -103,9 +117,20 @@ function requireFromApps(specifier: string): unknown {
   return createRequire(appsEntry)(specifier);
 }
 
-/** The real model: @ai-sdk/anthropic for the given id. */
-function resolveAnthropicModel(id: string): GenerationDependencies["model"] {
+/** The real model for the given id, provider routed by prefix (see
+ *  runner/models.ts defaultModelId): `gemini*` rides @ai-sdk/google (this
+ *  app's own dependency — the Gemini fallback is bench plumbing, not an
+ *  engine seam), everything else the Anthropic provider from @vendoai/apps's
+ *  module space. */
+function resolveProviderModel(id: string): GenerationDependencies["model"] {
   loadRootEnv();
+  if (providerKeyFor(id) === "GEMINI_API_KEY") {
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (apiKey === undefined || apiKey === "") {
+      throw new Error("GEMINI_API_KEY missing — set it in the repo-root .env");
+    }
+    return createGoogleGenerativeAI({ apiKey })(id) as unknown as GenerationDependencies["model"];
+  }
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (apiKey === undefined || apiKey === "") {
     throw new Error("ANTHROPIC_API_KEY missing — set it in the repo-root .env");
@@ -177,11 +202,14 @@ function modelFor(
   choice: RunModel | undefined,
   overrides: VendoAdapterOverrides,
 ): GenerationDependencies["model"] {
-  const create = overrides.createModel ?? resolveAnthropicModel;
+  const create = overrides.createModel ?? resolveProviderModel;
   if (!choice) {
-    // No per-run choice: exactly what ships (GENUI_BENCH_MODEL stays the
-    // headless override), and no middleware in the path.
-    return overrides.model ?? create(process.env.GENUI_BENCH_MODEL ?? DEFAULT_MODEL_ID);
+    // No per-run choice: the shared default resolver (GENUI_BENCH_MODEL stays
+    // the headless override; a keyless-Anthropic machine falls back to the
+    // root .env's Gemini model), and no middleware in the path. Root .env is
+    // loaded first so the resolver sees GEMINI_MODEL outside the CLI path.
+    loadRootEnv();
+    return overrides.model ?? create(defaultModelId());
   }
   const invalid = validateModelChoice(choice);
   if (invalid) throw new Error(invalid);
@@ -216,50 +244,177 @@ export function failureReason(error: unknown): string {
   return issues.length === 0 ? message : `${message}: ${issues.join(" | ")}`;
 }
 
+/** One usage slot across SDK dialects: a plain number (generate results),
+ *  or the v3 stream-finish shape `{ total, ... }`. */
+function tokenCount(value: unknown): number {
+  if (typeof value === "number") return value;
+  const total = (value as { total?: unknown } | undefined)?.total;
+  return typeof total === "number" ? total : 0;
+}
+
+/** Provider-call usage read defensively across SDK dialects. The vendo lane
+ *  sets no explicit cache, but Gemini may implicitly cache a repeated prefix
+ *  across the engine's many internal calls, so cache-read tokens are recorded
+ *  too — the same honest cached-vs-uncached split the openui lane reports. */
+function addUsage(sink: LaneUsage, usage: unknown): void {
+  const u = usage as {
+    inputTokens?: unknown; outputTokens?: unknown; promptTokens?: unknown; completionTokens?: unknown;
+    cachedInputTokens?: unknown;
+  } | undefined;
+  sink.promptTokens += tokenCount(u?.inputTokens ?? u?.promptTokens);
+  sink.outputTokens += tokenCount(u?.outputTokens ?? u?.completionTokens);
+  sink.cachedInputTokens = (sink.cachedInputTokens ?? 0) + tokenCount(u?.cachedInputTokens);
+}
+
+/**
+ * Count every provider call's tokens into `sink`, across all engine stages
+ * (brain, workers, reviewer, repair). The engine streams, so usage rides the
+ * stream's finish part; wrapGenerate covers the non-streaming calls. Pure
+ * bench accounting — the call itself is forwarded untouched.
+ */
+function withUsageCounting(
+  base: GenerationDependencies["model"],
+  sink: LaneUsage,
+): GenerationDependencies["model"] {
+  const { wrapLanguageModel } = requireFromApps("ai") as {
+    wrapLanguageModel: (options: { model: unknown; middleware: unknown }) => GenerationDependencies["model"];
+  };
+  return wrapLanguageModel({
+    model: base,
+    middleware: {
+      specificationVersion: "v3",
+      wrapGenerate: async ({ doGenerate }: { doGenerate: () => Promise<{ usage?: unknown }> }) => {
+        const result = await doGenerate();
+        addUsage(sink, result.usage);
+        return result;
+      },
+      wrapStream: async ({ doStream }: { doStream: () => Promise<{ stream: ReadableStream<unknown> }> }) => {
+        const result = await doStream();
+        const stream = result.stream.pipeThrough(
+          new TransformStream<unknown, unknown>({
+            transform(part, controller) {
+              const chunk = part as { type?: string; usage?: unknown };
+              if (chunk?.type === "finish") addUsage(sink, chunk.usage);
+              controller.enqueue(part);
+            },
+          }),
+        );
+        return { ...result, stream };
+      },
+    },
+  });
+}
+
+/** The conversation as the conductor wants it back (BrainTurn[], derived
+ *  structurally — the type is not exported from @vendoai/apps). */
+type SessionTurns = ConductedResult["session"];
+
+/** Stable identity + component name per tree node, for preservation scoring
+ *  (the engine's own claim: an edit keeps the ids of nodes it didn't touch). */
+function documentSnapshot(document: AppDocument | undefined): SessionSnapshot {
+  const nodes = (document?.tree as { nodes?: Array<{ id?: string; component?: string }> } | undefined)?.nodes;
+  if (!Array.isArray(nodes)) return { elements: [], components: {} };
+  const components: Record<string, string> = {};
+  for (const node of nodes) {
+    if (typeof node.id === "string" && typeof node.component === "string") components[node.id] = node.component;
+  }
+  return { elements: Object.keys(components).sort(), components };
+}
+
+/** Map one ConductedResult to a LaneResult (create and edit turns share it). */
+function laneResultOf(
+  conducted: ConductedResult,
+  startedAt: number,
+  usage: LaneUsage,
+  previousDocument: AppDocument | undefined,
+): LaneResult {
+  const durationMs = Date.now() - startedAt;
+  // A refusal is an ANSWER, not a crash: the host cannot do the ask, and the
+  // reasons are the sentences a person would read. On an edit turn the
+  // previous document rides along PRESERVED — the partial-refusal contract.
+  if (conducted.kind === "cannot") {
+    return {
+      status: "refused",
+      startedAt,
+      durationMs,
+      usage,
+      reasons: conducted.reasons,
+      ...(previousDocument === undefined ? {} : { document: previousDocument }),
+    };
+  }
+  if (conducted.kind === "failure") {
+    return {
+      status: "failed",
+      startedAt,
+      durationMs,
+      usage,
+      error: `generation failed: ${conducted.issues.join(" | ")}`,
+    };
+  }
+  const document: AppDocument = { ...conducted.document, id: `app_bench_${startedAt.toString(36)}` };
+  const wire = renderWire(document);
+  return {
+    status: "ok",
+    startedAt,
+    durationMs,
+    usage,
+    document,
+    ...(wire === undefined ? {} : { wire }),
+    findings: conducted.findings,
+  };
+}
+
 export function createVendoAdapter(overrides: VendoAdapterOverrides = {}): LaneAdapter {
+  const depsFor = (host: HostFixture, model: GenerationDependencies["model"]): GenerationDependencies => ({
+    model,
+    catalog: host.catalog as NormalizedCatalog,
+    tools: host.tools as HostToolInfo[],
+    toolShapes: host.shapes as Readonly<Record<string, ShapeType>>,
+    theme: host.theme,
+    // production defaults — deliberately no `pipeline` key
+  });
   return {
     name: "vendo",
     async generate(prompt: string, host: HostFixture, options: LaneRunOptions = {}): Promise<LaneResult> {
       const startedAt = Date.now();
-      const failed = (error: string): LaneResult => ({
-        status: "failed",
-        startedAt,
-        durationMs: Date.now() - startedAt,
-        error,
-      });
+      const usage: LaneUsage = { promptTokens: 0, outputTokens: 0, cachedInputTokens: 0 };
       try {
         const conduct = overrides.conduct ?? conductCreate;
-        const model = modelFor(options.model, overrides);
-        const deps: GenerationDependencies = {
-          model,
-          catalog: host.catalog as NormalizedCatalog,
-          tools: host.tools as HostToolInfo[],
-          toolShapes: host.shapes as Readonly<Record<string, ShapeType>>,
-          theme: host.theme,
-          // production defaults — deliberately no `pipeline` key
-        };
-        const conducted = await conduct({ prompt }, deps);
-        // A refusal is an ANSWER, not a crash: the host cannot do the ask, and
-        // the reasons are the sentences a person would read.
-        if (conducted.kind === "cannot") {
-          return failed(`the host refused this ask: ${conducted.reasons.join(" | ")}`);
-        }
-        if (conducted.kind === "failure") {
-          return failed(`generation failed: ${conducted.issues.join(" | ")}`);
-        }
-        const document: AppDocument = { ...conducted.document, id: `app_bench_${startedAt.toString(36)}` };
-        const wire = renderWire(document);
-        return {
-          status: "ok",
-          startedAt,
-          durationMs: Date.now() - startedAt,
-          document,
-          ...(wire === undefined ? {} : { wire }),
-          findings: conducted.findings,
-        };
+        const model = withUsageCounting(modelFor(options.model, overrides), usage);
+        const conducted = await conduct({ prompt }, depsFor(host, model));
+        return laneResultOf(conducted, startedAt, usage, undefined);
       } catch (error) {
-        return failed(failureReason(error));
+        return { status: "failed", startedAt, durationMs: Date.now() - startedAt, usage, error: failureReason(error) };
       }
+    },
+    createSession(host: HostFixture, options: LaneRunOptions = {}): LaneSession {
+      // One conversation: the document as it stands plus the brain's session
+      // transcript, exactly what conductEdit wants back ("no, the other
+      // chart" resolves because the conversation carries what was said).
+      const state: { document?: AppDocument; session: SessionTurns } = { session: [] };
+      return {
+        async turn(ask: string): Promise<LaneResult> {
+          const startedAt = Date.now();
+          const usage: LaneUsage = { promptTokens: 0, outputTokens: 0, cachedInputTokens: 0 };
+          try {
+            const model = withUsageCounting(modelFor(options.model, overrides), usage);
+            const deps = depsFor(host, model);
+            const conducted = state.document === undefined
+              ? await (overrides.conduct ?? conductCreate)({ prompt: ask }, deps)
+              : await (overrides.conductEditTurn ?? conductEdit)(
+                { app: state.document, instruction: ask, session: state.session }, deps);
+            const result = laneResultOf(conducted, startedAt, usage, state.document);
+            state.session = conducted.session;
+            if (result.status === "ok" && result.document !== undefined) state.document = result.document;
+            return result;
+          } catch (error) {
+            return { status: "failed", startedAt, durationMs: Date.now() - startedAt, usage, error: failureReason(error) };
+          }
+        },
+        snapshot(): SessionSnapshot {
+          return documentSnapshot(state.document);
+        },
+      };
     },
   };
 }

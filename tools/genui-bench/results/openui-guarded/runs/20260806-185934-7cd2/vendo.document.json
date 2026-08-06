@@ -1,0 +1,109 @@
+{
+  "format": "vendo/app@1",
+  "name": "Recent Transactions",
+  "tree": {
+    "formatVersion": "vendo-genui/v2",
+    "root": "root",
+    "nodes": [
+      {
+        "id": "root",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "group-0"
+        ]
+      },
+      {
+        "id": "group-0",
+        "component": "Surface",
+        "source": "prewired",
+        "children": [
+          "group-0-title",
+          "group-0-body"
+        ]
+      },
+      {
+        "id": "group-0-title",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Recent Activity",
+          "variant": "heading"
+        }
+      },
+      {
+        "id": "group-0-body",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "maplespendingdonut-1",
+          "group-0-body-datatable-1"
+        ]
+      },
+      {
+        "id": "maplespendingdonut-1",
+        "component": "MapleSpendingDonut",
+        "source": "host",
+        "props": {
+          "query": "spending"
+        }
+      },
+      {
+        "id": "group-0-body-datatable-1",
+        "component": "DataTable",
+        "source": "prewired",
+        "props": {
+          "rows": {
+            "$path": "/transactions/data"
+          },
+          "columns": [
+            {
+              "key": "timestamp",
+              "label": "Date",
+              "format": "date"
+            },
+            {
+              "key": "merchant",
+              "label": "Merchant"
+            },
+            {
+              "key": "category",
+              "label": "Category"
+            },
+            {
+              "key": "status",
+              "label": "Status"
+            },
+            {
+              "key": "amount",
+              "label": "Amount",
+              "format": "money",
+              "align": "end"
+            }
+          ],
+          "sortBy": "timestamp desc",
+          "filterableBy": [
+            "category",
+            "status"
+          ],
+          "searchable": true,
+          "emptyState": "No recent transactions"
+        }
+      }
+    ],
+    "queries": [
+      {
+        "name": "transactions",
+        "tool": "host_listTransactions",
+        "input": {
+          "limit": 20
+        }
+      },
+      {
+        "name": "spending",
+        "tool": "host_getSpendingInsights"
+      }
+    ]
+  },
+  "id": "app_bench_mshjycs0"
+}

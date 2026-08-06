@@ -1,0 +1,47 @@
+{
+  "id": "20260806-185801-65bb",
+  "createdAt": "2026-08-06T13:28:01.171Z",
+  "gitSha": "0176ce2ea4fd97e5e126e1956caf221c23a99c6e",
+  "gitDirty": null,
+  "request": {
+    "prompt": "one screen that answers: can I afford to hire someone",
+    "host": "cadence",
+    "lanes": [
+      "vendo",
+      "openui"
+    ],
+    "packRef": {
+      "pack": "cadence",
+      "index": 7
+    }
+  },
+  "lanes": {
+    "vendo": {
+      "status": "refused",
+      "startedAt": 1786022876840,
+      "durationMs": 3126,
+      "usage": {
+        "promptTokens": 2015,
+        "outputTokens": 484,
+        "cachedInputTokens": 0
+      },
+      "reasons": [
+        "Your host has no financial, revenue, or payroll data to determine if you can afford to hire someone."
+      ]
+    },
+    "openui": {
+      "status": "refused",
+      "startedAt": 1786022876849,
+      "durationMs": 4307,
+      "reasons": [
+        "Your host has no financial or payroll data, so affordability to hire someone cannot be calculated."
+      ],
+      "usage": {
+        "promptTokens": 7605,
+        "outputTokens": 613,
+        "cachedInputTokens": 7586
+      },
+      "repairs": 0
+    }
+  }
+}

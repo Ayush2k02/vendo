@@ -6,7 +6,7 @@
  * throws, and both land as status:"failed" with their sentences on the error;
  * a genuine crash resolves (never rejects) to status:"failed" too.
  */
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { VendoError, VENDO_APP_FORMAT, VENDO_TREE_FORMAT } from "@vendoai/core";
 import type { Finding, GeneratedAppDocument, GenerationDependencies } from "@vendoai/apps";
 import {
@@ -88,9 +88,9 @@ describe("vendo lane adapter", () => {
   });
 
   /** An honest refusal is a first-class RESULT, not a crash: the conductor
-   *  returns it, so the lane must say plainly that the host refused and carry
-   *  the reasons a person would read. */
-  it('a refusal ("cannot") lands as failed with the host\'s reasons', async () => {
+   *  returns it, and the three-valued accounting (answered/refused/failed)
+   *  carries the reasons a person would read as their own status. */
+  it('a refusal ("cannot") lands as status refused with the host\'s reasons', async () => {
     const reasons = ["Maple cannot move money to an account it does not hold."];
     const adapter = createVendoAdapter({
       model: fakeModel,
@@ -98,9 +98,44 @@ describe("vendo lane adapter", () => {
     });
 
     const result = await adapter.generate("wire $5k to my cousin", fixture);
-    if (result.status !== "failed") throw new Error(`expected failed, got ${JSON.stringify(result)}`);
-    expect(result.error).toContain("refused");
-    expect(result.error).toContain(reasons[0]!);
+    if (result.status !== "refused") throw new Error(`expected refused, got ${JSON.stringify(result)}`);
+    expect(result.reasons).toEqual(reasons);
+  });
+
+  /** Multi-turn: an edit-turn refusal PRESERVES the previous document (the
+   *  partial-refusal contract) and the session snapshot proves it. */
+  it("a session edit-turn refusal keeps the previous turn's document intact", async () => {
+    const document = {
+      format: "vendo/app@1" as const,
+      name: "Profile",
+      ui: "tree" as const,
+      tree: {
+        formatVersion: "vendo/tree@1",
+        nodes: [{ id: "n1", component: "Stat", props: { label: "Balance", value: 12 } }],
+        root: ["n1"],
+      },
+    };
+    const adapter = createVendoAdapter({
+      model: fakeModel,
+      conduct: async () => ({ kind: "app", document, queryResults: {}, findings: [], session: [] }),
+      conductEditTurn: async () => ({
+        kind: "cannot",
+        reasons: ["Maple has no credit score data."],
+        session: [],
+      }),
+    });
+    const session = adapter.createSession!(fixture);
+
+    const first = await session.turn("show my balance");
+    expect(first.status).toBe("ok");
+    const before = session.snapshot();
+    expect(before.elements).toEqual(["n1"]);
+    expect(before.components.n1).toBe("Stat");
+
+    const second = await session.turn("add my credit score");
+    if (second.status !== "refused") throw new Error(`expected refused, got ${JSON.stringify(second)}`);
+    expect(second.document).toBeDefined();
+    expect(session.snapshot()).toEqual(before);
   });
 
   /** The old validation throw is now a returned failure — the issues still
@@ -166,10 +201,26 @@ describe("vendo lane model controls", () => {
   }
 
   it("no model on the request → the engine's production default, untouched", async () => {
+    // Pin the resolver's env: the developer machine's root .env (a Gemini
+    // fallback key) must not leak into what this test asserts.
+    vi.stubEnv("GEMINI_API_KEY", "");
+    vi.stubEnv("GEMINI_MODEL", "");
     const { seen, adapter } = adapterCapturingId();
     const result = await adapter.generate("hi", fixture);
     expect(result.status).toBe("ok");
     expect(seen).toEqual([PRODUCTION_MODEL.id]);
+    vi.unstubAllEnvs();
+  });
+
+  it("keyless-Anthropic machine + Gemini env → the Gemini fallback id, same resolver", async () => {
+    vi.stubEnv("ANTHROPIC_API_KEY", "");
+    vi.stubEnv("GEMINI_API_KEY", "test-key");
+    vi.stubEnv("GEMINI_MODEL", "gemini-2.5-flash");
+    const { seen, adapter } = adapterCapturingId();
+    const result = await adapter.generate("hi", fixture);
+    expect(result.status).toBe("ok");
+    expect(seen).toEqual(["gemini-2.5-flash"]);
+    vi.unstubAllEnvs();
   });
 
   it("threads the chosen model id into the provider call", async () => {

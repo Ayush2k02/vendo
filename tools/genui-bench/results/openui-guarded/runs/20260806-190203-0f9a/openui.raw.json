@@ -1,0 +1,15 @@
+{
+  "model": "gemini-3.6-flash",
+  "responseText": "summaryGrid = Grid([nearestCard, kpiCard], 2, 16)",
+  "program": "root = Stack([header, summaryGrid, mainTabs], 16)\nheader = Text(\"Filing Deadline Board (Next 30 Days)\", \"heading\")\ndash = Query(\"host_getDashboard\", {}, {\"clientsMissingDocs\":0,\"documentsOutstanding\":0,\"documentsReceived\":0,\"documentsTotal\":0,\"clientsTotal\":0,\"nearestDeadline\":\"\",\"nearestDeadlineClient\":{\"id\":\"\",\"businessName\":\"\",\"filingDeadline\":\"\"}})\ndeadlines = Query(\"host_listDeadlines\", {}, [])\nsummaryGrid = Grid([nearestCard, kpiCard], 2, 16)\nnearestCard = Surface([nearestStat, nearestClientText], \"Nearest Deadline\")\nnearestStat = Stat(\"Filing Due\", dash.nearestDeadline, \"date\", \"Imminent filing\", \"danger\")\nnearestClientText = Text(\"Client: \" + dash.nearestDeadlineClient.businessName, \"label\")\nkpiCard = Surface([kpiRow], \"Filing Readiness Overview\")\nkpiRow = Row([docsStat, totalStat], 12)\ndocsStat = Stat(\"Docs Outstanding\", dash.documentsOutstanding, \"number\")\ntotalStat = Stat(\"Total Active Clients\", dash.clientsTotal, \"number\")\nmainTabs = Tabs([allTab, atRiskTab, chartTab])\nallTab = {label: \"All Upcoming Deadlines\", content: deadlinesSurface}\natRiskTab = {label: \"At Risk (Missing Docs)\", content: atRiskSurface}\ndeadlinesSurface = Surface([deadlinesTable], \"Filing Schedule\")\ndeadlinesTable = DataTable(deadlines, [colBusiness, colDeadline, colStatus, colMissingDocs], \"filingDeadline asc\", null, null, true, 10, \"No deadlines found\")\ncolBusiness = {key: \"businessName\", label: \"Business Name\"}\ncolDeadline = {key: \"filingDeadline\", label: \"Filing Deadline\", format: \"date\"}\ncolStatus = {key: \"status\", label: \"Status\", format: \"label\"}\natRiskSurface = Surface([atRiskCards], \"Action Required: Outstanding Documents\")\natRiskDeadlines = @Filter(deadlines, \"status\", \"==\", \"missing_docs\")\natRiskCards = CardList(atRiskDeadlines, \"businessName\", \"status\", [cardEntity, cardContact, cardDeadline], 2, \"No clients currently missing documents\")\ncardEntity = {key: \"entityType\", label: \"Entity\", format: \"label\"}\ncardContact = {key: \"contactName\", label: \"Contact\"}\ncardDeadline = {key: \"filingDeadline\", label: \"Deadline\", format: \"date\"}\ncolMissingDocs = {key: \"missingDocKinds\", label: \"Missing Documents\"}\nchartTab = {label: \"Status Breakdown\", content: chartSurface}\nchartSurface = Surface([statusChart], \"Clients by Status\")\nstatusChart = DonutChart(deadlines, \"status\", \"id\")",
+  "toolsReferenced": [
+    "host_getDashboard",
+    "host_listDeadlines"
+  ],
+  "parseMeta": {
+    "statementCount": 30,
+    "unresolved": [],
+    "orphaned": []
+  },
+  "repairs": 0
+}

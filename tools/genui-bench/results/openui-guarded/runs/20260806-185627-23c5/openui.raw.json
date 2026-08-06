@@ -1,0 +1,15 @@
+{
+  "model": "gemini-3.6-flash",
+  "responseText": "```openui\nroot = Stack([header, contentGrid], 16)\nheader = Text(\"Recent Transactions\", \"heading\")\ntxns = Query(\"host_listTransactions\", {limit: 50}, {data: [], total: 0})\nspending = Query(\"host_getSpendingInsights\", {}, [])\ncontentGrid = Grid([summarySurface, tableSurface], 2, 16)\nsummarySurface = Surface([summaryStack], \"Overview\")\nsummaryStack = Stack([totalStat, spendStat, chartTitle, chart], 12)\ntotalStat = Stat(\"Total transactions\", txns.total, \"number\", null, \"accent\")\nspendStat = Stat(\"Recent total spend\", @Sum(txns.data.amount), \"money\")\nchartTitle = Text(\"Spending by Category\", \"caption\")\nchart = DonutChart(spending, \"category\", \"amount\", \"money\", true, 180)\ntableSurface = Surface([table], \"Transactions\")\ntable = DataTable(txns.data, cols, \"timestamp desc\", 50, [\"category\", \"status\"], true, 10, \"No transactions match your search\")\ncols = [{key: \"merchant\", label: \"Merchant\"}, {key: \"category\", label: \"Category\", format: \"label\"}, {key: \"amount\", label: \"Amount\", format: \"money\", align: \"end\"}, {key: \"timestamp\", label: \"Date\", format: \"datetime\"}, {key: \"status\", label: \"Status\", format: \"label\"}]\n```",
+  "program": "root = Stack([header, contentGrid], 16)\nheader = Text(\"Recent Transactions\", \"heading\")\ntxns = Query(\"host_listTransactions\", {limit: 50}, {data: [], total: 0})\nspending = Query(\"host_getSpendingInsights\", {}, [])\ncontentGrid = Grid([summarySurface, tableSurface], 2, 16)\nsummarySurface = Surface([summaryStack], \"Overview\")\nsummaryStack = Stack([totalStat, spendStat, chartTitle, chart], 12)\ntotalStat = Stat(\"Total transactions\", txns.total, \"number\", null, \"accent\")\nspendStat = Stat(\"Recent total spend\", @Sum(txns.data.amount), \"money\")\nchartTitle = Text(\"Spending by Category\", \"caption\")\nchart = DonutChart(spending, \"category\", \"amount\", \"money\", true, 180)\ntableSurface = Surface([table], \"Transactions\")\ntable = DataTable(txns.data, cols, \"timestamp desc\", 50, [\"category\", \"status\"], true, 10, \"No transactions match your search\")\ncols = [{key: \"merchant\", label: \"Merchant\"}, {key: \"category\", label: \"Category\", format: \"label\"}, {key: \"amount\", label: \"Amount\", format: \"money\", align: \"end\"}, {key: \"timestamp\", label: \"Date\", format: \"datetime\"}, {key: \"status\", label: \"Status\", format: \"label\"}]",
+  "toolsReferenced": [
+    "host_getSpendingInsights",
+    "host_listTransactions"
+  ],
+  "parseMeta": {
+    "statementCount": 14,
+    "unresolved": [],
+    "orphaned": []
+  },
+  "repairs": 0
+}

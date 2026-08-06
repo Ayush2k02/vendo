@@ -1,0 +1,38 @@
+{
+  "id": "20260806-185817-e9b0",
+  "createdAt": "2026-08-06T13:28:17.728Z",
+  "gitSha": "0176ce2ea4fd97e5e126e1956caf221c23a99c6e",
+  "gitDirty": null,
+  "request": {
+    "prompt": "show my clients",
+    "host": "cadence",
+    "lanes": [
+      "vendo",
+      "openui"
+    ]
+  },
+  "lanes": {
+    "vendo": {
+      "status": "failed",
+      "startedAt": 1786022883041,
+      "durationMs": 13010,
+      "usage": {
+        "promptTokens": 2007,
+        "outputTokens": 2236,
+        "cachedInputTokens": 0
+      },
+      "error": "generation failed: node \"datatable-1\" sets unknown prop \"data\" on prewired component \"DataTable\"; the renderer drops it. Allowed props: rows, columns, sortBy, limit, filterableBy, searchable, paginate, emptyState, caption"
+    },
+    "openui": {
+      "status": "ok",
+      "startedAt": 1786022883090,
+      "durationMs": 14612,
+      "usage": {
+        "promptTokens": 7597,
+        "outputTokens": 2477,
+        "cachedInputTokens": 7586
+      },
+      "repairs": 0
+    }
+  }
+}

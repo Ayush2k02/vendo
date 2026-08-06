@@ -1,0 +1,15 @@
+<App name="Monthly Close Status">
+  <Query id="dashboard" tool="host_getDashboard" input={{}}/>
+  <Query id="deadlines" tool="host_listDeadlines" input={{}}/>
+  <Tabs id="tabs" tabs={[{ value: "Overview", label: "Overview" }]} value="Overview">
+    <Stack id="tab-0">
+      <Surface id="group-0">
+        <Text id="group-0-title" text="Missing Documents & Upcoming Deadlines" variant="heading"/>
+        <Grid id="group-0-body" columns={2}>
+          <CadenceMissingDocsHero id="group-0-body-cadencemissingdocshero-1" missingCount={dashboard.clientsMissingDocs} clientCount={dashboard.clientsTotal} badgeLabel="Outstanding Documents"/>
+          <DataTable id="group-0-body-datatable-1" rows={deadlines} columns={[{ key: "businessName", label: "Client" }, { key: "filingDeadline", label: "Filing Deadline", format: "date" }, { key: "status", label: "Status" }, { key: "missingDocKinds", label: "Missing Document Types" }]} searchable emptyState="No upcoming deadlines found"/>
+        </Grid>
+      </Surface>
+    </Stack>
+  </Tabs>
+</App>

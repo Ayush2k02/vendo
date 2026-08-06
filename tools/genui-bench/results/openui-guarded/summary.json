@@ -1,0 +1,1145 @@
+{
+  "model": "gemini-3.6-flash",
+  "totals": {
+    "records": 29,
+    "singleShot": 16,
+    "conversationTurns": 13
+  },
+  "singleShot": {
+    "vendo": {
+      "runs": 16,
+      "answered": 5,
+      "refused": 10,
+      "failed": 1,
+      "repairs": 0,
+      "promptTokens": 56226,
+      "cachedInputTokens": 0,
+      "uncachedInputTokens": 56226,
+      "outputTokens": 33229,
+      "medianDurationMs": 4019,
+      "editFindings": 0
+    },
+    "openui": {
+      "runs": 16,
+      "answered": 5,
+      "refused": 11,
+      "failed": 0,
+      "repairs": 0,
+      "promptTokens": 122468,
+      "cachedInputTokens": 122208,
+      "uncachedInputTokens": 260,
+      "outputTokens": 22420,
+      "medianDurationMs": 5727,
+      "editFindings": 0
+    }
+  },
+  "conversations": {
+    "vendo": {
+      "runs": 13,
+      "answered": 8,
+      "refused": 2,
+      "failed": 3,
+      "repairs": 0,
+      "promptTokens": 56332,
+      "cachedInputTokens": 0,
+      "uncachedInputTokens": 56332,
+      "outputTokens": 36712,
+      "medianDurationMs": 11152,
+      "editFindings": 2
+    },
+    "openui": {
+      "runs": 13,
+      "answered": 11,
+      "refused": 2,
+      "failed": 0,
+      "repairs": 0,
+      "promptTokens": 112692,
+      "cachedInputTokens": 104034,
+      "uncachedInputTokens": 8658,
+      "outputTokens": 17928,
+      "medianDurationMs": 8114,
+      "editFindings": 2
+    }
+  },
+  "overall": {
+    "vendo": {
+      "runs": 29,
+      "answered": 13,
+      "refused": 12,
+      "failed": 4,
+      "repairs": 0,
+      "promptTokens": 112558,
+      "cachedInputTokens": 0,
+      "uncachedInputTokens": 112558,
+      "outputTokens": 69941,
+      "medianDurationMs": 10123,
+      "editFindings": 2
+    },
+    "openui": {
+      "runs": 29,
+      "answered": 16,
+      "refused": 13,
+      "failed": 0,
+      "repairs": 0,
+      "promptTokens": 235160,
+      "cachedInputTokens": 226242,
+      "uncachedInputTokens": 8918,
+      "outputTokens": 40348,
+      "medianDurationMs": 7570,
+      "editFindings": 2
+    }
+  },
+  "runs": [
+    {
+      "id": "20260806-185540-c77c",
+      "host": "maple",
+      "prompt": "show my account balances at a glance",
+      "pack": "smoke",
+      "conversation": null,
+      "lanes": {
+        "vendo": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 46198,
+          "promptTokens": 8392,
+          "outputTokens": 8215,
+          "cachedInputTokens": 0,
+          "uncachedInputTokens": 8392,
+          "repairs": 0,
+          "findings": 2
+        },
+        "openui": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 18283,
+          "promptTokens": 7809,
+          "outputTokens": 3322,
+          "cachedInputTokens": 7794,
+          "uncachedInputTokens": 15,
+          "repairs": 0,
+          "findings": 0
+        }
+      }
+    },
+    {
+      "id": "20260806-185609-85d4",
+      "host": "maple",
+      "prompt": "let me transfer money between my accounts",
+      "pack": "smoke",
+      "conversation": null,
+      "lanes": {
+        "vendo": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 29267,
+          "promptTokens": 6791,
+          "outputTokens": 6148,
+          "cachedInputTokens": 0,
+          "uncachedInputTokens": 6791,
+          "repairs": 0,
+          "findings": 0
+        },
+        "openui": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 19549,
+          "promptTokens": 7809,
+          "outputTokens": 4619,
+          "cachedInputTokens": 7794,
+          "uncachedInputTokens": 15,
+          "repairs": 0,
+          "findings": 0
+        }
+      }
+    },
+    {
+      "id": "20260806-185627-23c5",
+      "host": "maple",
+      "prompt": "show my recent transactions with search",
+      "pack": "smoke",
+      "conversation": null,
+      "lanes": {
+        "vendo": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 16131,
+          "promptTokens": 4436,
+          "outputTokens": 2671,
+          "cachedInputTokens": 0,
+          "uncachedInputTokens": 4436,
+          "repairs": 0,
+          "findings": 0
+        },
+        "openui": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 17976,
+          "promptTokens": 7808,
+          "outputTokens": 3619,
+          "cachedInputTokens": 7794,
+          "uncachedInputTokens": 14,
+          "repairs": 0,
+          "findings": 0
+        }
+      }
+    },
+    {
+      "id": "20260806-185635-3444",
+      "host": "cadence",
+      "prompt": "show my account balances at a glance",
+      "pack": "smoke",
+      "conversation": null,
+      "lanes": {
+        "vendo": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 4119,
+          "promptTokens": 2011,
+          "outputTokens": 460,
+          "cachedInputTokens": 0,
+          "uncachedInputTokens": 2011,
+          "repairs": 0,
+          "reasons": [
+            "Your host has no way to show account balances."
+          ]
+        },
+        "openui": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 5727,
+          "promptTokens": 7601,
+          "outputTokens": 395,
+          "cachedInputTokens": 7586,
+          "uncachedInputTokens": 15,
+          "repairs": 0,
+          "reasons": [
+            "Your host has no account balance data, so account balances cannot be displayed."
+          ]
+        }
+      }
+    },
+    {
+      "id": "20260806-185637-e487",
+      "host": "cadence",
+      "prompt": "let me transfer money between my accounts",
+      "pack": "smoke",
+      "conversation": null,
+      "lanes": {
+        "vendo": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 1943,
+          "promptTokens": 2011,
+          "outputTokens": 212,
+          "cachedInputTokens": 0,
+          "uncachedInputTokens": 2011,
+          "repairs": 0,
+          "reasons": [
+            "Your host has no way to transfer money between accounts."
+          ]
+        },
+        "openui": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 2423,
+          "promptTokens": 7601,
+          "outputTokens": 289,
+          "cachedInputTokens": 7586,
+          "uncachedInputTokens": 15,
+          "repairs": 0,
+          "reasons": [
+            "Your host has no banking or account transfer tools, so money cannot be transferred between accounts."
+          ]
+        }
+      }
+    },
+    {
+      "id": "20260806-185641-df1b",
+      "host": "cadence",
+      "prompt": "show my recent transactions with search",
+      "pack": "smoke",
+      "conversation": null,
+      "lanes": {
+        "vendo": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 4013,
+          "promptTokens": 2010,
+          "outputTokens": 535,
+          "cachedInputTokens": 0,
+          "uncachedInputTokens": 2010,
+          "repairs": 0,
+          "reasons": [
+            "Your host has no way to show recent transactions."
+          ]
+        },
+        "openui": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 3223,
+          "promptTokens": 7600,
+          "outputTokens": 519,
+          "cachedInputTokens": 7586,
+          "uncachedInputTokens": 14,
+          "repairs": 0,
+          "reasons": [
+            "Your host has no transaction data, so recent transactions cannot be shown."
+          ]
+        }
+      }
+    },
+    {
+      "id": "20260806-185651-0243",
+      "host": "cadence",
+      "prompt": "which clients still owe me money, oldest first",
+      "pack": "cadence",
+      "conversation": null,
+      "lanes": {
+        "vendo": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 4019,
+          "promptTokens": 2013,
+          "outputTokens": 547,
+          "cachedInputTokens": 0,
+          "uncachedInputTokens": 2013,
+          "repairs": 0,
+          "reasons": [
+            "Your host has no records of client balances or money owed."
+          ]
+        },
+        "openui": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 6996,
+          "promptTokens": 7603,
+          "outputTokens": 580,
+          "cachedInputTokens": 7586,
+          "uncachedInputTokens": 17,
+          "repairs": 0,
+          "reasons": [
+            "Your host has no billing or accounts receivable data, so information on which clients owe money cannot be provided."
+          ]
+        }
+      }
+    },
+    {
+      "id": "20260806-185655-9664",
+      "host": "cadence",
+      "prompt": "show me where my money went last quarter",
+      "pack": "cadence",
+      "conversation": null,
+      "lanes": {
+        "vendo": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 2729,
+          "promptTokens": 2012,
+          "outputTokens": 356,
+          "cachedInputTokens": 0,
+          "uncachedInputTokens": 2012,
+          "repairs": 0,
+          "reasons": [
+            "Your host has no tools to track expenses or spending from last quarter."
+          ]
+        },
+        "openui": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 3997,
+          "promptTokens": 7602,
+          "outputTokens": 562,
+          "cachedInputTokens": 7586,
+          "uncachedInputTokens": 16,
+          "repairs": 0,
+          "reasons": [
+            "Your host has no financial transaction or expense data, so last quarter's spending cannot be displayed."
+          ]
+        }
+      }
+    },
+    {
+      "id": "20260806-185659-382f",
+      "host": "cadence",
+      "prompt": "let me chase every overdue invoice in one go",
+      "pack": "cadence",
+      "conversation": null,
+      "lanes": {
+        "vendo": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 3616,
+          "promptTokens": 2013,
+          "outputTokens": 495,
+          "cachedInputTokens": 0,
+          "uncachedInputTokens": 2013,
+          "repairs": 0,
+          "reasons": [
+            "Your host does not track or manage invoices, so overdue invoices cannot be chased."
+          ]
+        },
+        "openui": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 4097,
+          "promptTokens": 7603,
+          "outputTokens": 546,
+          "cachedInputTokens": 7586,
+          "uncachedInputTokens": 17,
+          "repairs": 0,
+          "reasons": [
+            "Your host has no invoice or billing data, so overdue invoices cannot be retrieved or chased."
+          ]
+        }
+      }
+    },
+    {
+      "id": "20260806-185717-1089",
+      "host": "cadence",
+      "prompt": "what's missing before I can close the books this month",
+      "pack": "cadence",
+      "conversation": null,
+      "lanes": {
+        "vendo": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 18481,
+          "promptTokens": 4843,
+          "outputTokens": 3183,
+          "cachedInputTokens": 0,
+          "uncachedInputTokens": 4843,
+          "repairs": 0,
+          "findings": 0
+        },
+        "openui": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 8158,
+          "promptTokens": 7606,
+          "outputTokens": 1206,
+          "cachedInputTokens": 7586,
+          "uncachedInputTokens": 20,
+          "repairs": 0,
+          "reasons": [
+            "Your host has no accounting or general ledger data for closing the books, so outstanding month-end items cannot be determined."
+          ]
+        }
+      }
+    },
+    {
+      "id": "20260806-185721-cf86",
+      "host": "cadence",
+      "prompt": "show revenue by client with a chart, and let me drill into one",
+      "pack": "cadence",
+      "conversation": null,
+      "lanes": {
+        "vendo": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 2954,
+          "promptTokens": 2018,
+          "outputTokens": 380,
+          "cachedInputTokens": 0,
+          "uncachedInputTokens": 2018,
+          "repairs": 0,
+          "reasons": [
+            "Your host does not track client revenue or financial transactions."
+          ]
+        },
+        "openui": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 3422,
+          "promptTokens": 7608,
+          "outputTokens": 513,
+          "cachedInputTokens": 7586,
+          "uncachedInputTokens": 22,
+          "repairs": 0,
+          "reasons": [
+            "Your host has no revenue or billing data, so revenue by client cannot be displayed or charted."
+          ]
+        }
+      }
+    },
+    {
+      "id": "20260806-185753-7ade",
+      "host": "cadence",
+      "prompt": "build me a deadline board for the next 30 days",
+      "pack": "cadence",
+      "conversation": null,
+      "lanes": {
+        "vendo": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 31693,
+          "promptTokens": 9572,
+          "outputTokens": 6594,
+          "cachedInputTokens": 0,
+          "uncachedInputTokens": 9572,
+          "repairs": 0,
+          "findings": 0
+        },
+        "openui": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 11607,
+          "promptTokens": 7606,
+          "outputTokens": 2322,
+          "cachedInputTokens": 7586,
+          "uncachedInputTokens": 20,
+          "repairs": 0,
+          "findings": 0
+        }
+      }
+    },
+    {
+      "id": "20260806-185756-de73",
+      "host": "cadence",
+      "prompt": "which clients are least profitable once I account for time spent",
+      "pack": "cadence",
+      "conversation": null,
+      "lanes": {
+        "vendo": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 3692,
+          "promptTokens": 2015,
+          "outputTokens": 311,
+          "cachedInputTokens": 0,
+          "uncachedInputTokens": 2015,
+          "repairs": 0,
+          "reasons": [
+            "Your host does not track time spent or profitability per client."
+          ]
+        },
+        "openui": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 3588,
+          "promptTokens": 7605,
+          "outputTokens": 444,
+          "cachedInputTokens": 7586,
+          "uncachedInputTokens": 19,
+          "repairs": 0,
+          "reasons": [
+            "Your host has no profitability or time tracking data, so client profitability after accounting for time spent cannot be calculated."
+          ]
+        }
+      }
+    },
+    {
+      "id": "20260806-185801-65bb",
+      "host": "cadence",
+      "prompt": "one screen that answers: can I afford to hire someone",
+      "pack": "cadence",
+      "conversation": null,
+      "lanes": {
+        "vendo": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 3126,
+          "promptTokens": 2015,
+          "outputTokens": 484,
+          "cachedInputTokens": 0,
+          "uncachedInputTokens": 2015,
+          "repairs": 0,
+          "reasons": [
+            "Your host has no financial, revenue, or payroll data to determine if you can afford to hire someone."
+          ]
+        },
+        "openui": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 4307,
+          "promptTokens": 7605,
+          "outputTokens": 613,
+          "cachedInputTokens": 7586,
+          "uncachedInputTokens": 19,
+          "repairs": 0,
+          "reasons": [
+            "Your host has no financial or payroll data, so affordability to hire someone cannot be calculated."
+          ]
+        }
+      }
+    },
+    {
+      "id": "20260806-185817-e9b0",
+      "host": "cadence",
+      "prompt": "show my clients",
+      "pack": null,
+      "conversation": null,
+      "lanes": {
+        "vendo": {
+          "status": "failed",
+          "outcome": "failed",
+          "durationMs": 13010,
+          "promptTokens": 2007,
+          "outputTokens": 2236,
+          "cachedInputTokens": 0,
+          "uncachedInputTokens": 2007,
+          "repairs": 0,
+          "error": "generation failed: node \"datatable-1\" sets unknown prop \"data\" on prewired component \"DataTable\"; the renderer drops it. Allowed props: rows, columns, sortBy, limit, filterableBy, searchable, paginate, emptyState, caption"
+        },
+        "openui": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 14612,
+          "promptTokens": 7597,
+          "outputTokens": 2477,
+          "cachedInputTokens": 7586,
+          "uncachedInputTokens": 11,
+          "repairs": 0,
+          "findings": 0
+        }
+      }
+    },
+    {
+      "id": "20260806-185825-55b4",
+      "host": "maple",
+      "prompt": "show my clients",
+      "pack": null,
+      "conversation": null,
+      "lanes": {
+        "vendo": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 3190,
+          "promptTokens": 2067,
+          "outputTokens": 402,
+          "cachedInputTokens": 0,
+          "uncachedInputTokens": 2067,
+          "repairs": 0,
+          "reasons": [
+            "Your host has no client management or CRM features to list clients."
+          ]
+        },
+        "openui": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 5471,
+          "promptTokens": 7805,
+          "outputTokens": 394,
+          "cachedInputTokens": 7794,
+          "uncachedInputTokens": 11,
+          "repairs": 0,
+          "reasons": [
+            "Your host has no client management or client list data, so your clients cannot be displayed."
+          ]
+        }
+      }
+    },
+    {
+      "id": "20260806-185905-5bfe",
+      "host": "maple",
+      "prompt": "show my recent transactions",
+      "pack": null,
+      "conversation": {
+        "fixture": "maple-spending-workspace",
+        "turn": 1,
+        "of": 7
+      },
+      "lanes": {
+        "vendo": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 16446,
+          "promptTokens": 4415,
+          "outputTokens": 2602,
+          "cachedInputTokens": 0,
+          "uncachedInputTokens": 4415,
+          "repairs": 0,
+          "findings": 0,
+          "editFindings": []
+        },
+        "openui": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 18565,
+          "promptTokens": 7806,
+          "outputTokens": 3408,
+          "cachedInputTokens": 7794,
+          "uncachedInputTokens": 12,
+          "repairs": 0,
+          "findings": 0,
+          "editFindings": []
+        }
+      }
+    },
+    {
+      "id": "20260806-185916-5446",
+      "host": "maple",
+      "prompt": "add a bar chart of spending by category above the table",
+      "pack": null,
+      "conversation": {
+        "fixture": "maple-spending-workspace",
+        "turn": 2,
+        "of": 7
+      },
+      "lanes": {
+        "openui": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 8114,
+          "promptTokens": 8802,
+          "outputTokens": 819,
+          "cachedInputTokens": 8154,
+          "uncachedInputTokens": 648,
+          "repairs": 0,
+          "findings": 0,
+          "editFindings": []
+        },
+        "vendo": {
+          "status": "failed",
+          "outcome": "failed",
+          "durationMs": 10123,
+          "promptTokens": 2318,
+          "outputTokens": 2185,
+          "cachedInputTokens": 0,
+          "uncachedInputTokens": 2318,
+          "repairs": 0,
+          "error": "generation failed: wire shape-mismatch: node \"barchart-1\" prop \"data\" (/spending/categories): \"categories\" indexes into an array in the tool's response shape (expected a numeric index) | binding /spending/categories on node \"barchart-1\" prop \"data\": \"categories\" indexes into an array in the tool's response shape (expected a numeric index)",
+          "editFindings": []
+        }
+      }
+    },
+    {
+      "id": "20260806-185934-7cd2",
+      "host": "maple",
+      "prompt": "make that chart a donut instead",
+      "pack": null,
+      "conversation": {
+        "fixture": "maple-spending-workspace",
+        "turn": 3,
+        "of": 7
+      },
+      "lanes": {
+        "openui": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 5679,
+          "promptTokens": 8881,
+          "outputTokens": 824,
+          "cachedInputTokens": 8154,
+          "uncachedInputTokens": 727,
+          "repairs": 0,
+          "findings": 0,
+          "editFindings": []
+        },
+        "vendo": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 18092,
+          "promptTokens": 3520,
+          "outputTokens": 3706,
+          "cachedInputTokens": 0,
+          "uncachedInputTokens": 3520,
+          "repairs": 0,
+          "findings": 0,
+          "editFindings": [
+            {
+              "severity": "warn",
+              "where": "element \"app\"",
+              "message": "preservation: this Stack disappeared on a turn that only asked to modify \u2014 regression on untouched UI"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "20260806-185954-dc16",
+      "host": "maple",
+      "prompt": "add a stat card with my total balance across all accounts",
+      "pack": null,
+      "conversation": {
+        "fixture": "maple-spending-workspace",
+        "turn": 4,
+        "of": 7
+      },
+      "lanes": {
+        "openui": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 8277,
+          "promptTokens": 8912,
+          "outputTokens": 1277,
+          "cachedInputTokens": 8154,
+          "uncachedInputTokens": 758,
+          "repairs": 0,
+          "findings": 0,
+          "editFindings": []
+        },
+        "vendo": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 20036,
+          "promptTokens": 6145,
+          "outputTokens": 3435,
+          "cachedInputTokens": 0,
+          "uncachedInputTokens": 6145,
+          "repairs": 0,
+          "findings": 1,
+          "editFindings": []
+        }
+      }
+    },
+    {
+      "id": "20260806-185958-cf42",
+      "host": "maple",
+      "prompt": "also show my credit score next to it",
+      "pack": null,
+      "conversation": {
+        "fixture": "maple-spending-workspace",
+        "turn": 5,
+        "of": 7
+      },
+      "lanes": {
+        "vendo": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 2461,
+          "promptTokens": 2558,
+          "outputTokens": 344,
+          "cachedInputTokens": 0,
+          "uncachedInputTokens": 2558,
+          "repairs": 0,
+          "reasons": [
+            "Your host has no tool or data source for showing credit scores."
+          ],
+          "editFindings": []
+        },
+        "openui": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 3826,
+          "promptTokens": 8981,
+          "outputTokens": 429,
+          "cachedInputTokens": 8154,
+          "uncachedInputTokens": 827,
+          "repairs": 0,
+          "reasons": [
+            "Your host does not provide credit score data."
+          ],
+          "editFindings": []
+        }
+      }
+    },
+    {
+      "id": "20260806-190007-8b7d",
+      "host": "maple",
+      "prompt": "remove the transactions table",
+      "pack": null,
+      "conversation": {
+        "fixture": "maple-spending-workspace",
+        "turn": 6,
+        "of": 7
+      },
+      "lanes": {
+        "openui": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 7570,
+          "promptTokens": 9010,
+          "outputTokens": 1061,
+          "cachedInputTokens": 8154,
+          "uncachedInputTokens": 856,
+          "repairs": 0,
+          "findings": 0,
+          "editFindings": [
+            {
+              "severity": "warn",
+              "where": "edit",
+              "message": "expected no table in the UI after this turn; one is still present"
+            }
+          ]
+        },
+        "vendo": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 9700,
+          "promptTokens": 3663,
+          "outputTokens": 1797,
+          "cachedInputTokens": 0,
+          "uncachedInputTokens": 3663,
+          "repairs": 0,
+          "findings": 0,
+          "editFindings": []
+        }
+      }
+    },
+    {
+      "id": "20260806-190016-65bd",
+      "host": "maple",
+      "prompt": "add a line chart of my cashflow over the last months",
+      "pack": null,
+      "conversation": {
+        "fixture": "maple-spending-workspace",
+        "turn": 7,
+        "of": 7
+      },
+      "lanes": {
+        "vendo": {
+          "status": "failed",
+          "outcome": "failed",
+          "durationMs": 7330,
+          "promptTokens": 2487,
+          "outputTokens": 1488,
+          "cachedInputTokens": 0,
+          "uncachedInputTokens": 2487,
+          "repairs": 0,
+          "error": "generation failed: node \"linechart-1\" sets unknown prop \"query\" on prewired component \"LineChart\"; the renderer drops it. Allowed props: data, xKey, series, format, height, emptyState",
+          "editFindings": []
+        },
+        "openui": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 9056,
+          "promptTokens": 8903,
+          "outputTokens": 1511,
+          "cachedInputTokens": 8154,
+          "uncachedInputTokens": 749,
+          "repairs": 0,
+          "findings": 0,
+          "editFindings": []
+        }
+      }
+    },
+    {
+      "id": "20260806-190107-8bf9",
+      "host": "cadence",
+      "prompt": "build me a deadline board for the next 30 days",
+      "pack": null,
+      "conversation": {
+        "fixture": "cadence-deadline-workspace",
+        "turn": 1,
+        "of": 6
+      },
+      "lanes": {
+        "openui": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 17197,
+          "promptTokens": 7606,
+          "outputTokens": 2680,
+          "cachedInputTokens": 7586,
+          "uncachedInputTokens": 20,
+          "repairs": 0,
+          "findings": 0,
+          "editFindings": []
+        },
+        "vendo": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 50643,
+          "promptTokens": 12408,
+          "outputTokens": 11453,
+          "cachedInputTokens": 0,
+          "uncachedInputTokens": 12408,
+          "repairs": 0,
+          "findings": 0,
+          "editFindings": []
+        }
+      }
+    },
+    {
+      "id": "20260806-190124-4a75",
+      "host": "cadence",
+      "prompt": "add a stat card with how many clients are missing documents",
+      "pack": null,
+      "conversation": {
+        "fixture": "cadence-deadline-workspace",
+        "turn": 2,
+        "of": 6
+      },
+      "lanes": {
+        "openui": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 10820,
+          "promptTokens": 8680,
+          "outputTokens": 1622,
+          "cachedInputTokens": 7946,
+          "uncachedInputTokens": 734,
+          "repairs": 0,
+          "findings": 0,
+          "editFindings": [
+            {
+              "severity": "warn",
+              "where": "element \"missingStat\"",
+              "message": "preservation: this Stat disappeared on a turn that only asked to add \u2014 regression on untouched UI"
+            }
+          ]
+        },
+        "vendo": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 17001,
+          "promptTokens": 4317,
+          "outputTokens": 3184,
+          "cachedInputTokens": 0,
+          "uncachedInputTokens": 4317,
+          "repairs": 0,
+          "findings": 0,
+          "editFindings": []
+        }
+      }
+    },
+    {
+      "id": "20260806-190136-bf0d",
+      "host": "cadence",
+      "prompt": "show the deadlines as a table with client, filing deadline, and the missing document kinds",
+      "pack": null,
+      "conversation": {
+        "fixture": "cadence-deadline-workspace",
+        "turn": 3,
+        "of": 6
+      },
+      "lanes": {
+        "openui": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 7614,
+          "promptTokens": 8735,
+          "outputTokens": 1230,
+          "cachedInputTokens": 7946,
+          "uncachedInputTokens": 789,
+          "repairs": 0,
+          "findings": 0,
+          "editFindings": []
+        },
+        "vendo": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 12393,
+          "promptTokens": 4366,
+          "outputTokens": 2311,
+          "cachedInputTokens": 0,
+          "uncachedInputTokens": 4366,
+          "repairs": 0,
+          "findings": 0,
+          "editFindings": []
+        }
+      }
+    },
+    {
+      "id": "20260806-190141-e804",
+      "host": "cadence",
+      "prompt": "add a profitability column to that table",
+      "pack": null,
+      "conversation": {
+        "fixture": "cadence-deadline-workspace",
+        "turn": 4,
+        "of": 6
+      },
+      "lanes": {
+        "vendo": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 3347,
+          "promptTokens": 2836,
+          "outputTokens": 410,
+          "cachedInputTokens": 0,
+          "uncachedInputTokens": 2836,
+          "repairs": 0,
+          "reasons": [
+            "Your host does not track client profitability data, so a profitability column cannot be added to the deadlines table."
+          ],
+          "editFindings": []
+        },
+        "openui": {
+          "status": "refused",
+          "outcome": "refused",
+          "durationMs": 4802,
+          "promptTokens": 8739,
+          "outputTokens": 601,
+          "cachedInputTokens": 7946,
+          "uncachedInputTokens": 793,
+          "repairs": 0,
+          "reasons": [
+            "Your host has no financial or revenue data for clients, so profitability cannot be displayed."
+          ],
+          "editFindings": []
+        }
+      }
+    },
+    {
+      "id": "20260806-190152-1c84",
+      "host": "cadence",
+      "prompt": "add a donut chart of clients by status",
+      "pack": null,
+      "conversation": {
+        "fixture": "cadence-deadline-workspace",
+        "turn": 5,
+        "of": 6
+      },
+      "lanes": {
+        "openui": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 9158,
+          "promptTokens": 8780,
+          "outputTokens": 1854,
+          "cachedInputTokens": 7946,
+          "uncachedInputTokens": 834,
+          "repairs": 0,
+          "findings": 0,
+          "editFindings": []
+        },
+        "vendo": {
+          "status": "failed",
+          "outcome": "failed",
+          "durationMs": 11152,
+          "promptTokens": 2881,
+          "outputTokens": 2107,
+          "cachedInputTokens": 0,
+          "uncachedInputTokens": 2881,
+          "repairs": 0,
+          "error": "generation failed: node \"donutchart-1\" sets unknown prop \"items\" on prewired component \"DonutChart\"; the renderer drops it. Allowed props: data, categoryKey, valueKey, format, donut, height, emptyState | node \"donutchart-1\" sets unknown prop \"categoryField\" on prewired component \"DonutChart\"; the renderer drops it. Allowed props: data, categoryKey, valueKey, format, donut, height, emptyState | node \"donutchart-1\" sets unknown prop \"title\" on prewired component \"DonutChart\"; the renderer drops it. Allowed props: data, categoryKey, valueKey, format, donut, height, emptyState",
+          "editFindings": []
+        }
+      }
+    },
+    {
+      "id": "20260806-190203-0f9a",
+      "host": "cadence",
+      "prompt": "remove the missing-documents stat you added",
+      "pack": null,
+      "conversation": {
+        "fixture": "cadence-deadline-workspace",
+        "turn": 6,
+        "of": 6
+      },
+      "lanes": {
+        "openui": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 4173,
+          "promptTokens": 8857,
+          "outputTokens": 612,
+          "cachedInputTokens": 7946,
+          "uncachedInputTokens": 911,
+          "repairs": 0,
+          "findings": 0,
+          "editFindings": []
+        },
+        "vendo": {
+          "status": "ok",
+          "outcome": "answered",
+          "durationMs": 10236,
+          "promptTokens": 4418,
+          "outputTokens": 1690,
+          "cachedInputTokens": 0,
+          "uncachedInputTokens": 4418,
+          "repairs": 0,
+          "findings": 1,
+          "editFindings": [
+            {
+              "severity": "warn",
+              "where": "edit",
+              "message": "expected a chart-pie in the UI after this turn; none is present"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

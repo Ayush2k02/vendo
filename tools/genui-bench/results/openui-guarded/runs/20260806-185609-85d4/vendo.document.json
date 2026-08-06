@@ -1,0 +1,164 @@
+{
+  "format": "vendo/app@1",
+  "name": "Transfer money",
+  "tree": {
+    "formatVersion": "vendo-genui/v2",
+    "root": "app",
+    "nodes": [
+      {
+        "id": "app",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "group-0",
+          "group-1"
+        ]
+      },
+      {
+        "id": "group-0",
+        "component": "Surface",
+        "source": "prewired",
+        "children": [
+          "group-0-title",
+          "group-0-body"
+        ]
+      },
+      {
+        "id": "group-0-title",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Account Balances",
+          "variant": "heading"
+        }
+      },
+      {
+        "id": "group-0-body",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "group-0-body-datatable-1"
+        ]
+      },
+      {
+        "id": "group-0-body-datatable-1",
+        "component": "DataTable",
+        "source": "prewired",
+        "props": {
+          "rows": {
+            "$path": "/hostListAccounts"
+          },
+          "columns": [
+            {
+              "key": "name",
+              "label": "Account Name"
+            },
+            {
+              "key": "kind",
+              "label": "Type"
+            },
+            {
+              "key": "mask",
+              "label": "Mask"
+            },
+            {
+              "key": "accountNumber",
+              "label": "Account Number"
+            },
+            {
+              "key": "balance",
+              "label": "Balance",
+              "format": "money",
+              "align": "end"
+            }
+          ],
+          "sortBy": "name asc",
+          "filterableBy": [
+            "kind"
+          ],
+          "searchable": true,
+          "emptyState": "No accounts available",
+          "caption": "Overview of accounts and current balances"
+        }
+      },
+      {
+        "id": "group-1",
+        "component": "Surface",
+        "source": "prewired",
+        "children": [
+          "group-1-title",
+          "group-1-body"
+        ]
+      },
+      {
+        "id": "group-1-title",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Initiate Transfer",
+          "variant": "heading"
+        }
+      },
+      {
+        "id": "group-1-body",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "group-1-body-form-1"
+        ]
+      },
+      {
+        "id": "group-1-body-form-1",
+        "component": "Form",
+        "source": "prewired",
+        "props": {
+          "onSubmit": {
+            "action": "host_transferMoney"
+          },
+          "submitLabel": "Transfer money"
+        },
+        "children": [
+          "group-1-body-select-1",
+          "group-1-body-input-1"
+        ]
+      },
+      {
+        "id": "group-1-body-select-1",
+        "component": "Select",
+        "source": "prewired",
+        "props": {
+          "label": "Destination account",
+          "name": "to_account_id",
+          "options": {
+            "$path": "/accounts"
+          },
+          "labelField": "name",
+          "valueField": "id"
+        }
+      },
+      {
+        "id": "group-1-body-input-1",
+        "component": "Input",
+        "source": "prewired",
+        "props": {
+          "label": "Transfer amount",
+          "name": "amount",
+          "type": "number"
+        }
+      }
+    ],
+    "queries": [
+      {
+        "name": "accounts",
+        "tool": "host_listAccounts",
+        "input": {}
+      },
+      {
+        "name": "hostListAccounts",
+        "tool": "host_listAccounts",
+        "input": {}
+      }
+    ]
+  },
+  "id": "app_bench_mshjtq36"
+}

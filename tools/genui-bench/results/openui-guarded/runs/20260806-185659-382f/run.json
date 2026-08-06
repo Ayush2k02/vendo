@@ -1,0 +1,47 @@
+{
+  "id": "20260806-185659-382f",
+  "createdAt": "2026-08-06T13:26:59.444Z",
+  "gitSha": "0176ce2ea4fd97e5e126e1956caf221c23a99c6e",
+  "gitDirty": null,
+  "request": {
+    "prompt": "let me chase every overdue invoice in one go",
+    "host": "cadence",
+    "lanes": [
+      "vendo",
+      "openui"
+    ],
+    "packRef": {
+      "pack": "cadence",
+      "index": 2
+    }
+  },
+  "lanes": {
+    "vendo": {
+      "status": "refused",
+      "startedAt": 1786022815322,
+      "durationMs": 3616,
+      "usage": {
+        "promptTokens": 2013,
+        "outputTokens": 495,
+        "cachedInputTokens": 0
+      },
+      "reasons": [
+        "Your host does not track or manage invoices, so overdue invoices cannot be chased."
+      ]
+    },
+    "openui": {
+      "status": "refused",
+      "startedAt": 1786022815331,
+      "durationMs": 4097,
+      "reasons": [
+        "Your host has no invoice or billing data, so overdue invoices cannot be retrieved or chased."
+      ],
+      "usage": {
+        "promptTokens": 7603,
+        "outputTokens": 546,
+        "cachedInputTokens": 7586
+      },
+      "repairs": 0
+    }
+  }
+}

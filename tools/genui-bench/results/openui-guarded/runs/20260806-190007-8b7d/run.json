@@ -1,0 +1,50 @@
+{
+  "id": "20260806-190007-8b7d",
+  "createdAt": "2026-08-06T13:30:07.751Z",
+  "gitSha": "0176ce2ea4fd97e5e126e1956caf221c23a99c6e",
+  "gitDirty": null,
+  "request": {
+    "prompt": "remove the transactions table",
+    "host": "maple",
+    "lanes": [
+      "vendo",
+      "openui"
+    ],
+    "conversationRef": {
+      "fixture": "maple-spending-workspace",
+      "turn": 6,
+      "of": 7
+    }
+  },
+  "lanes": {
+    "openui": {
+      "status": "ok",
+      "startedAt": 1786022998065,
+      "durationMs": 7570,
+      "usage": {
+        "promptTokens": 9010,
+        "outputTokens": 1061,
+        "cachedInputTokens": 8154
+      },
+      "repairs": 0,
+      "editFindings": [
+        {
+          "severity": "warn",
+          "where": "edit",
+          "message": "expected no table in the UI after this turn; one is still present"
+        }
+      ]
+    },
+    "vendo": {
+      "status": "ok",
+      "startedAt": 1786022998051,
+      "durationMs": 9700,
+      "usage": {
+        "promptTokens": 3663,
+        "outputTokens": 1797,
+        "cachedInputTokens": 0
+      },
+      "editFindings": []
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "model": "gemini-3.6-flash",
+  "responseText": "barChartComp = BarChart(spending, \"category\", [\"amount\"], \"money\")\nbarChartCard = Surface([barChartComp], \"Spending by Category\")\ntab1Stack = Stack([barChartCard, tableCard], 16)\ntab1 = {label: \"All Transactions\", content: tab1Stack}",
+  "program": "root = Stack([header, summaryGrid, mainTabs], 16)\nheader = Text(\"Recent Transactions\", \"heading\")\ntxns = Query(\"host_listTransactions\", {limit: 50}, {data: [], total: 0})\nspending = Query(\"host_getSpendingInsights\", {}, [])\nrecurring = Query(\"host_getRecurringInsights\", {}, [])\ntxnData = txns.data\ntotalSpend = @Sum(txnData.amount)\ntxnAvg = @Avg(txnData.amount)\nstatTotal = Stat(\"Total Volume\", totalSpend, \"money\", null, \"accent\")\nstatCount = Stat(\"Transactions Count\", txns.total, \"number\")\nstatAvg = Stat(\"Average Transaction\", txnAvg, \"money\")\nstatsStack = Stack([statTotal, statCount, statAvg], 12)\nsummaryCard = Surface([statsStack], \"Summary\")\nchartComp = DonutChart(spending, \"category\", \"amount\", \"money\")\nchartCard = Surface([chartComp], \"Spending Breakdown\")\nsummaryGrid = Grid([summaryCard, chartCard], 2, 16)\ntableCols = [{key: \"timestamp\", label: \"Date\", format: \"datetime\"}, {key: \"merchant\", label: \"Merchant\"}, {key: \"category\", label: \"Category\", format: \"label\"}, {key: \"status\", label: \"Status\", format: \"label\"}, {key: \"amount\", label: \"Amount\", format: \"money\", align: \"end\"}]\ntxnTable = DataTable(txnData, tableCols, \"timestamp desc\", 50, [\"category\", \"status\"], true, 10, \"No transactions found\")\ntableCard = Surface([txnTable], \"Activity Ledger\")\nrecurringCols = [{key: \"merchant\", label: \"Merchant\"}, {key: \"category\", label: \"Category\", format: \"label\"}, {key: \"cadence\", label: \"Cadence\", format: \"label\"}, {key: \"nextDate\", label: \"Next Date\", format: \"date\"}, {key: \"amount\", label: \"Amount\", format: \"money\", align: \"end\"}]\nrecurringTable = DataTable(recurring, recurringCols, \"nextDate asc\", 20, [\"category\"], false, 10, \"No recurring charges detected\")\nrecurringCard = Surface([recurringTable], \"Upcoming Recurring Charges\")\ntab1 = {label: \"All Transactions\", content: tab1Stack}\ntab2 = {label: \"Recurring Charges\", content: recurringCard}\nmainTabs = Tabs([tab1, tab2])\nbarChartComp = BarChart(spending, \"category\", [\"amount\"], \"money\")\nbarChartCard = Surface([barChartComp], \"Spending by Category\")\ntab1Stack = Stack([barChartCard, tableCard], 16)",
+  "toolsReferenced": [
+    "host_getRecurringInsights",
+    "host_getSpendingInsights",
+    "host_listTransactions"
+  ],
+  "parseMeta": {
+    "statementCount": 28,
+    "unresolved": [],
+    "orphaned": []
+  },
+  "repairs": 0
+}

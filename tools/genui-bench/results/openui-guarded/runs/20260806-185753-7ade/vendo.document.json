@@ -1,0 +1,152 @@
+{
+  "format": "vendo/app@1",
+  "name": "Upcoming Deadlines Board",
+  "tree": {
+    "formatVersion": "vendo-genui/v2",
+    "root": "root",
+    "nodes": [
+      {
+        "id": "root",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "group-0",
+          "group-1"
+        ]
+      },
+      {
+        "id": "group-0",
+        "component": "Surface",
+        "source": "prewired",
+        "children": [
+          "group-0-title",
+          "group-0-body"
+        ]
+      },
+      {
+        "id": "group-0-title",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "Deadline Summary",
+          "variant": "heading"
+        }
+      },
+      {
+        "id": "group-0-body",
+        "component": "Grid",
+        "source": "prewired",
+        "props": {
+          "columns": 2
+        },
+        "children": [
+          "group-0-body-cadencemissingdocshero-1",
+          "group-0-body-stat-1"
+        ]
+      },
+      {
+        "id": "group-0-body-cadencemissingdocshero-1",
+        "component": "CadenceMissingDocsHero",
+        "source": "host",
+        "props": {
+          "missingCount": {
+            "$path": "/dashboard/clientsMissingDocs"
+          },
+          "clientCount": {
+            "$path": "/dashboard/clientsTotal"
+          },
+          "badgeLabel": "Action Needed"
+        }
+      },
+      {
+        "id": "group-0-body-stat-1",
+        "component": "Stat",
+        "source": "prewired",
+        "props": {
+          "label": "Upcoming Deadlines (Next 30 Days)",
+          "value": {
+            "$expr": "count(deadlines)"
+          },
+          "format": "number"
+        }
+      },
+      {
+        "id": "group-1",
+        "component": "Surface",
+        "source": "prewired",
+        "children": [
+          "group-1-title",
+          "group-1-body"
+        ]
+      },
+      {
+        "id": "group-1-title",
+        "component": "Text",
+        "source": "prewired",
+        "props": {
+          "text": "30-Day Deadline Schedule",
+          "variant": "heading"
+        }
+      },
+      {
+        "id": "group-1-body",
+        "component": "Stack",
+        "source": "prewired",
+        "children": [
+          "group-1-body-datatable-1"
+        ]
+      },
+      {
+        "id": "group-1-body-datatable-1",
+        "component": "DataTable",
+        "source": "prewired",
+        "props": {
+          "rows": {
+            "$path": "/deadlines"
+          },
+          "sortBy": "filingDeadline asc",
+          "paginate": 10,
+          "searchable": true,
+          "filterableBy": [
+            "status",
+            "entityType"
+          ],
+          "columns": [
+            {
+              "key": "businessName",
+              "label": "Client Name"
+            },
+            {
+              "key": "filingDeadline",
+              "label": "Deadline Date",
+              "format": "date"
+            },
+            {
+              "key": "missingDocKinds",
+              "label": "Missing Documents"
+            },
+            {
+              "key": "status",
+              "label": "Status"
+            }
+          ],
+          "emptyState": "No upcoming filing deadlines in the next 30 days",
+          "caption": "Clients with filing deadlines in the next 30 days"
+        }
+      }
+    ],
+    "queries": [
+      {
+        "name": "deadlines",
+        "tool": "host_listDeadlines",
+        "input": {}
+      },
+      {
+        "name": "dashboard",
+        "tool": "host_getDashboard",
+        "input": {}
+      }
+    ]
+  },
+  "id": "app_bench_mshjvwad"
+}

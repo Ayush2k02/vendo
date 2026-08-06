@@ -31,6 +31,18 @@ export function PaneNonOk({ result }: { result: LaneResult }) {
       </p>
     );
   }
+  if (result.status === "refused") {
+    return (
+      <div data-pane-state="refused" style={{ fontSize: 13, color: "#d9b96a" }}>
+        <p style={{ margin: "0 0 4px", fontWeight: 600 }}>the host refused this ask</p>
+        <ul style={{ margin: 0, paddingLeft: 18 }}>
+          {result.reasons.map((reason, index) => (
+            <li key={index}>{reason}</li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
   if (result.status === "failed") {
     return (
       <div data-pane-state="failed" style={{ color: "#e0716f", fontSize: 13 }}>

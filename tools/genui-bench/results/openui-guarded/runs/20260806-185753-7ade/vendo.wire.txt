@@ -1,0 +1,17 @@
+<App name="Upcoming Deadlines Board">
+  <Query id="deadlines" tool="host_listDeadlines" input={{}}/>
+  <Query id="dashboard" tool="host_getDashboard" input={{}}/>
+  <Surface id="group-0">
+    <Text id="group-0-title" text="Deadline Summary" variant="heading"/>
+    <Grid id="group-0-body" columns={2}>
+      <CadenceMissingDocsHero id="group-0-body-cadencemissingdocshero-1" missingCount={dashboard.clientsMissingDocs} clientCount={dashboard.clientsTotal} badgeLabel="Action Needed"/>
+      <Stat id="group-0-body-stat-1" label="Upcoming Deadlines (Next 30 Days)" value={count(deadlines)} format="number"/>
+    </Grid>
+  </Surface>
+  <Surface id="group-1">
+    <Text id="group-1-title" text="30-Day Deadline Schedule" variant="heading"/>
+    <Stack id="group-1-body">
+      <DataTable id="group-1-body-datatable-1" rows={deadlines} sortBy="filingDeadline asc" paginate={10} searchable filterableBy={["status", "entityType"]} columns={[{ key: "businessName", label: "Client Name" }, { key: "filingDeadline", label: "Deadline Date", format: "date" }, { key: "missingDocKinds", label: "Missing Documents" }, { key: "status", label: "Status" }]} emptyState="No upcoming filing deadlines in the next 30 days" caption="Clients with filing deadlines in the next 30 days"/>
+    </Stack>
+  </Surface>
+</App>

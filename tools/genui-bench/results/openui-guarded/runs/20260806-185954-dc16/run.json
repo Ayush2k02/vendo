@@ -1,0 +1,44 @@
+{
+  "id": "20260806-185954-dc16",
+  "createdAt": "2026-08-06T13:29:54.209Z",
+  "gitSha": "0176ce2ea4fd97e5e126e1956caf221c23a99c6e",
+  "gitDirty": null,
+  "request": {
+    "prompt": "add a stat card with my total balance across all accounts",
+    "host": "maple",
+    "lanes": [
+      "vendo",
+      "openui"
+    ],
+    "conversationRef": {
+      "fixture": "maple-spending-workspace",
+      "turn": 4,
+      "of": 7
+    }
+  },
+  "lanes": {
+    "openui": {
+      "status": "ok",
+      "startedAt": 1786022974195,
+      "durationMs": 8277,
+      "usage": {
+        "promptTokens": 8912,
+        "outputTokens": 1277,
+        "cachedInputTokens": 8154
+      },
+      "repairs": 0,
+      "editFindings": []
+    },
+    "vendo": {
+      "status": "ok",
+      "startedAt": 1786022974173,
+      "durationMs": 20036,
+      "usage": {
+        "promptTokens": 6145,
+        "outputTokens": 3435,
+        "cachedInputTokens": 0
+      },
+      "editFindings": []
+    }
+  }
+}

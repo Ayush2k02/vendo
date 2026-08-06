@@ -1,0 +1,12 @@
+{
+  "model": "gemini-3.6-flash",
+  "responseText": "<Cannot>Your host has no revenue or billing data, so revenue by client cannot be displayed or charted.</Cannot>",
+  "toolsReferenced": [],
+  "refusal": {
+    "reasons": [
+      "Your host has no revenue or billing data, so revenue by client cannot be displayed or charted."
+    ],
+    "program": "root = Stack([title, cannot1], 10)\ntitle = Text(\"This host cannot do that\", \"heading\")\ncannot1 = Disclaimer(\"Your host has no revenue or billing data, so revenue by client cannot be displayed or charted.\", \"Out of reach\")"
+  },
+  "repairs": 0
+}

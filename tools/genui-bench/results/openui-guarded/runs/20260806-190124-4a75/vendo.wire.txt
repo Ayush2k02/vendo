@@ -1,0 +1,33 @@
+<App name="Upcoming Deadlines Board">
+  <Query id="deadlines" tool="host_listDeadlines" input={{}}/>
+  <Query id="dashboard" tool="host_getDashboard" input={{}}/>
+  <Tabs id="tabs" tabs={[{ value: "Overview", label: "Overview" }, { value: "30-Day Schedule", label: "30-Day Schedule" }, { value: "Document Readiness", label: "Document Readiness" }]} value="Overview">
+    <Stack id="tab-0">
+      <Surface id="group-0">
+        <Text id="group-0-title" text="Deadline Summary" variant="heading"/>
+        <Grid id="group-0-body" columns={3}>
+          <Stat id="group-0-body-stat-1" label="Nearest Filing Deadline" value={dashboard.nearestDeadline} format="date" suffix={dashboard.nearestDeadlineClient.businessName}/>
+          <Stat id="group-0-body-stat-2" label="Clients Missing Documents" value={dashboard.clientsMissingDocs} format="number" tone="danger"/>
+          <Stat id="group-0-body-stat-3" label="Outstanding Documents Ratio" value={dashboard.documentsOutstanding / dashboard.documentsTotal} format="percent"/>
+        </Grid>
+      </Surface>
+    </Stack>
+    <Stack id="stack-1">
+      <Surface id="group-1">
+        <Text id="group-1-title" text="Filings Due in Next 30 Days" variant="heading"/>
+        <Stat id="stat-1" label="Clients Missing Documents" value={dashboard.clientsMissingDocs} tone="danger"/>
+        <Stack id="group-1-body">
+          <DataTable id="group-1-body-datatable-1" rows={deadlines} sortBy="filingDeadline asc" columns={[{ key: "filingDeadline", label: "Filing Date", format: "date" }, { key: "businessName", label: "Client Name" }, { key: "progress", label: "Collection Progress" }, { key: "missingDocKinds", label: "Missing Document Types" }]} emptyState="No filings due in the next 30 days"/>
+        </Stack>
+      </Surface>
+    </Stack>
+    <Stack id="stack-2">
+      <Surface id="group-2">
+        <Text id="group-2-title" text="Action Needed Before Filing" variant="heading"/>
+        <Stack id="group-2-body">
+          <CardList id="group-2-body-cardlist-1" items={deadlines} titleField="businessName" badgeField="status" fields={[{ key: "entityType", label: "Entity Type" }, { key: "filingDeadline", label: "Deadline", format: "date" }, { key: "missingDocKinds", label: "Missing Documents" }, { key: "contactName", label: "Contact Name" }, { key: "contactEmail", label: "Contact Email" }]} columns={3} emptyState="No outstanding documents for upcoming deadlines."/>
+        </Stack>
+      </Surface>
+    </Stack>
+  </Tabs>
+</App>

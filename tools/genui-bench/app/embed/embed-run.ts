@@ -9,7 +9,9 @@ export function embedDocument(runId: string | undefined): AppDocument | null {
   if (runId === undefined || runId === "" || !isSafeName(runId)) return null;
   try {
     const lane = loadRun(runsDir, runId).lanes.vendo;
-    return lane?.status === "ok" ? (lane.document ?? null) : null;
+    // A refused turn carries the PRESERVED previous document — the embed
+    // renders it intact (the partial-refusal contract made visible).
+    return lane?.status === "ok" || lane?.status === "refused" ? (lane.document ?? null) : null;
   } catch {
     return null;
   }

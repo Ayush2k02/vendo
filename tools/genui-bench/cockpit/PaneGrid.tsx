@@ -71,13 +71,15 @@ function statusClass(result: LaneResult | undefined, running: boolean): string {
   if (!result) return running ? "run" : "idle";
   if (result.status === "no-key") return "idle";
   if (result.status === "failed") return "err";
+  if (result.status === "refused") return "warn";
   return findingCount(result) > 0 ? "warn" : "ok";
 }
 
 function headerTime(result: LaneResult | undefined, running: boolean): string {
   if (!result) return running ? "…" : "";
   if (result.status === "no-key") return "no key";
-  const findings = findingCount(result);
   const time = formatDuration(result.durationMs);
+  if (result.status === "refused") return `${time} · refused`;
+  const findings = findingCount(result);
   return findings > 0 ? `${time} · ${findings} finding${findings === 1 ? "" : "s"}` : time;
 }

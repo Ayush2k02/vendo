@@ -1,0 +1,47 @@
+{
+  "id": "20260806-185756-de73",
+  "createdAt": "2026-08-06T13:27:56.840Z",
+  "gitSha": "0176ce2ea4fd97e5e126e1956caf221c23a99c6e",
+  "gitDirty": null,
+  "request": {
+    "prompt": "which clients are least profitable once I account for time spent",
+    "host": "cadence",
+    "lanes": [
+      "vendo",
+      "openui"
+    ],
+    "packRef": {
+      "pack": "cadence",
+      "index": 6
+    }
+  },
+  "lanes": {
+    "vendo": {
+      "status": "refused",
+      "startedAt": 1786022873135,
+      "durationMs": 3692,
+      "usage": {
+        "promptTokens": 2015,
+        "outputTokens": 311,
+        "cachedInputTokens": 0
+      },
+      "reasons": [
+        "Your host does not track time spent or profitability per client."
+      ]
+    },
+    "openui": {
+      "status": "refused",
+      "startedAt": 1786022873144,
+      "durationMs": 3588,
+      "reasons": [
+        "Your host has no profitability or time tracking data, so client profitability after accounting for time spent cannot be calculated."
+      ],
+      "usage": {
+        "promptTokens": 7605,
+        "outputTokens": 444,
+        "cachedInputTokens": 7586
+      },
+      "repairs": 0
+    }
+  }
+}

@@ -65,11 +65,13 @@ export function loadRun(runsDir: string, id: string): RunRecord {
     const wirePath = join(runDir, wireFile(name));
     if (existsSync(wirePath)) result.wire = readFileSync(wirePath, "utf8");
     const documentPath = join(runDir, documentFile(name));
-    if (existsSync(documentPath) && result.status === "ok") {
+    // Refused results may carry the PRESERVED previous document (the
+    // partial-refusal contract), so both statuses rehydrate it.
+    if (existsSync(documentPath) && (result.status === "ok" || result.status === "refused")) {
       result.document = JSON.parse(readFileSync(documentPath, "utf8"));
     }
     const findingsPath = join(runDir, findingsFile(name));
-    if (existsSync(findingsPath) && result.status === "ok") {
+    if (existsSync(findingsPath)) {
       result.findings = JSON.parse(readFileSync(findingsPath, "utf8"));
     }
     const rawPath = join(runDir, rawFile(name));
