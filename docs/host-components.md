@@ -78,7 +78,7 @@ the next clean sync:
 | `useApps` | list, create, remove, and fork |
 | `useApp` | open, call, edit, history, undo, and refresh by re-opening |
 | `useSlotApp` | the app currently pinned to a slot (polls; `VendoSlot` uses it itself) |
-| `useAutomations` | enable, disable, runs, dry-run, and stop |
+| `useAutomations` | enable, disable, runs, dry-run, rehearse, and stop |
 | `useActivity` | self-scoped audit activity |
 | `useVendoOverlay` | programmatic open/close controller for `VendoOverlay` |
 | `useVendoStatus` | connection and guard posture |
@@ -257,11 +257,11 @@ content is `.vendo/greeting.json`, imported and passed through:
 ```jsonc
 // .vendo/greeting.json
 {
-  "intro": "Hi — I'm Cadence's built-in assistant. …",
+  "intro": "Hi — I'm Maple's built-in assistant. …",
   "prompts": [
-    "Which clients still owe documents?",
-    "Build me a deadline board for this month",
-    "Reshape my dashboard around document chasing"   // keep one molding prompt
+    "Where did my money go last month?",
+    "Build me a spending board for this quarter",
+    "Reshape my dashboard around upcoming bills"   // keep one molding prompt
   ]
 }
 ```

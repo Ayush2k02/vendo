@@ -65,6 +65,7 @@ import {
   canonicalJson,
   descriptorHash,
   validateAppDocument,
+  VENUES,
   type ToolDescriptor,
 } from "./index.js";
 
@@ -136,7 +137,7 @@ describe("§2 — principalSchema pins kind to user | org (block-actions design 
 
 describe("§3 — run context and trigger ref", () => {
   it("accepts every venue and presence, and carries request headers", () => {
-    for (const venue of ["chat", "app", "automation", "mcp"] as const) {
+    for (const venue of VENUES) {
       for (const presence of ["present", "away"] as const) {
         expect(runContextSchema.safeParse({
           principal: { kind: "user", subject: "u" },
@@ -460,7 +461,7 @@ describe("§11 — trigger sources and run models", () => {
     expect(runModelSchema.safeParse({ kind: "steps", steps: "nope" }).success).toBe(false);
     expect(stepSchema.safeParse({ id: "s1", tool: "fn:x", if: "$exists(event)", forEach: "steps.load" }).success).toBe(true);
     expect(triggerSchema.safeParse({
-      on: { kind: "host-event", event: "e" }, run: { kind: "agentic", prompt: "p" },
+      id: "main", on: { kind: "host-event", event: "e" }, run: { kind: "agentic", prompt: "p" },
     }).success).toBe(true);
   });
 });
@@ -597,9 +598,13 @@ describe("amended public export surface — root utilities and /conformance inve
       "memoryAppAccess",
       "memoryKnowledgeAdapter",
       "memoryStoreAdapter",
+      "memoryStoreOps",
       "runConformance",
       "secretsProviderConformance",
       "storeAdapterConformance",
+      // Store design v1: the 32-op / 7-family StoreOps contract, mounted by the
+      // local backend and the cloud client so neither can drift from it.
+      "storeOpsConformance",
       "toolRegistryConformance",
     ]);
   });

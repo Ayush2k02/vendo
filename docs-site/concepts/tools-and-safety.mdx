@@ -77,16 +77,11 @@ Breakers can turn a run decision into an ask at any point.
 
 ### Effective risk resolution
 
-- `vendo_apps_create` is `read`. Creating an app writes only to Vendo's own
-  app store and always produces a jailed layer-1 tree document. It runs
-  immediately with no approval card.
-- `vendo_apps_edit` is declared `write`. It is downgraded to `read` for a
-  single call only when the app is owner-scoped, is a tree (layer 1) document,
-  and the edit instruction does not require server code. A tree-only edit
-  runs without approval; an edit that adds server behavior, host-tool writes,
-  destructive actions, or egress keeps the approval card. If an edit
-  classified as tree-only unexpectedly emits server code, the runtime fails
-  closed before the sandbox runs or the app is persisted.
+- `vendo_make` is `read`, whether it starts a new app or changes the one named
+  by `app`. The only lifecycle write is to Vendo's own app store, so it runs
+  immediately with no approval card. The ceremony belongs on what a screen
+  does, not on the person rearranging their own view: every action inside the
+  screen is a tool call of its own, graded and guarded at call time.
 - `vendo_apps_rebase_pin` is `write`. It replays a remixed pin's recorded
   edit trail onto a newly captured host baseline and produces one new app
   version. Rebase is user- or host-invoked only; the agent never
@@ -96,11 +91,11 @@ Breakers can turn a run decision into an ask at any point.
 
 Loadout selection is deterministic:
 
-- An explicit `agent.loadout` list wins: exactly those tool names, uncapped
+- An explicit `loadout` list wins: exactly those tool names, uncapped
   (missing names are dropped).
 - Otherwise the default is a connection-scoped seed — your host tools plus
   the toolkits this principal has actually connected — capped at
-  `agent.maxInitialTools` (default `128`), never an alphabetical slice.
+  `maxInitialTools` (default `128`), never an alphabetical slice.
 - If the seed cannot be resolved, the agent degrades to the whole enabled
   host surface when it fits the cap, else to a read-first bounded default:
   safest risk first, then name. The remainder stay searchable.
@@ -115,7 +110,7 @@ the model calls a searched-in tool, it becomes available on the very next
 step; loaded tools persist for the life of the thread and are cleared when
 the thread is deleted.
 
-See [`agent.maxInitialTools` and `agent.loadout`](/reference/handler-options#agent-context)
+See [`maxInitialTools` and `loadout`](/reference/handler-options#turn-context)
 for the configuration surface.
 
 ### Grant invalidation

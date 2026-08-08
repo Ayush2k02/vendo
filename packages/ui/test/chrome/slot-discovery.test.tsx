@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 // Shelf Task 3 — Slot self-discovery: the slot resolves "the app placed in
-// slot X" on its own (the polling dance demo-accounting's hero-slot used to
-// hand-roll), via the useSlotApp hook over the standard useResource lifecycle.
+// slot X" on its own (the polling dance host hero-slots used to hand-roll),
+// via the useSlotApp hook over the standard useResource lifecycle.
 // Since the 2026-08-02 pins/placements split, discovery reads `placements`
 // ONLY; `pins` is fork provenance and never places an app.
 import type { AppDocument } from "@vendoai/core";
@@ -49,14 +49,18 @@ describe("Slot pin self-discovery (useSlotApp + VendoSlot)", () => {
     return <output>{isLoading ? "loading" : appId ?? "none"}</output>;
   }
 
-  it("resolves the latest app pinned to the slot", async () => {
-    vi.spyOn(client.apps, "list").mockResolvedValue([
-      pinnedApp(),
-      pinnedApp({ id: "app_2", name: "Newer remix" }),
+  // ⚠️ TEST EDIT (D5) — this case used a HAND-ORDERED `client.apps.list` mock, so
+  // it could not express the order the wire actually returns and `.at(-1)` (the
+  // OLDEST match) passed as "latest wins" for two months. It now goes over the
+  // real wire, whose /apps mirrors `runtime.list()`: newest first.
+  it("resolves the LATEST app placed in the slot, over the wire's real newest-first order", async () => {
+    wire.state.apps.push(
+      pinnedApp({ id: "app_older", name: "First remix" }),
+      pinnedApp({ id: "app_newer", name: "Newer remix" }),
       pinnedApp({ id: "app_other", placements: ["sidebar"] }),
-    ]);
+    );
     render(<VendoProvider client={client}><Probe slot="hero" /></VendoProvider>);
-    await waitFor(() => expect(screen.getByRole("status").textContent).toBe("app_2"));
+    await waitFor(() => expect(screen.getByRole("status").textContent).toBe("app_newer"));
   });
 
   it("reports no app when nothing is placed in the slot", async () => {

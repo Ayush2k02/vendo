@@ -27,6 +27,12 @@ export function createFakeClient(fixtures: PlaygroundFixtures): VendoClient {
     return found;
   };
 
+  /** The mutable per-trigger arm state the enable/disable flows flip. */
+  const automationTrigger = (appId: string, triggerId: string) =>
+    state.automations
+      .find((candidate) => candidate.app.id === appId)
+      ?.triggers.find((candidate) => candidate.trigger.id === triggerId);
+
   return {
     baseUrl: "playground:fake",
     headers: {},
@@ -200,15 +206,15 @@ export function createFakeClient(fixtures: PlaygroundFixtures): VendoClient {
     },
 
     automations: {
-      list: async () => state.automations.map((entry) => ({ ...entry })),
-      enable: async (id) => {
-        const entry = state.automations.find((candidate) => candidate.app.id === id);
-        if (entry) entry.enabled = true;
+      list: async () => state.automations.map((entry) => ({ ...entry, triggers: entry.triggers.map((trigger) => ({ ...trigger })) })),
+      enable: async (id, triggerId) => {
+        const trigger = automationTrigger(id, triggerId);
+        if (trigger) trigger.enabled = true;
         return { enabled: true, missing: [] };
       },
-      disable: async (id) => {
-        const entry = state.automations.find((candidate) => candidate.app.id === id);
-        if (entry) entry.enabled = false;
+      disable: async (id, triggerId) => {
+        const trigger = automationTrigger(id, triggerId);
+        if (trigger) trigger.enabled = false;
       },
       dryRun: async () => ({
         steps: [
@@ -217,6 +223,44 @@ export function createFakeClient(fixtures: PlaygroundFixtures): VendoClient {
         ],
         grantsMissing: [],
       }),
+      rehearse: async (id, triggerId, windowDays) => {
+        const to = Date.now();
+        const day = 86_400_000;
+        const resolvedWindowDays = windowDays === 7 ? 7 : 30;
+        return {
+          appId: id,
+          triggerId,
+          windowDays: resolvedWindowDays,
+          from: new Date(to - resolvedWindowDays * day).toISOString(),
+          to: new Date(to).toISOString(),
+          // One firing per day in the window (a DAILY automation), so the
+          // narrower 7d window genuinely returns fewer rows than 30d rather than
+          // repeating the same three.
+          firings: Array.from({ length: resolvedWindowDays }, (_, index) => resolvedWindowDays - index).map((daysAgo) => {
+            const firedAt = new Date(to - daysAgo * day).toISOString();
+            return {
+              scheduledFor: firedAt,
+              status: "fired" as const,
+              simulatedActions: 1,
+              steps: [
+                {
+                  id: "step_1",
+                  tool: "host_listRenewals",
+                  status: "ok" as const,
+                  window: { from: new Date(to - (daysAgo + 2) * day).toISOString(), to: firedAt },
+                  evaluatedOn: "window" as const,
+                },
+                {
+                  id: "step_2",
+                  tool: "slack_SLACK_SEND_MESSAGE",
+                  status: "simulated" as const,
+                  args: { channel: "#renewals", message: "2 renewals close this week" },
+                },
+              ],
+            };
+          }),
+        };
+      },
       // The playground has no sponsorship state to lapse, so nothing is ever
       // waiting to be taken on.
       adopt: async () => ({ adopted: false, missing: [], reason: "already-adopted" as const }),
@@ -232,6 +276,10 @@ export function createFakeClient(fixtures: PlaygroundFixtures): VendoClient {
         return found;
       },
       stop: async () => undefined,
+      // The playground fires nothing, so "run it again" hands back the run it
+      // was asked about rather than inventing a run id nothing will ever answer
+      // for.
+      rerun: async (id) => id,
     },
 
     activity: {

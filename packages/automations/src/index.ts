@@ -21,6 +21,8 @@ import type {
   StoreAdapter,
   ToolOutcome,
   ToolRegistry,
+  ToolSemantics,
+  Trigger,
   TriggerSource,
 } from "@vendoai/core";
 import type { AppsRuntime } from "@vendoai/apps";
@@ -29,7 +31,8 @@ import { createAutomationsEngine } from "./engine.js";
 import type { AdoptionCard } from "./adoption.js";
 
 export type { AdoptionCard, AdoptionNeed } from "./adoption.js";
-export { appIntentOf, SPONSORSHIPS, type Sponsorship } from "./sponsorship.js";
+export { appIntentOf, SPONSORSHIPS, triggerKey, type Sponsorship } from "./sponsorship.js";
+export { UNATTENDED_IRREVERSIBILITY_RULE, unattendedIrreversibilityCheck } from "./law.js";
 
 /** Build contract §9.3's `can()`, as much of it as the engine needs — taken as
  *  config so this package never reaches sideways into the store. Lane G's
@@ -56,6 +59,9 @@ export interface AutomationsConfig {
   store: StoreAdapter;
   /** Absent → agentic runs unavailable, steps still work. */
   runner?: AgentRunner;
+  /** W3 — the merged `.vendo` field semantics, rehearse()'s ONLY money source:
+   *  no synced semantic, no `result` headline. Provider form re-reads per call. */
+  semantics?: Readonly<Record<string, ToolSemantics>> | (() => Readonly<Record<string, ToolSemantics>> | undefined);
   /** The SAME per-call risk resolver the composition gave the guard. Arm-time
    *  capture grades a declared connector call with it, so the consent card
    *  states the grade the call will really run under and the grant it mints
@@ -92,13 +98,20 @@ export interface AutomationsConfig {
   memberships?: (principal: Principal) => Promise<Membership[]>;
 }
 
-/** 07 §5 */
-export type RunStatus = "running" | "ok" | "error" | "stopped" | "pending-approval";
+/** 07 §5. There is no waiting state: a run that meets a permission it does not
+ *  hold fails LOUDLY (`error`, code `needs-permission`) and the person grants it
+ *  and re-runs. A run that could be resumed later was a run nobody could see the
+ *  end of — it held an approval open, an identity open, and an intent open across
+ *  an unbounded gap. */
+export type RunStatus = "running" | "ok" | "error" | "stopped";
 
 /** 07 §5 */
 export interface RunRecord {
   id: RunId;
   appId: AppId;
+  /** WHICH trigger of the app fired this run. An app has a list of them, so the
+   *  app id alone no longer says what ran. */
+  triggerId: string;
   trigger: { kind: TriggerSource["kind"]; event?: string };
   status: RunStatus;
   startedAt: IsoDateTime;
@@ -107,7 +120,43 @@ export interface RunRecord {
   steps: Array<{ id: string; tool: string; outcome: ToolOutcome["status"]; at: IsoDateTime; detail?: string }>;
   /** Agentic: model-written; steps: generated. */
   summary?: string;
-  error?: { code: string; message: string };
+  /** `code: "needs-permission"` is the one a surface acts on: the run met a
+   *  permission nobody had granted, the ask is pending, and `tool`/`slug` name
+   *  exactly what it needed — so the row can offer Grant & re-run instead of
+   *  making the person go looking. */
+  error?: { code: string; message: string; tool?: string; slug?: string };
+}
+
+/** What a rehearsal of this automation could actually show, resolved from the
+ *  trigger plus the bound descriptors — using the SAME predicates rehearse()
+ *  itself applies, so a surface can never advertise a preview the report will
+ *  not contain.
+ *
+ *  It exists because the two useful facts are knowable WITHOUT replaying
+ *  anything, and replaying to discover them is the expensive way round: a
+ *  read-only automation costs a full round of real host reads to tell you
+ *  there was nothing to consent to. */
+export interface RehearsalOutlook {
+  /** rehearse() takes schedule triggers driving a `steps` run model, and
+   *  nothing else — an agentic run, or a step naming a non-`fn:` tool the guard
+   *  cannot resolve, is rejected outright, so offering the action at all is a
+   *  mistake when this is false. */
+  supported: boolean;
+  /** Steps bound to a write/destructive tool: the ones that resolve to
+   *  simulated cards. ZERO is the load-bearing case — reads execute and
+   *  preview, but there is no action to approve, so the report tells the user
+   *  little that the automation's own description did not.
+   *
+   *  Steps, not actions: a `forEach` fans one step out over as many items as
+   *  the read returns, and that count is only knowable by running it. */
+  actingSteps: number;
+  readSteps: number;
+  /** Reads whose per-firing window rehearse() will actually pin: `acceptsDateBounds`
+   *  AND at least one of `from`/`to` left unset by the step (a step that
+   *  hard-codes BOTH bounds re-reads the same fixed range every firing, so it is
+   *  not counted here). Short of readSteps, some firings re-read today's data and
+   *  repeat each other rather than replaying genuinely different history. */
+  historicalReads: number;
 }
 
 /** 07 §5 */
@@ -116,34 +165,123 @@ export interface RunPlan {
   grantsMissing: string[];
 }
 
+/** Additive (rehearse()) — one step row of a rehearsal firing. */
+export interface RehearsalStep {
+  id: string;
+  tool: string;
+  /** "simulated" = write/destructive risk; the guard resolved the call to its
+   *  simulated card instead of executing. "skipped" = an `if` condition was
+   *  false, a `forEach` matched no items, or the step is an app function call
+   *  (fn:, not rehearsed in v1). */
+  status: "ok" | "simulated" | "skipped" | "blocked" | "error";
+  /** The call's fully resolved arguments (JSONata evaluated against the
+   *  firing's event and REAL upstream step outputs). */
+  args?: Record<string, Json>;
+  /** Truncated JSON preview of a real read's output. */
+  preview?: string;
+  /** A numeric summary of a real read's resolved output, for the timeline's
+   *  single-line headline. `totalCents` sums the one MONEY field every element
+   *  of the output's homogeneous list shares, always in integer minor units (a
+   *  `money.dollars` field is scaled on the way in); `breakdown` is the
+   *  per-item split for the expandable detail. Derived SHAPE-first from the
+   *  FULL output (before `preview` truncation); the money field is named by the
+   *  host's synced `semantics` and nothing else, so this stays host-agnostic.
+   *  Absent when the output has no single unambiguous money field — including
+   *  every tool the host has not synced semantics for — so the row shows no
+   *  number rather than an invented one. */
+  result?: { totalCents: number; breakdown?: Array<{ label: string; cents: number }> };
+  /** The date bounds the call carried (pinned to the firing's window when the
+   *  tool accepts `from`/`to` and the step left them unset). */
+  window?: { from: IsoDateTime; to: IsoDateTime };
+  /** "window" = the read was date-bounded to the firing's window; "today" =
+   *  the tool takes no date bounds, so the row reflects today's data. */
+  evaluatedOn?: "window" | "today";
+  detail?: string;
+  /** For a "simulated" write step: the guard's honest verdict for what the
+   *  ENABLED automation would actually do with this call (lifted from the
+   *  RehearsalSimulation card). `wouldAsk` = it would still need an approval
+   *  (no standing grant captured yet, a critical tool, or a policy `ask`);
+   *  `grantsMissing` = the tool(s) whose standing grant is absent (mirrors
+   *  RunPlan.grantsMissing); `wouldBlock` = a policy BLOCK rule would stop it
+   *  outright even after enable. Absent/false ⇒ the write would simply run once
+   *  live, so the card reads as a plain simulated action. */
+  wouldAsk?: boolean;
+  grantsMissing?: string[];
+  wouldBlock?: string;
+}
+
+/** Additive (rehearse()) — one historical firing of the trigger. */
+export interface RehearsalFiring {
+  scheduledFor: IsoDateTime;
+  /** "skipped" = no tool call ran for this firing: e.g. every step's `if` was
+   *  false, a `forEach` matched no items, or every step was an `fn:` app call. */
+  status: "fired" | "skipped" | "error";
+  /** Count of simulated write/destructive actions in this firing. */
+  simulatedActions: number;
+  steps: RehearsalStep[];
+}
+
+/** Additive (rehearse()) — what `POST /automations/:id/rehearse` returns. */
+export interface RehearsalReport {
+  appId: AppId;
+  /** The trigger this report replays — rehearsal is per trigger, like every
+   *  other ceremony a person decides. */
+  triggerId: string;
+  /** The resolved trailing window this report replays (07 §1 amendment):
+   *  exactly 7 or 30 days. The UI renders "last N days" from this rather than
+   *  tracking its own copy of what was requested. */
+  windowDays: 7 | 30;
+  from: IsoDateTime;
+  to: IsoDateTime;
+  firings: RehearsalFiring[];
+  /** True when the schedule fired more often than the report keeps; the MOST
+   *  RECENT firings are kept (never a silent cap). */
+  truncated?: boolean;
+}
+
 /** 07 §1 */
 export interface AutomationsEngine {
-  /** Arm/disarm an app's trigger. Enabling runs the grant-capture flow (07 §3).
-   *  `grantSetId` (additive — 07 §1 amendment parked) names the ONE grant set
-   *  the `missing` asks belong to, so a single decision can settle them all;
-   *  present exactly when `missing` is non-empty. */
-  enable(appId: AppId, ctx: RunContext): Promise<{ enabled: boolean; missing: ApprovalRequest[]; grantSetId?: string }>;
-  disable(appId: AppId, ctx: RunContext): Promise<void>;
-  /** The user's apps with a trigger. `pendingGrants`/`grantSetId` (additive —
-   *  07 §1 amendment parked) project the app's still-undecided standing-grant
-   *  asks, so surfaces can show "waiting on N permissions" after a reload
-   *  instead of trusting an enable() result held in memory. */
+  /** Arm/disarm ONE trigger of an app. Enabling runs the grant-capture flow
+   *  (07 §3) for that trigger alone. `grantSetId` (additive — 07 §1 amendment
+   *  parked) names the ONE grant set the `missing` asks belong to, so a single
+   *  decision can settle them all; present exactly when `missing` is non-empty. */
+  enable(
+    appId: AppId,
+    triggerId: string,
+    ctx: RunContext,
+  ): Promise<{ enabled: boolean; missing: ApprovalRequest[]; grantSetId?: string }>;
+  disable(appId: AppId, triggerId: string, ctx: RunContext): Promise<void>;
+  /** The user's apps that have triggers, each with its trigger LIST. Everything
+   *  a person decides — armed, who it runs as, whether it stopped, what it is
+   *  still waiting to be allowed — is per trigger, because that is the unit they
+   *  arm. Only `editors` is per app: app access is not a per-trigger fact. */
   list(ctx: RunContext): Promise<Array<{
     app: AppDocument;
-    enabled: boolean;
-    pendingGrants?: number;
-    grantSetId?: string;
-    /** §13 — who the automation runs as, for its window label ("runs with
-     *  Dana's access"). `display` rides the sponsorship row, captured from the
-     *  sponsor's own Principal when they took the automation on, so it reads the
-     *  same for everyone: Vendo still holds no directory and invents no name. */
-    sponsor?: { subject: string; display?: string };
-    /** §9.9 — set exactly while the automation is STOPPED and waiting to be
-     *  adopted. `summary` is the same consumer sentence the adoption card and
-     *  the stopped run row carry, so the list is a route back to a paused
-     *  automation instead of the one place it vanished from (E8-F2). It never
-     *  names the sponsor: this string is read by anyone who can edit the app. */
-    stopped?: { reason: "edit" | "departure" | "grants"; summary: string };
+    triggers: Array<{
+      trigger: Trigger;
+      enabled: boolean;
+      /** Rehearsal outlook (additive — 07 §1 amendment): what replaying THIS
+       *  trigger would be worth, resolved without replaying anything, with the
+       *  same predicates rehearse() applies. Absent on servers predating it. */
+      rehearsal?: RehearsalOutlook;
+      /** `pendingGrants`/`grantSetId` (additive — 07 §1 amendment parked) project
+       *  this trigger's still-undecided standing-grant asks, so surfaces can show
+       *  "waiting on N permissions" after a reload instead of trusting an
+       *  enable() result held in memory. */
+      pendingGrants?: number;
+      grantSetId?: string;
+      /** §13 — who this trigger runs as, for its window label ("runs with
+       *  Dana's access"). `display` rides the sponsorship row, captured from the
+       *  sponsor's own Principal when they took the automation on, so it reads the
+       *  same for everyone: Vendo still holds no directory and invents no name. */
+      sponsor?: { subject: string; display?: string };
+      /** §9.9 — set exactly while this trigger is STOPPED and waiting to be
+       *  adopted. `summary` is the same consumer sentence the adoption card and
+       *  the stopped run row carry, so the list is a route back to a paused
+       *  automation instead of the one place it vanished from (E8-F2). It never
+       *  names the sponsor: this string is read by anyone who can edit the app. */
+      stopped?: { reason: "edit" | "departure" | "grants"; summary: string };
+    }>;
     /** How many principals hold a grant on the app, when an access seam is
      *  configured — the "wider editor set" the label names when one exists. */
     editors?: number;
@@ -162,14 +300,27 @@ export interface AutomationsEngine {
   runs: {
     get(id: RunId, ctx: RunContext): Promise<RunRecord | null>;
     list(
-      filter: { appId?: AppId; status?: RunStatus; cursor?: string },
+      filter: { appId?: AppId; triggerId?: string; status?: RunStatus; cursor?: string },
       ctx: RunContext,
     ): Promise<{ runs: RunRecord[]; cursor?: string }>;
     /** Kill switch: best-effort cancel, marks "stopped". */
     stop(id: RunId, ctx: RunContext): Promise<void>;
+    /** Run it again — the remedy for a run that failed. A FRESH run of the same
+     *  (app, trigger) on the same triggering event, against LIVE data: no
+     *  replay, no restored mid-run state, nothing resumed. Gated like `stop`
+     *  (anyone who can edit the app), and refused when its trigger is not armed.
+     *  Returns the new run's id. */
+    rerun(id: RunId, ctx: RunContext): Promise<RunId>;
   };
-  /** Preview: what would run, nothing executes. */
-  dryRun(appId: AppId, ctx: RunContext, event?: Json): Promise<RunPlan>;
+  /** Preview: what ONE trigger would run, nothing executes. */
+  dryRun(appId: AppId, triggerId: string, ctx: RunContext, event?: Json): Promise<RunPlan>;
+  /** Rehearsal (additive): replay ONE trigger's schedule firings over a
+   *  trailing window (`windowDays`, 7 or 30, defaulting to 30) through the
+   *  steps executor under the guard's `rehearsal` venue — reads execute for
+   *  real on the live interactive session, writes resolve to simulated cards,
+   *  no grants are required and nothing persists to run history. v1: steps
+   *  automations on schedule triggers only. */
+  rehearse(appId: AppId, triggerId: string, ctx: RunContext, windowDays?: 7 | 30): Promise<RehearsalReport>;
 
   /** Build contract §9.9 — the apps runtime's `onDocumentEdit` hook, from this
    *  side: an edit by anyone other than the sponsor invalidates sponsorship;
@@ -193,13 +344,18 @@ export interface AutomationsEngine {
    *  }
    *  ```
    *
-   *  Any other key attaches a card nobody ever sees. */
+   *  Any other key attaches a card nobody ever sees.
+   *
+   *  Sponsorship is per (app, trigger), so a card is about ONE trigger and names
+   *  it (`AdoptionCard.triggerId`). The open payload carries a single card, so
+   *  when several of an app's triggers are waiting this answers for the first in
+   *  declaration order and the next one surfaces once that is taken on. */
   adoption(appId: AppId, ctx: RunContext): Promise<AdoptionCard | undefined>;
 
-  /** Take a stopped automation on: approve its reads and writes as YOURSELF
+  /** Take a stopped trigger on: approve its reads and writes as YOURSELF
    *  (approvals stay strictly self-subject) and become its sponsor. The first
    *  editor+ to complete wins; the loser hears `already-adopted`. */
-  adopt(appId: AppId, ctx: RunContext): Promise<{
+  adopt(appId: AppId, triggerId: string, ctx: RunContext): Promise<{
     adopted: boolean;
     missing: ApprovalRequest[];
     grantSetId?: string;
